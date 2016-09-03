@@ -1,15 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+using System.Configuration;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
+using System.Web.OData.Builder;
+using System.Web.OData.Extensions;
+using Hach.Fusion.Core.Api.Controllers;
+using Hach.Fusion.Core.Api.Handlers;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Microsoft.OData.Edm;
+using Swashbuckle.Application;
+using Swashbuckle.OData;
 
 namespace Hach.Fusion.FFCO.Api
 {
+    /// <summary>
+    /// Configures the web service by registering needed components and establishing an Entity
+    /// Data Model (EDM).
+    /// </summary>
     public static class WebApiConfig
     {
+        /// <summary>
+        /// Registers Web API services.
+        /// </summary>
+        /// <param name="config"></param>
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -17,14 +32,85 @@ namespace Hach.Fusion.FFCO.Api
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
+            // Enable Cross-origin Resource Sharing (CORS)
+            config.EnableCors();
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            var edmModel = GetImplicitEdm();
+
+            config.MapODataServiceRoute(
+                "V161RouteVersioning",
+                "odata/v16.1",
+                edmModel);
+
+            var controllerSelector = config.Services.GetService(typeof(IHttpControllerSelector)) as ODataVersionControllerSelector;
+
+            controllerSelector?.RouteVersionSuffixMapping.Add("V151RouteVersioning", "v15_1");
+
+            // Automatically change the Pascal casing standard in C# MVC to Camal Case Standard used in JavaScript
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+
+            config.MessageHandlers.Add(new LogRequestAndResponseHandler());
+            config.EnableCaseInsensitive(true);
+
+            // Configure swagger for api documentation.
+            var authority = ConfigurationManager.AppSettings["IdServerUri"];
+            // https://github.com/rbeauchamp/Swashbuckle.OData
+            config
+                .EnableSwagger(c =>
+                {
+                    c.SingleApiVersion("v15_1", "FFSE Documentation");
+                    c.CustomProvider(defaultProvider => new ODataSwaggerProvider(defaultProvider, c));
+                    c.DescribeAllEnumsAsStrings();
+                    c.IncludeXmlComments(GetXmlDocumentationFilename());
+                    c.UseFullTypeNameInSchemaIds();
+                    c.OAuth2("oauth2")
+                        .Description("OAuth2 Implicit Grant")
+                        .Flow("implicit")
+                        .AuthorizationUrl(authority + "/connect/authorize")
+                        .TokenUrl(authority + "/connect/token")
+                        .Scopes(scopes =>
+                        {
+                            scopes.Add("FFAccessAPI", "FFSE Web Api");
+                        });
+                    c.OperationFilter<AssignOAuth2SecurityRequirements>();
+                })
+                .EnableSwaggerUi(u =>
+                {
+                    u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
+                });
+        }
+
+        /// <summary>
+        /// Builds an Entity Data Model used by the message router and controllers.
+        /// </summary>
+        /// <returns>An Entity Data Model.</returns>
+        private static IEdmModel GetImplicitEdm()
+        {
+            var builder = new ODataConventionModelBuilder();
+
+            //builder.EntitySet<LocationBaseDto>("Locations");
+            //builder.EntitySet<LocationTypeDto>("LocationTypes");
+            //builder.EntitySet<PpaLocationDto>("PpaLocationMeasurements");
+            //builder.EntitySet<ParameterTypeSettingsDto>("ParameterTypeSettings");
+            //builder.EntitySet<TenantParameterLimitsBaseDto>("TenantParameterLimits");
+
+            builder.EnableLowerCamelCase();
+
+            return builder.GetEdmModel();
+        }
+
+        /// <summary>
+        /// Gets the XML documentation filename. (XML documentation must be enabled in the project properties).
+        /// </summary>
+        /// <returns>The XML documentation filename.</returns>
+        private static string GetXmlDocumentationFilename()
+        {
+            return $@"{AppDomain.CurrentDomain.BaseDirectory}bin\Hach.Fusion.FF.Api.XML";
         }
     }
 }
