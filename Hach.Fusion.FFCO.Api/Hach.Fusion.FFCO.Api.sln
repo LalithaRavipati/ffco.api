@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Api", "Hac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Api.Tests", "Hach.Fusion.FFCO.Api.Tests\Hach.Fusion.FFCO.Api.Tests.csproj", "{45D4820F-7884-476A-88A8-7131C0926992}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Business", "Hach.Fusion.FFCO.Business\Hach.Fusion.FFCO.Business.csproj", "{4F3DD40A-7863-4783-A1A9-F31B3B838773}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{45D4820F-7884-476A-88A8-7131C0926992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D4820F-7884-476A-88A8-7131C0926992}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D4820F-7884-476A-88A8-7131C0926992}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F3DD40A-7863-4783-A1A9-F31B3B838773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F3DD40A-7863-4783-A1A9-F31B3B838773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F3DD40A-7863-4783-A1A9-F31B3B838773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F3DD40A-7863-4783-A1A9-F31B3B838773}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
