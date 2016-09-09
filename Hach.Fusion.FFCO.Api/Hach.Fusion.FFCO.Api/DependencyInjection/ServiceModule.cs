@@ -1,7 +1,14 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Business.Facades;
+using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Validators;
+using Hach.Fusion.FFCO.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.DependencyInjection
 {
@@ -17,6 +24,11 @@ namespace Hach.Fusion.FFCO.Api.DependencyInjection
         protected override void Load(ContainerBuilder builder)
         {
             // Contexts
+            builder.Register(
+                c => new DataContext(ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString))
+                .AsSelf()
+                .As<DataContext>()
+                .InstancePerLifetimeScope();
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
@@ -24,6 +36,11 @@ namespace Hach.Fusion.FFCO.Api.DependencyInjection
             // Claims Transformation
             builder.RegisterType<ClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
+
+            // Locations
+            builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
+                LocationQueryDto, Guid>>();
+            builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
 
             base.Load(builder);
         }

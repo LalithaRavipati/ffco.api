@@ -1,11 +1,19 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace Hach.Fusion.FFCO.Api
 {
+    /// <summary>
+    /// Configuration for bundling multiple files in order to improve service performance.
+    /// </summary>
+    /// <remarks>
+    /// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+    /// </remarks>
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+        /// <summary>
+        /// Register bundles to improve request load times.
+        /// </summary>
+        /// <param name="bundles">Collection of bundles that need to be registered.</param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

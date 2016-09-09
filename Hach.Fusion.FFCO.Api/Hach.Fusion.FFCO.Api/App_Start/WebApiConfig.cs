@@ -6,6 +6,7 @@ using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
+using Hach.Fusion.FFCO.Dtos;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -24,7 +25,7 @@ namespace Hach.Fusion.FFCO.Api
         /// <summary>
         /// Registers Web API services.
         /// </summary>
-        /// <param name="config"></param>
+        /// <param name="config">Configuration for an HTTP server.</param>
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -47,7 +48,7 @@ namespace Hach.Fusion.FFCO.Api
 
             var controllerSelector = config.Services.GetService(typeof(IHttpControllerSelector)) as ODataVersionControllerSelector;
 
-            controllerSelector?.RouteVersionSuffixMapping.Add("V151RouteVersioning", "v15_1");
+            controllerSelector?.RouteVersionSuffixMapping.Add("V161RouteVersioning", "v16_1");
 
             // Automatically change the Pascal casing standard in C# MVC to Camal Case Standard used in JavaScript
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -57,13 +58,14 @@ namespace Hach.Fusion.FFCO.Api
             config.MessageHandlers.Add(new LogRequestAndResponseHandler());
             config.EnableCaseInsensitive(true);
 
-            // Configure swagger for api documentation.
             var authority = ConfigurationManager.AppSettings["IdServerUri"];
-            // https://github.com/rbeauchamp/Swashbuckle.OData
+
+            // Configure swagger for api documentation.
+            // See https://github.com/rbeauchamp/Swashbuckle.OData
             config
                 .EnableSwagger(c =>
                 {
-                    c.SingleApiVersion("v15_1", "FFSE Documentation");
+                    c.SingleApiVersion("v16_1", "FFCO Documentation");
                     c.CustomProvider(defaultProvider => new ODataSwaggerProvider(defaultProvider, c));
                     c.DescribeAllEnumsAsStrings();
                     c.IncludeXmlComments(GetXmlDocumentationFilename());
@@ -75,7 +77,7 @@ namespace Hach.Fusion.FFCO.Api
                         .TokenUrl(authority + "/connect/token")
                         .Scopes(scopes =>
                         {
-                            scopes.Add("FFAccessAPI", "FFSE Web Api");
+                            scopes.Add("FFAccessAPI", "FFCO Web Api");
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
                 })
@@ -93,11 +95,7 @@ namespace Hach.Fusion.FFCO.Api
         {
             var builder = new ODataConventionModelBuilder();
 
-            //builder.EntitySet<LocationBaseDto>("Locations");
-            //builder.EntitySet<LocationTypeDto>("LocationTypes");
-            //builder.EntitySet<PpaLocationDto>("PpaLocationMeasurements");
-            //builder.EntitySet<ParameterTypeSettingsDto>("ParameterTypeSettings");
-            //builder.EntitySet<TenantParameterLimitsBaseDto>("TenantParameterLimits");
+            builder.EntitySet<LocationBaseDto>("Locations");
 
             builder.EnableLowerCamelCase();
 
@@ -110,7 +108,7 @@ namespace Hach.Fusion.FFCO.Api
         /// <returns>The XML documentation filename.</returns>
         private static string GetXmlDocumentationFilename()
         {
-            return $@"{AppDomain.CurrentDomain.BaseDirectory}bin\Hach.Fusion.FF.Api.XML";
+            return $@"{AppDomain.CurrentDomain.BaseDirectory}bin\Hach.Fusion.FFCO.Api.XML";
         }
     }
 }

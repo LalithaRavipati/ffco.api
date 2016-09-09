@@ -7,12 +7,12 @@ using Swashbuckle.Swagger;
 namespace Hach.Fusion.FFCO.Api
 {
     /// <summary>
-    /// Operation filter enabling the Swagger ui to use the web api.
-    /// <see cref="http://knowyourtoolset.com/2015/08/secure-web-apis-with-swagger-swashbuckle-and-oauth2-part-2/"/>
+    /// Operation filter enabling the Swagger UI to use the web API.
     /// </summary>
+    /// <see cref="http://knowyourtoolset.com/2015/08/secure-web-apis-with-swagger-swashbuckle-and-oauth2-part-2/"/>
     public class AssignOAuth2SecurityRequirements : IOperationFilter
     {
-        /// <inheritDoc/>>
+        /// <inheritDoc/>
         public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             var actFilters = apiDescription.ActionDescriptor.GetFilterPipeline();
