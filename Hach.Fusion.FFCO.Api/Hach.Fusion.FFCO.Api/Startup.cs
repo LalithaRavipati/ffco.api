@@ -10,9 +10,7 @@ using Autofac.Integration.WebApi;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.FFCO.Api.DependencyInjection;
-using Hach.Fusion.FFCO.Business;
 using IdentityServer3.AccessTokenValidation;
-using log4net.Core;
 using Microsoft.Owin;
 using Owin;
 using Thinktecture.IdentityModel;
@@ -22,8 +20,15 @@ using Thinktecture.IdentityModel;
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace Hach.Fusion.FFCO.Api
 {
-    public partial class Startup
+    /// <summary>
+    /// Application startup code.
+    /// </summary>
+    public class Startup
     {
+        /// <summary>
+        /// Configuration performed during application start up.
+        /// </summary>
+        /// <param name="app">Application builder object being configured.</param>
         public void Configuration(IAppBuilder app)
         {
             ConfigureLogging();

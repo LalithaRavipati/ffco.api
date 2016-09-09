@@ -1,4 +1,5 @@
-/*
+#pragma warning disable 1591
+ /*
  * Copyright 2015 Dominick Baier, Brock Allen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -442,3 +443,4 @@ namespace IdentityServer3.AspNetIdentity
         }
     }
 }
+#pragma warning restore 1591
