@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Query;
 using AutoMapper;
-using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
@@ -143,7 +142,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </remarks>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
         {
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            //TODO: RFKutz, 09/10/2016
+            //var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            Guid? userId = null;
             // User ID should always be available, but if not ...
             if (userId == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
@@ -182,7 +183,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             Mapper.Map(dto, location);
 
-            location.CreatedById = Guid.Parse(userId);
+            //TODO: RFKutz, 09/10/2016
+            //location.CreatedById = Guid.Parse(userId);
+            location.CreatedById = Guid.NewGuid();
             location.CreatedOn = DateTime.UtcNow;
             location.ModifiedById = location.CreatedById;
             location.ModifiedOn = location.CreatedOn;
@@ -240,7 +243,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
         {
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            //TODO: RFKutz [09/10/2016]
+            //var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            Guid? userId = null;
             // User ID should always be available, but if not ...
             if (userId == null)
                 return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
@@ -294,7 +299,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Attach(location);
             Mapper.Map(locationDto, location);
 
-            location.ModifiedById = Guid.Parse(userId);
+            //TODO: RFKutz [09/10/2016]
+            //location.ModifiedById = Guid.Parse(userId);
+            location.ModifiedById = Guid.NewGuid();
             location.ModifiedOn = DateTime.UtcNow;
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
