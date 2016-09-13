@@ -9,7 +9,6 @@ using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Dtos;
-using Hach.Fusion.Storage.FFAA.SQL.DbContext;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -30,11 +29,11 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
                 .AsSelf()
                 .As<DataContext>()
                 .InstancePerLifetimeScope();
-            builder.Register(
+            /*builder.Register(
                 c => new FFAAContext(ConfigurationManager.ConnectionStrings["IdSvrConnectionString"].ConnectionString))
                 .AsSelf()
                 .As<IIdentityContext>()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope();*/
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
