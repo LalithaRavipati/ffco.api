@@ -36,9 +36,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist location data.</param>
-        public LocationsController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationCommandDto, LocationCommandDto, LocationQueryDto, Guid> facade) : base(oDataHelper)
+        public LocationsController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationCommandDto, LocationCommandDto, LocationQueryDto, Guid> facade) 
+            : base(oDataHelper)
         {
-            if (facade == null) throw new ArgumentNullException(nameof(facade));
+            if (facade == null)
+                throw new ArgumentNullException(nameof(facade));
+
             Facade = facade;
         }
 

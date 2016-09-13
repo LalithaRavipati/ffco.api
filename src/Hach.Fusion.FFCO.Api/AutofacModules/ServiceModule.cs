@@ -25,7 +25,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
         {
             // Contexts
             builder.Register(
-                c => new DataContext(ConfigurationManager.ConnectionStrings["FFCOContext"].ConnectionString))
+                c => new DataContext(ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString))
                 .AsSelf()
                 .As<DataContext>()
                 .InstancePerLifetimeScope();
