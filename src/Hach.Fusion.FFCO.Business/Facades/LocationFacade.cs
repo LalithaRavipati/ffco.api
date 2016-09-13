@@ -1,6 +1,5 @@
 ﻿using Hach.Fusion.FFCO.Dtos;
 using System;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.OData;
@@ -32,7 +31,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public LocationFacade(DataContext context, IFFValidator<LocationCommandDto> validator)
         {
             _context = context;
-            ((IObjectContextAdapter)_context).ObjectContext.ContextOptions.LazyLoadingEnabled = false;
+            // Is this needed? ((IObjectContextAdapter)_context).ObjectContext.ContextOptions.LazyLoadingEnabled = false;
             ValidatorCreate = validator;
             ValidatorUpdate = validator;
         }
@@ -49,16 +48,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LocationQueryDto>> Get(ODataQueryOptions<LocationQueryDto> queryOptions)
         {
-            throw new NotImplementedException();
-
-            /*queryOptions.Validate(ValidationSettings);
+            queryOptions.Validate(ValidationSettings);
 
             var results = await Task.Run(() => _context.ExpandedLocations()
                 .Select(Mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
 
-            return Query.Result(results);*/
+            return Query.Result(results);
         }
 
         /// <summary>
