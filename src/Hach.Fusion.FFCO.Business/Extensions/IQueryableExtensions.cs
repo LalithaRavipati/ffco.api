@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Data.Entity;
 using System.Linq;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Entities;
@@ -18,11 +18,9 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         /// <returns>An IQueryable of <see cref="Location"/>.</returns>
         public static IQueryable<Location> ExpandedLocations(this DataContext context)
         {
-            throw new NotImplementedException();
-
-            /*return context.Locations
+            return context.Locations
                 .Include(x => x.Parent)
-                .Include(x => x.ChildLocations);*/
+                .Include(x => x.Locations);
         }
     }
 }

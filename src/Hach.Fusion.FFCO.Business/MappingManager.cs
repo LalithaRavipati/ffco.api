@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Business
 {
@@ -34,9 +36,19 @@ namespace Hach.Fusion.FFCO.Business
             IsInitialized = true;
 
             // Initialize groups of mapping classes
+            InitializeLocations();
 
             // Make sure the mapping is valid
             Mapper.AssertConfigurationIsValid();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Location entity and Dtos.
+        /// </summary>
+        private static void InitializeLocations()
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<Location, LocationQueryDto>()
+                .ForMember(x => x.InternalName, opt => opt.Ignore()));
         }
     }
 }
