@@ -13,7 +13,6 @@ namespace Hach.Fusion.FFCO.Business.Database
     {
         private const string Schema_ff = "ff";
         private const string Schema_dbo = "dbo";
-        private const string Schema_foart = "foart";
 
         /// <summary>
         /// Default constructor.
@@ -44,6 +43,21 @@ namespace Hach.Fusion.FFCO.Business.Database
         /// </summary>
         public DbSet<LocationType> LocationTypes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the DbSet containing <see cref="ParameterType"/> entities.
+        /// </summary>
+        public DbSet<ParameterType> ParameterTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DbSet containing <see cref="UnitType"/> entities.
+        /// </summary>
+        public DbSet<UnitType> UnitTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DbSet containing <see cref="Parameter"/> entities.
+        /// </summary>
+        public DbSet<Parameter> Parameters { get; set; }
+
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -64,8 +78,9 @@ namespace Hach.Fusion.FFCO.Business.Database
 
             // Set ff schema for foundation tables.
             modelBuilder.Entity<LocationType>().ToTable("LocationTypes", Schema_ff);
-
-            // Set foart schema for foart tables.
+            modelBuilder.Entity<UnitType>().ToTable("UnitTypes", Schema_ff);
+            modelBuilder.Entity<ParameterType>().ToTable("ParameterTypes", Schema_ff);
+            modelBuilder.Entity<Parameter>().ToTable("Parameters", Schema_ff);
         }
     }
 }

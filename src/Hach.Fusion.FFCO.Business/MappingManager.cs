@@ -22,6 +22,11 @@ namespace Hach.Fusion.FFCO.Business
         public static bool IsInitialized { get; private set; }
 
         /// <summary>
+        /// AutoMapper interface used for perfoming mapping.
+        /// </summary>
+        public static IMapper AutoMapper { get; private set; }
+
+        /// <summary>
         /// Initialize object mapping.
         /// </summary>
         /// <remarks>
@@ -36,19 +41,52 @@ namespace Hach.Fusion.FFCO.Business
             IsInitialized = true;
 
             // Initialize groups of mapping classes
-            InitializeLocations();
+            var config = new MapperConfiguration(cfg =>
+            {
+                InitializeUnitTypes(cfg);
+                InitializeParameterTypes(cfg);
+                InitializeLocations(cfg);
+                InitializeParameters(cfg);
+            });
 
             // Make sure the mapping is valid
-            Mapper.AssertConfigurationIsValid();
+            config.AssertConfigurationIsValid();
+
+            AutoMapper = config.CreateMapper();
         }
 
         /// <summary>
         /// Configure AutoMapper for converting between the Location entity and Dtos.
         /// </summary>
-        private static void InitializeLocations()
+        private static void InitializeLocations(IProfileExpression cfg)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Location, LocationQueryDto>()
-                .ForMember(x => x.InternalName, opt => opt.Ignore()));
+            cfg.CreateMap<Location, LocationQueryDto>()
+                .ForMember(x => x.InternalName, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Parameter entity and Dtos.
+        /// </summary>
+        private static void InitializeParameters(IProfileExpression cfg)
+        {
+            cfg.CreateMap<Parameter, ParameterDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the UnitType entity and Dtos.
+        /// </summary>
+        private static void InitializeUnitTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<UnitType, UnitTypeDto>();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the ParameterType entity and Dtos.
+        /// </summary>
+        private static void InitializeParameterTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<ParameterType, ParameterTypeDto>();
         }
     }
 }

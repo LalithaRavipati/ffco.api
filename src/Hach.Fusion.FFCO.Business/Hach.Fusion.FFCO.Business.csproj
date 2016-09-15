@@ -51,8 +51,8 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.0.0.1\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.0.0.2\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -167,6 +167,7 @@
     <Compile Include="Extensions\DateTimeKindAttribute.cs" />
     <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Facades\LocationFacade.cs" />
+    <Compile Include="Facades\ParameterFacade.cs" />
     <Compile Include="ForeignKeyNamingConvention.cs" />
     <Compile Include="MappingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

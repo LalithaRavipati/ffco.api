@@ -103,6 +103,9 @@ namespace Hach.Fusion.FFCO.Api
             var builder = new ODataConventionModelBuilder();
 
             builder.EntitySet<LocationBaseDto>("Locations");
+            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
+            builder.EntitySet<UnitTypeDto>("UnitTypes");
+            builder.EntitySet<ParameterDto>("Parameters");
 
             builder.EnableLowerCamelCase();
 
