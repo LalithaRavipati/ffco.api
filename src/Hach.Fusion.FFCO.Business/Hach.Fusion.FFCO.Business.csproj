@@ -168,6 +168,7 @@
     <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Facades\LocationFacade.cs" />
     <Compile Include="Facades\ParameterFacade.cs" />
+    <Compile Include="Facades\ParameterTypeFacade.cs" />
     <Compile Include="ForeignKeyNamingConvention.cs" />
     <Compile Include="MappingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

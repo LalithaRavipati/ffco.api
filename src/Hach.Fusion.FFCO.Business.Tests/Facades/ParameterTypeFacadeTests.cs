@@ -21,20 +21,20 @@ using NUnit.Framework;
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
-    public class ParameterFacadeTests
+    public class ParameterTypeFacadeTests
     {
         private DataContext _context;
-        private readonly Mock<ODataQueryOptions<ParameterDto>> _mockDtoOptions;
-        private ParameterFacade _facade;
+        private readonly Mock<ODataQueryOptions<ParameterTypeDto>> _mockDtoOptions;
+        private ParameterTypeFacade _facade;
 
-        public ParameterFacadeTests()
+        public ParameterTypeFacadeTests()
         {
             MappingManager.Initialize();
 
             var builder = BuildODataModel();
 
-            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterDto), new ODataPath()), new HttpRequestMessage());
+            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterTypeDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterTypeDto), new ODataPath()), new HttpRequestMessage());
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
         }
@@ -43,8 +43,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var builder = new ODataModelBuilder();
 
-            builder.EntitySet<ParameterDto>("Parameters");
-            builder.EntityType<ParameterDto>().HasKey(x => x.Id);
+            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
+            builder.EntityType<ParameterTypeDto>().HasKey(x => x.Id);
 
             return builder;
         }
@@ -57,7 +57,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
             _context = new DataContext(connectionString);
-            _facade = new ParameterFacade(_context);
+            _facade = new ParameterTypeFacade(_context);
 
             Seeder.SeedWithTestData(_context);
         }
@@ -71,21 +71,21 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         #region Get Tests
 
         [Test]
-        public async Task When_Get_Parameters_Succeeds()
+        public async Task When_Get_ParameterTypes_Succeeds()
         {
             var queryResult = await _facade.Get(_mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
             Assert.That(results.Count, Is.EqualTo(2));
-            Assert.That(results.Any(x => x.Id == SeedData.Parameters.Flow.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == SeedData.Parameters.pH.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == SeedData.ParameterTypes.Chemical.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == SeedData.ParameterTypes.Sensed.Id), Is.True);
         }
 
         [Test]
-        public async Task When_Get_Parameter_Succeeds()
+        public async Task When_Get_ParameterType_Succeeds()
         {
-            var seed = SeedData.Parameters.Flow;
+            var seed = SeedData.ParameterTypes.Chemical;
 
             var queryResult = await _facade.Get(seed.Id);
 
@@ -94,17 +94,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var dto = queryResult.Dto;
             Assert.That(dto.Id, Is.EqualTo(seed.Id));
             Assert.That(dto.I18NKeyName, Is.EqualTo(seed.I18NKeyName));
-            Assert.That(dto.BaseChemicalFormTypeId, Is.EqualTo(seed.BaseChemicalFormTypeId));
-            Assert.That(dto.BaseUnitTypeId, Is.EqualTo(seed.BaseUnitTypeId));
-            Assert.That(dto.CreatedById, Is.EqualTo(seed.CreatedById));
-            Assert.That(dto.ModifiedById, Is.EqualTo(seed.ModifiedById));
-            Assert.That(dto.CreatedOn, Is.EqualTo(seed.CreatedOn).Within(TimeSpan.FromSeconds(1)));
-            Assert.That(dto.ModifiedOn, Is.EqualTo(seed.ModifiedOn).Within(TimeSpan.FromSeconds(1)));
-            Assert.That(dto.ParameterTypeId, Is.EqualTo(seed.ParameterTypeId));
         }
 
         [Test]
-        public async Task When_Get_Parameter_InvalidId_Fails()
+        public async Task When_Get_ParameterType_InvalidId_Fails()
         {
             var queryResult = await _facade.Get(Guid.Empty);
 
@@ -113,9 +106,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
         [Test]
-        public async Task When_GetProperty_Parameter_Succeeds()
+        public async Task When_GetProperty_ParameterType_Succeeds()
         {
-            var seed = SeedData.Parameters.pH;
+            var seed = SeedData.ParameterTypes.Sensed;
 
             var queryResult = await _facade.GetProperty(seed.Id, "I18NKeyName");
 
@@ -124,7 +117,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
         [Test]
-        public async Task When_GetProperty_Parameter_InvalidId_Fails()
+        public async Task When_GetProperty_ParameterTypes_InvalidId_Fails()
         {
             var queryResult = await _facade.GetProperty(Guid.Empty, "I18NKeyName");
 
@@ -133,9 +126,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
         [Test]
-        public async Task When_GetProperty_Parameter_InvalidProperty_Fails()
+        public async Task When_GetProperty_ParameterTypes_InvalidProperty_Fails()
         {
-            var queryResult = await _facade.GetProperty(SeedData.Parameters.Flow.Id, "abc");
+            var queryResult = await _facade.GetProperty(SeedData.ParameterTypes.Chemical.Id, "abc");
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(queryResult.PropertyValue, Is.Null);

@@ -16,19 +16,19 @@ using Hach.Fusion.FFCO.Entities;
 namespace Hach.Fusion.FFCO.Business.Facades
 {
     /// <summary>
-    /// Facade for managing the parameter repository. 
+    /// Facade for managing the ParameterType repository. 
     /// </summary>
-    public class ParameterFacade : FacadeBase<ParameterDto, Guid>
+    public class ParameterTypeFacade : FacadeBase<ParameterTypeDto, Guid>
     {
         private readonly DataContext _context;
 
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Constructor for the <see cref="ParameterFacade"/> class taking a database context argument.
+        /// Constructor for the <see cref="ParameterTypeFacade"/> class taking a database context argument.
         /// </summary>
         /// <param name="context">Database context containing entities.</param>
-        public ParameterFacade(DataContext context)
+        public ParameterTypeFacade(DataContext context)
         {
             _context = context;
             _mapper = MappingManager.AutoMapper;
@@ -38,19 +38,19 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Get Methods
 
         /// <summary>
-        /// Gets a list of parameters from the data store.
+        /// Gets a list of ParameterTypes from the data store.
         /// </summary>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the list of location type DTOs retrieved.
         /// </returns>
-        public override async Task<QueryResult<ParameterDto>> Get(ODataQueryOptions<ParameterDto> queryOptions)
+        public override async Task<QueryResult<ParameterTypeDto>> Get(ODataQueryOptions<ParameterTypeDto> queryOptions)
         {
             queryOptions.Validate(ValidationSettings);
 
-            var results = await Task.Run(() => _context.Parameters
-              .Select(_mapper.Map<Parameter, ParameterDto>)
+            var results = await Task.Run(() => _context.ParameterTypes
+              .Select(_mapper.Map<ParameterType, ParameterTypeDto>)
               .AsQueryable())
               .ConfigureAwait(false);
 
@@ -58,29 +58,29 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Gets a single parameter from the data store.
+        /// Gets a single parameter type from the data store.
         /// </summary>
         /// <param name="id">ID that uniquely identifies the entity to be retrieved.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result includes the location type DTO retrieved.
         /// </returns>
-        public override async Task<QueryResult<ParameterDto>> Get(Guid id)
+        public override async Task<QueryResult<ParameterTypeDto>> Get(Guid id)
         {
-            var result = await Task.Run(() => _context.Parameters
+            var result = await Task.Run(() => _context.ParameterTypes
                 .FirstOrDefault(lt => lt.Id == id))
                 .ConfigureAwait(false);
 
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map<Parameter, ParameterDto>(result);
+            var dto = _mapper.Map<ParameterType, ParameterTypeDto>(result);
 
             return Query.Result(dto);
         }
 
         /// <summary>
-        /// Gets the value of the indicated parameter's property.
+        /// Gets the value of the indicated ParameterType property.
         /// </summary>
         /// <param name="id">ID that identifies the entity to be retrieved.</param>
         /// <param name="propertyName">Name of the property whose value is to be retrieved.</param>
@@ -88,16 +88,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the indicated property's value.
         /// </returns>
-        public override async Task<QueryResult<ParameterDto>> GetProperty(Guid id, string propertyName)
+        public override async Task<QueryResult<ParameterTypeDto>> GetProperty(Guid id, string propertyName)
         {
-            var result = await _context.Parameters
+            var result = await _context.ParameterTypes
                 .SingleOrDefaultAsync(st => st.Id == id)
                 .ConfigureAwait(false);
 
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var resultDto = _mapper.Map<Parameter, ParameterDto>(result);
+            var resultDto = _mapper.Map<ParameterType, ParameterTypeDto>(result);
 
             var property = resultDto.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
 
@@ -106,7 +106,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var value = property.GetValue(resultDto).ToString();
 
-            return new QueryResult<ParameterDto>(value);
+            return new QueryResult<ParameterTypeDto>(value);
         }
 
         #endregion Get Methods
@@ -119,7 +119,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="dto">Unused.</param>
         /// <returns>Always throws the Not Implemented Exception.</returns>
         /// <exception cref="NotImplementedException">This exception is always thrown.</exception>
-        public override Task<CommandResult<ParameterDto, Guid>> Create(ParameterDto dto)
+        public override Task<CommandResult<ParameterTypeDto, Guid>> Create(ParameterTypeDto dto)
         {
             throw new NotImplementedException();
         }
@@ -131,7 +131,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="delta">Unused.</param>
         /// <returns>Always throws the Not Implemented Exception.</returns>
         /// <exception cref="NotImplementedException">This exception is always thrown.</exception>
-        public override Task<CommandResult<ParameterDto, Guid>> Update(Guid id, Delta<ParameterDto> delta)
+        public override Task<CommandResult<ParameterTypeDto, Guid>> Update(Guid id, Delta<ParameterTypeDto> delta)
         {
             throw new NotImplementedException();
         }
@@ -142,7 +142,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="id">Unused.</param>
         /// <returns>Always throws the Not Implemented Exception.</returns>
         /// <exception cref="NotImplementedException">This exception is always thrown.</exception>
-        public override Task<CommandResult<ParameterDto, Guid>> Delete(Guid id)
+        public override Task<CommandResult<ParameterTypeDto, Guid>> Delete(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -155,7 +155,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="referenceId">Unused.</param>
         /// <returns>Always throws the Not Implemented Exception.</returns>
         /// <exception cref="NotImplementedException">This exception is always thrown.</exception>
-        public override Task<CommandResult<ParameterDto, Guid>> CreateReference(Guid id, string navigationProperty, object referenceId)
+        public override Task<CommandResult<ParameterTypeDto, Guid>> CreateReference(Guid id, string navigationProperty, object referenceId)
         {
             throw new NotImplementedException();
         }
@@ -168,7 +168,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="referenceId">Unused.</param>
         /// <returns>Always throws the Not Implemented Exception.</returns>
         /// <exception cref="NotImplementedException">This exception is always thrown.</exception>
-        public override Task<CommandResult<ParameterDto, Guid>> DeleteReference(Guid id, string navigationProperty, object referenceId)
+        public override Task<CommandResult<ParameterTypeDto, Guid>> DeleteReference(Guid id, string navigationProperty, object referenceId)
         {
             throw new NotImplementedException();
         }
