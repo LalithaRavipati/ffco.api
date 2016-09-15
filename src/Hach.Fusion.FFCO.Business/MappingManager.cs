@@ -48,7 +48,7 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations()
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Location, LocationQueryDto>()
-                .ForMember(x => x.InternalName, opt => opt.Ignore()));
+                .ForMember(x => x.Name, opt => opt.Ignore()));
         }
     }
 }

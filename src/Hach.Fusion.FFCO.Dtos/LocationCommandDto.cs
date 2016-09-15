@@ -7,8 +7,6 @@ namespace Hach.Fusion.FFCO.Dtos
     /// </summary>
     public class LocationCommandDto : LocationBaseDto
     {
-        public Guid TenantId { get; set; }
-
         public string Name { get; set; }
 
         public Guid LocationTypeId { get; set; }
