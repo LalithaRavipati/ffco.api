@@ -22,6 +22,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     {
         private readonly DataContext _context;
 
+        private readonly IMapper _mapper;
+
         /// <summary>
         /// Constructor for the <see cref="LocationFacade"/> class taking a database context
         /// and validator argument.
@@ -31,9 +33,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public LocationFacade(DataContext context, IFFValidator<LocationCommandDto> validator)
         {
             _context = context;
-            // Is this needed? ((IObjectContextAdapter)_context).ObjectContext.ContextOptions.LazyLoadingEnabled = false;
+
             ValidatorCreate = validator;
             ValidatorUpdate = validator;
+
+            _mapper = MappingManager.AutoMapper;
         }
 
         #region Get Methods
@@ -51,7 +55,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             queryOptions.Validate(ValidationSettings);
 
             var results = await Task.Run(() => _context.ExpandedLocations()
-                .Select(Mapper.Map<Location, LocationQueryDto>)
+                .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
 

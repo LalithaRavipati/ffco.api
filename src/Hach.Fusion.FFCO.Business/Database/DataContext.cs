@@ -44,6 +44,11 @@ namespace Hach.Fusion.FFCO.Business.Database
         /// </summary>
         public DbSet<LocationType> LocationTypes { get; set; }
 
+
+        public DbSet<Tenant> Tenants { get; set; }
+
+
+
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -64,8 +69,8 @@ namespace Hach.Fusion.FFCO.Business.Database
 
             // Set ff schema for foundation tables.
             modelBuilder.Entity<LocationType>().ToTable("LocationTypes", Schema_ff);
-
-            // Set foart schema for foart tables.
+            modelBuilder.Entity<TenantProductOffering>().ToTable("TenantProductOfferings")
+                .HasKey(t => new {t.TenantId, t.ProductOfferingId});
         }
     }
 }
