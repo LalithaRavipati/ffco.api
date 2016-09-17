@@ -2,6 +2,8 @@
 using System.Data.Entity.Infrastructure;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Entities;
+using Hach.Fusion.FFCO.Entities.Hach.Fusion.FFCO.Entities;
+
 // ReSharper disable InconsistentNaming
 
 namespace Hach.Fusion.FFCO.Business.Database
@@ -47,6 +49,10 @@ namespace Hach.Fusion.FFCO.Business.Database
 
         public DbSet<Tenant> Tenants { get; set; }
 
+        public DbSet<ProductOffering> ProductOfferings { get; set; }
+
+        public DbSet<ProductOfferingTenantLocation> ProductOfferingTenantLocations { get; set; }
+
 
 
         /// <inheritdoc />
@@ -55,6 +61,31 @@ namespace Hach.Fusion.FFCO.Business.Database
             ConfigureSchemas(modelBuilder);
 
             modelBuilder.Conventions.Add(new ForeignKeyNamingConvention());
+
+            //modelBuilder.Entity<Tenant>().ToTable("Tenants")
+            //    .HasKey(t => t.Id);
+
+            //modelBuilder.Entity<TenantProductOffering>()
+            //    .HasKey(t => new { t.TenantId, t.ProductOfferingId });
+
+            modelBuilder.Entity<ProductOfferingTenantLocation>()
+                .ToTable("ProductOfferingsTenantsLocations")
+                .HasKey(e => new {e.ProductOfferingId, e.TenantId, e.LocationId});
+
+            modelBuilder.Entity<ProductOfferingTenantLocation>()
+                .HasRequired(e => e.ProductOffering)
+                .WithMany(e => e.ProductOfferingTenantLocations)
+                .HasForeignKey(e => e.ProductOfferingId);
+
+            modelBuilder.Entity<ProductOfferingTenantLocation>()
+                .HasRequired(e => e.Tenant)
+                .WithMany(e => e.ProductOfferingTenantLocations)
+                .HasForeignKey(e => e.TenantId);
+
+            modelBuilder.Entity<ProductOfferingTenantLocation>()
+                .HasRequired(e => e.Location)
+                .WithMany(e => e.ProductOfferingTenantLocations)
+                .HasForeignKey(e => e.LocationId);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -69,8 +100,6 @@ namespace Hach.Fusion.FFCO.Business.Database
 
             // Set ff schema for foundation tables.
             modelBuilder.Entity<LocationType>().ToTable("LocationTypes", Schema_ff);
-            modelBuilder.Entity<TenantProductOffering>().ToTable("TenantProductOfferings")
-                .HasKey(t => new {t.TenantId, t.ProductOfferingId});
         }
     }
 }
