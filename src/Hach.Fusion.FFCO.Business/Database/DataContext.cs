@@ -13,7 +13,6 @@ namespace Hach.Fusion.FFCO.Business.Database
     /// </summary>
     public class DataContext : DbContext
     {
-        private const string Schema_ff = "ff";
         private const string Schema_dbo = "dbo";
         private const string Schema_foart = "foart";
 
@@ -96,10 +95,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         private static void ConfigureSchemas(DbModelBuilder modelBuilder)
         {
             // Set default schema for tables.               
-            modelBuilder.HasDefaultSchema(Schema_dbo);
-
-            // Set ff schema for foundation tables.
-            modelBuilder.Entity<LocationType>().ToTable("LocationTypes", Schema_ff);
+            modelBuilder.HasDefaultSchema(Schema_dbo);            
         }
     }
 }

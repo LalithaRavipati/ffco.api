@@ -13,9 +13,9 @@ using System.Web.OData.Routing;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Tests.Data;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Entities.Seed;
 using Moq;
 using NUnit.Framework;
 
@@ -79,10 +79,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
-            Assert.That(results.Count, Is.EqualTo(3));
-            Assert.That(results.Any(x => x.Id == SeedData.Locations.Location_1.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == SeedData.Locations.Location_1A.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == SeedData.Locations.Location_2.Id), Is.True);
+            
+            Assert.That(results.Any(x => x.Id == Data.Locations.Location_Plant_01.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Location_Process_Preliminary.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Location_Process_Influent.Id), Is.True);
         }
 
         #endregion Get Tests
