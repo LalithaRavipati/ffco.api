@@ -55,8 +55,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.0.0.1\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.8\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.13\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Packages\IdentityServer3.AspNetIdentity\IdentityServer3.AspNetIdentity.cs" />
+    <Compile Include="Facades\UnitTypeFacadeTests.cs" />
     <Compile Include="Facades\LocationTypeFacadeTests.cs" />
     <Compile Include="Facades\LocationFacadeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,20 +22,20 @@ using NUnit.Framework;
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
-    public class LocationFacadeTests
+    public class UnitTypeFacadeTests
     {
         private DataContext _context;
-        private readonly Mock<ODataQueryOptions<LocationQueryDto>> _mockDtoOptions;
-        private LocationFacade _facade;
+        private readonly Mock<ODataQueryOptions<UnitTypeQueryDto>> _mockDtoOptions;
+        private UnitTypeFacade _facade;
 
-        public LocationFacadeTests()
+        public UnitTypeFacadeTests()
         {
             MappingManager.Initialize();
 
             var builder = BuildODataModel();
 
-            _mockDtoOptions = new Mock<ODataQueryOptions<LocationQueryDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof(LocationQueryDto), new ODataPath()), new HttpRequestMessage());
+            _mockDtoOptions = new Mock<ODataQueryOptions<UnitTypeQueryDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(UnitTypeQueryDto), new ODataPath()), new HttpRequestMessage());
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
         }
@@ -46,6 +46,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             builder.EntitySet<LocationQueryDto>("Locations");
             builder.EntityType<LocationQueryDto>().HasKey(x => x.Id);
+
+            builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
+            builder.EntityType<UnitTypeQueryDto>().HasKey(x => x.Id);
+
 
             return builder;
         }
@@ -58,8 +62,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
             _context = new DataContext(connectionString);
-            var validator = new LocationValidator();
-            _facade = new LocationFacade(_context, validator);
+            var validator = new UnitTypeValidator();
+            _facade = new UnitTypeFacade(_context, validator);
 
             Seeder.SeedWithTestData(_context);
         }
@@ -73,16 +77,16 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         #region Get Tests
 
         [Test]
-        public async Task When_Get_Locations_Succeeds()
+        public async Task When_Get_UnitTypes_Succeeds()
         {
             var queryResult = await _facade.Get(_mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
-            
-            Assert.That(results.Any(x => x.Id == Data.Locations.Plant_01.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Preliminary.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Influent.Id), Is.True);
+
+            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Centigrade.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Fahrenheit.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
         }
 
         #endregion Get Tests

@@ -11,6 +11,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
 
             SeedLocationTypes(context);
             SeedLocations(context);
+            SeedUnitTypeGroups(context);
+            SeedUnitTypes(context);
         }
 
         private static void DeleteAllExistingTestData(DataContext context)
@@ -33,17 +35,66 @@ namespace Hach.Fusion.FFCO.Business.Tests
 
         private static void SeedLocations(DataContext context)
         {
-            context.Locations.Add(Data.Locations.Location_Plant_01);
-            context.Locations.Add(Data.Locations.Location_Process_Preliminary);
-            context.Locations.Add(Data.Locations.Location_SamplingSite_Grit);
-            context.Locations.Add(Data.Locations.Location_SamplingSite_Screenings);
-            context.Locations.Add(Data.Locations.Location_SamplingSite_Chemical);
+            context.Locations.Add(Data.Locations.Plant_01);
+            context.Locations.Add(Data.Locations.Process_Preliminary);
+            context.Locations.Add(Data.Locations.SamplingSite_Grit);
+            context.Locations.Add(Data.Locations.SamplingSite_Screenings);
+            context.Locations.Add(Data.Locations.SamplingSite_Chemical);
 
-            context.Locations.Add(Data.Locations.Location_Process_Influent);
-            context.Locations.Add(Data.Locations.Location_SamplingSite_Influent_InfluentCombined);
-            context.Locations.Add(Data.Locations.Location_SamplingSite_Influent_HauledWasted);
+            context.Locations.Add(Data.Locations.Process_Influent);
+            context.Locations.Add(Data.Locations.SamplingSite_Influent_InfluentCombined);
+            context.Locations.Add(Data.Locations.SamplingSite_Influent_HauledWasted);
 
             context.SaveChanges();
+        }
+
+        /*
+          
+         select 'context.UnitTypeGroups.Add(Data.UnitTypeGroups.' + I18NKeyName + ');'
+         from unitTypeGroups
+
+        */
+        private static void SeedUnitTypeGroups(DataContext context)
+        {
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Volume);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.VolumeTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.AreaTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Length);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Mass);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.MassTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Area);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.LengthTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Time);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.pH);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Temp);
+        }
+
+        private static void SeedUnitTypes(DataContext context)
+        {
+            context.UnitTypes.Add(Data.UnitTypes.GrainsPerGallon);
+            context.UnitTypes.Add(Data.UnitTypes.Millimeters);
+            context.UnitTypes.Add(Data.UnitTypes.PartsPerMillion);
+            context.UnitTypes.Add(Data.UnitTypes.MilligramsPerLiter);
+            context.UnitTypes.Add(Data.UnitTypes.MillisiemensPerCentimeter);
+            context.UnitTypes.Add(Data.UnitTypes.Centigrade);
+            context.UnitTypes.Add(Data.UnitTypes.MillionGallonsPerDay);
+            context.UnitTypes.Add(Data.UnitTypes.Inches);
+            context.UnitTypes.Add(Data.UnitTypes.Millibar);
+            context.UnitTypes.Add(Data.UnitTypes.MicrogramsPerLiter);
+            context.UnitTypes.Add(Data.UnitTypes.PercentSaturation);
+            context.UnitTypes.Add(Data.UnitTypes.GermanDegrees);
+            context.UnitTypes.Add(Data.UnitTypes.InchesOfMercury);
+            context.UnitTypes.Add(Data.UnitTypes.PartsPerBillion);
+            context.UnitTypes.Add(Data.UnitTypes.Hectopascal);
+            context.UnitTypes.Add(Data.UnitTypes.Fahrenheit);
+            context.UnitTypes.Add(Data.UnitTypes.EnglishDegrees);
+            context.UnitTypes.Add(Data.UnitTypes.FrenchDegrees);
+            context.UnitTypes.Add(Data.UnitTypes.MicrosiemensPerCentimeter);
+            context.UnitTypes.Add(Data.UnitTypes.Millivolts);
+            context.UnitTypes.Add(Data.UnitTypes.Percent);
+            context.UnitTypes.Add(Data.UnitTypes.pH);
+            context.UnitTypes.Add(Data.UnitTypes.GallonsPerMinute);
+            context.UnitTypes.Add(Data.UnitTypes.MillimetersOfMercury);
         }
     }
 }

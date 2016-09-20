@@ -104,6 +104,8 @@ namespace Hach.Fusion.FFCO.Api
 
             builder.EntitySet<LocationBaseDto>("Locations");
             builder.EntitySet<LocationTypeQueryDto>("LocationTypes");
+            builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
+            builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
 
             builder.EnableLowerCamelCase();
 

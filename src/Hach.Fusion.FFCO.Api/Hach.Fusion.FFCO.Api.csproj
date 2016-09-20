@@ -331,6 +331,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
+    <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

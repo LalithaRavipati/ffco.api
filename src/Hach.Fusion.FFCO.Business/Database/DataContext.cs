@@ -44,8 +44,10 @@ namespace Hach.Fusion.FFCO.Business.Database
         /// Gets or sets the DbSet containing <see cref="LocationType"/> entities.
         /// </summary>
         public DbSet<LocationType> LocationTypes { get; set; }
-
-
+    
+        public DbSet<UnitType> UnitTypes { get; set; }
+        public DbSet<UnitTypeGroup> UnitTypeGroups { get; set; }
+    
         public DbSet<Tenant> Tenants { get; set; }
 
         public DbSet<ProductOffering> ProductOfferings { get; set; }
