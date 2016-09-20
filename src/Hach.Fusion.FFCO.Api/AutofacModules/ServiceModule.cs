@@ -45,7 +45,12 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
                 LocationQueryDto, Guid>>();
+
+            builder.RegisterType<LocationTypeFacade>().As<IFacadeWithCruModels<LocationTypeQueryDto, LocationTypeQueryDto,
+                LocationTypeQueryDto, Guid>>();
+
             builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
+            builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeQueryDto>>();
 
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 
