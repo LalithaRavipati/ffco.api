@@ -15,8 +15,7 @@ using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Entities;
-using Omu.ValueInjecter;
-using Omu.ValueInjecter.Injections;
+using Hach.Fusion.FFCO.Entities.Extensions;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -29,6 +28,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         private readonly DataContext _context;
 
         private readonly IMapper _mapper;
+        private readonly string _userId;
 
         /// <summary>
         /// Constructor for the <see cref="LocationFacade"/> class taking a database context
@@ -45,7 +45,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper = MappingManager.AutoMapper;
 
-
+            _userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
         }
 
         #region Get Methods
@@ -123,13 +123,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// because the created item does not have children. So, there cannot be a circular reference.
         /// </remarks>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
-        {
-            
-
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            
+        {                                 
             // User ID should always be available, but if not ...
-            if (userId == null)
+            if (_userId == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var validationResponse = ValidatorCreate.Validate(dto);
@@ -166,13 +162,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper.Map(dto, location);
 
-            //TODO: RFKutz, 09/10/2016
-            //location.CreatedById = Guid.Parse(userId);
-            location.CreatedById = Guid.NewGuid();
-            location.CreatedOn = DateTime.UtcNow;
-            location.ModifiedById = location.CreatedById;
-            location.ModifiedOn = location.CreatedOn;
-
+            location.SetAuditFieldsOnCreate(Guid.Parse(_userId));
+            
             _context.Locations.Add(location);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -202,6 +193,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             if (location.Locations.Count > 0)
                 return Command.Error<LocationQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
+
+            _context.Locations.Attach(location);
+            location.SetAuditFieldsOnUpdate(_userId);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             _context.Locations.Remove(location);
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -280,9 +275,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _context.Locations.Attach(location);
             _mapper.Map(locationDto, location);
-            
-            location.ModifiedById = Guid.Parse(userId);          
-            location.ModifiedOn = DateTime.UtcNow;
+
+            location.SetAuditFieldsOnUpdate(_userId);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 

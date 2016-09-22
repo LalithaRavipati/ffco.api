@@ -55,8 +55,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.0.0.1\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.21\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.23.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.23\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

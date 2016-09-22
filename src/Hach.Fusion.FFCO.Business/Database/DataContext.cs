@@ -183,7 +183,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         /// <param name="entry">The entity to be soft deleted.</param>
         private static void SoftDelete(DbEntityEntry entry)
         {
-            entry.Property("IsDeleted").CurrentValue = true;
+            entry.Property("IsDeleted").CurrentValue = true;            
 
             // prevent hard delete            
             entry.State = EntityState.Modified;
