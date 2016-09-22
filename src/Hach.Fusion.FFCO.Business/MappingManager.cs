@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hach.Fusion.Core.Business.Spatial;
 using Hach.Fusion.FFCO.Dtos;
 using Hach.Fusion.FFCO.Entities;
 
@@ -60,10 +61,46 @@ namespace Hach.Fusion.FFCO.Business
             cfg.CreateMap<Location, LocationQueryDto>();
                 //.ForMember(x => x.Name, opt => opt.Ignore());
 
+            
             cfg.CreateMap<LocationType, LocationTypeQueryDto>();
 
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
             cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
+
+            cfg.CreateMap<Location, LocationCommandDto>()
+                .ForSourceMember(x => x.Parent, opt => opt.Ignore())
+                .ForSourceMember(x => x.Locations, opt => opt.Ignore())
+                .ForSourceMember(x => x.LocationType, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
+                .ForSourceMember(x => x.Geography, opt => opt.Ignore())
+                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());            
+               
+
+            cfg.CreateMap<LocationCommandDto, Location>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Parent, opt => opt.Ignore())
+                .ForMember(x => x.Locations, opt => opt.Ignore())
+                .ForMember(x => x.LocationType, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore())
+                .ForMember(x => x.Geography, opt => opt.Ignore())
+                .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+
+        }
+
+        /// <summary>
+        /// Initializes mapping location entities to Data Transfer Objects (DTOs) for commands and vice versa.
+        /// </summary>
+        private static void InitializeLocationForCommands()
+        {
+           
         }
     }
 }

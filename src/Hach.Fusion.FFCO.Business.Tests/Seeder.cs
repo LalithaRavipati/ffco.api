@@ -1,4 +1,5 @@
-﻿using Hach.Fusion.FFCO.Business.Database;
+﻿using System.ComponentModel.Design.Serialization;
+using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Entities.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -11,8 +12,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
 
             SeedLocationTypes(context);
             SeedLocations(context);
-            SeedUnitTypeGroups(context);
-            SeedUnitTypes(context);
+            //SeedUnitTypeGroups(context);
+            //SeedUnitTypes(context);
         }
 
         private static void DeleteAllExistingTestData(DataContext context)
@@ -20,6 +21,9 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
+            //context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
+            //context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
+            
 
             context.SaveChanges();
         }
@@ -30,6 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.LocationTypes.Add(Data.LocationTypes.Process);
             context.LocationTypes.Add(Data.LocationTypes.SamplingSite);
 
+            context.LocationTypes.Add(Data.LocationTypes.Distribution);
             context.SaveChanges();
         }
 
@@ -45,6 +50,11 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Locations.Add(Data.Locations.SamplingSite_Influent_InfluentCombined);
             context.Locations.Add(Data.Locations.SamplingSite_Influent_HauledWasted);
 
+            context.Locations.Add(Data.Locations.Test_SoftDeleted);
+            context.Locations.Add(Data.Locations.Test_SoftDeletable);
+            context.Locations.Add(Data.Locations.Test_Updateable);
+
+            
             context.SaveChanges();
         }
 
@@ -67,6 +77,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.UnitTypeGroups.Add(Data.UnitTypeGroups.Time);
             context.UnitTypeGroups.Add(Data.UnitTypeGroups.pH);
             context.UnitTypeGroups.Add(Data.UnitTypeGroups.Temp);
+
+            context.SaveChanges();
         }
 
         private static void SeedUnitTypes(DataContext context)
@@ -95,6 +107,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.UnitTypes.Add(Data.UnitTypes.pH);
             context.UnitTypes.Add(Data.UnitTypes.GallonsPerMinute);
             context.UnitTypes.Add(Data.UnitTypes.MillimetersOfMercury);
+
+            context.SaveChanges();
         }
     }
 }

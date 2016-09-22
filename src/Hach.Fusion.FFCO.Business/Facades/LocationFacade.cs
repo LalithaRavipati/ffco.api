@@ -1,16 +1,22 @@
 ﻿using Hach.Fusion.FFCO.Dtos;
 using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Query;
 using AutoMapper;
+using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Extensions;
+using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Entities;
+using Omu.ValueInjecter;
+using Omu.ValueInjecter.Injections;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -38,6 +44,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
             ValidatorUpdate = validator;
 
             _mapper = MappingManager.AutoMapper;
+
+
         }
 
         #region Get Methods
@@ -58,7 +66,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
-
+            
             return Query.Result(results);
         }
 
@@ -71,19 +79,17 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// If successful, the task result includes the location DTO retrieved.
         /// </returns>
         public override async Task<QueryResult<LocationQueryDto>> Get(Guid id)
-        {
-            throw new NotImplementedException();
-
-            /*var result = await Task.Run(() => _context.ExpandedLocations()
+        {            
+            var result = await Task.Run(() => _context.ExpandedLocations()
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var locationDto = Mapper.Map<Location, LocationQueryDto>(result);
+            var locationDto = _mapper.Map<Location, LocationQueryDto>(result);
 
-            return Query.Result(locationDto);*/
+            return Query.Result(locationDto);
         }
 
         /// <summary>
@@ -97,33 +103,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LocationQueryDto>> GetProperty(Guid id, string propertyName)
         {
-            throw new NotImplementedException();
-
-            /*var result = await _context.Locations
-                .SingleOrDefaultAsync(l => l.Id == id)
-                .ConfigureAwait(false);
-
-            if (result == null)
-                return Query.Error(EntityErrorCode.EntityNotFound);
-
-            var resultDto = Mapper.Map<Location, LocationQueryDto>(result);
-
-            var property = resultDto.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-
-            if (property == null)
-                return Query.Error(EntityErrorCode.EntityPropertyNotFound);
-
-            var value = property.GetValue(resultDto);
-
-            string valueString;
-            if (property.Name == "Locations" || property.Name == "Point")
-                valueString = JsonConvert.SerializeObject(value);
-            else if (property.PropertyType == typeof(DateTime))
-                valueString = ((DateTime)value).ToString("s");
-            else
-                valueString = value.ToString();
-
-            return new QueryResult<LocationQueryDto>(valueString);*/
+            throw new NotImplementedException();           
         }
 
         #endregion Get Methods
@@ -144,11 +124,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </remarks>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
         {
-            throw new NotImplementedException();
+            
 
-            /*//TODO: RFKutz, 09/10/2016
-            //var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            Guid? userId = null;
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            
             // User ID should always be available, but if not ...
             if (userId == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
@@ -185,7 +164,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 Id = Guid.NewGuid()
             };
 
-            Mapper.Map(dto, location);
+            _mapper.Map(dto, location);
 
             //TODO: RFKutz, 09/10/2016
             //location.CreatedById = Guid.Parse(userId);
@@ -197,7 +176,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Add(location);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.Created(Mapper.Map(location, new LocationQueryDto()), location.Id);*/
+            return Command.Created(_mapper.Map(location, new LocationQueryDto()), location.Id);
         }
 
         #endregion Create Method
@@ -212,24 +191,22 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Delete(Guid id)
-        {
-            throw new NotImplementedException();
-
-            /*var location = await _context.Locations
-              .Include(l => l.ChildLocations)
+        {            
+            var location = await _context.Locations
+              .Include(l => l.Locations)
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
 
             if (location == null)
                 return Command.Error<LocationQueryDto>(EntityErrorCode.EntityNotFound);
 
-            if (location.ChildLocations.Count > 0)
+            if (location.Locations.Count > 0)
                 return Command.Error<LocationQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
 
             _context.Locations.Remove(location);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LocationQueryDto>();*/
+            return Command.NoContent<LocationQueryDto>();
         }
 
         #endregion Delete Method
@@ -249,11 +226,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
         {
-            throw new NotImplementedException();
-
-            /*//TODO: RFKutz [09/10/2016]
-            //var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            Guid? userId = null;
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            
             // User ID should always be available, but if not ...
             if (userId == null)
                 return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
@@ -268,7 +242,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (location == null)
                 return Command.Error<LocationCommandDto>(EntityErrorCode.EntityNotFound);
 
-            var locationDto = Mapper.Map(location, new LocationCommandDto());
+            var locationDto = _mapper.Map(location, new LocationCommandDto());
             delta.Patch(locationDto);
 
             var validationResponse = ValidatorUpdate.Validate(locationDto);
@@ -305,16 +279,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationCommandDto>(validationResponse);
 
             _context.Locations.Attach(location);
-            Mapper.Map(locationDto, location);
-
-            //TODO: RFKutz [09/10/2016]
-            //location.ModifiedById = Guid.Parse(userId);
-            location.ModifiedById = Guid.NewGuid();
+            _mapper.Map(locationDto, location);
+            
+            location.ModifiedById = Guid.Parse(userId);          
             location.ModifiedOn = DateTime.UtcNow;
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LocationCommandDto>();*/
+            return Command.NoContent<LocationCommandDto>();
         }
 
         #endregion Update Method
