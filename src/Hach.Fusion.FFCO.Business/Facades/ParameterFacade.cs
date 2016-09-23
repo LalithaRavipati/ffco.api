@@ -43,7 +43,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the list of location type DTOs retrieved.
+        /// If successful, the task result contains the list of DTOs retrieved.
         /// </returns>
         public override async Task<QueryResult<ParameterDto>> Get(ODataQueryOptions<ParameterDto> queryOptions)
         {
@@ -63,7 +63,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="id">ID that uniquely identifies the entity to be retrieved.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result includes the location type DTO retrieved.
+        /// If successful, the task result includes the DTO retrieved.
         /// </returns>
         public override async Task<QueryResult<ParameterDto>> Get(Guid id)
         {
@@ -79,39 +79,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
             return Query.Result(dto);
         }
 
-        /// <summary>
-        /// Gets the value of the indicated parameter's property.
-        /// </summary>
-        /// <param name="id">ID that identifies the entity to be retrieved.</param>
-        /// <param name="propertyName">Name of the property whose value is to be retrieved.</param>
-        /// <returns>
-        /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the indicated property's value.
-        /// </returns>
-        public override async Task<QueryResult<ParameterDto>> GetProperty(Guid id, string propertyName)
-        {
-            var result = await _context.Parameters
-                .SingleOrDefaultAsync(st => st.Id == id)
-                .ConfigureAwait(false);
-
-            if (result == null)
-                return Query.Error(EntityErrorCode.EntityNotFound);
-
-            var resultDto = _mapper.Map<Parameter, ParameterDto>(result);
-
-            var property = resultDto.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-
-            if (property == null)
-                return Query.Error(EntityErrorCode.EntityPropertyNotFound);
-
-            var value = property.GetValue(resultDto).ToString();
-
-            return new QueryResult<ParameterDto>(value);
-        }
-
         #endregion Get Methods
 
         #region Not Implemented Methods
+
+        public override Task<QueryResult<ParameterDto>> GetProperty(Guid id, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Creates an entity (not implemented).

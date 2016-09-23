@@ -112,35 +112,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(queryResult.Dto, Is.Null);
         }
 
-        [Test]
-        public async Task When_GetProperty_Parameter_Succeeds()
-        {
-            var seed = SeedData.Parameters.pH;
-
-            var queryResult = await _facade.GetProperty(seed.Id, "I18NKeyName");
-
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
-            Assert.That(queryResult.PropertyValue, Is.EqualTo(seed.I18NKeyName));
-        }
-
-        [Test]
-        public async Task When_GetProperty_Parameter_InvalidId_Fails()
-        {
-            var queryResult = await _facade.GetProperty(Guid.Empty, "I18NKeyName");
-
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
-            Assert.That(queryResult.PropertyValue, Is.Null);
-        }
-
-        [Test]
-        public async Task When_GetProperty_Parameter_InvalidProperty_Fails()
-        {
-            var queryResult = await _facade.GetProperty(SeedData.Parameters.Flow.Id, "abc");
-
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-            Assert.That(queryResult.PropertyValue, Is.Null);
-        }
-
         #endregion Get Tests
     }
 }

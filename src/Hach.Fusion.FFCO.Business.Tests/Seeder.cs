@@ -13,7 +13,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedParameterTypes(context);
             SeedUnitTypes(context);
 
-            SeedLocations(context);
+            //SeedLocations(context);
             SeedParameters(context);
         }
 
