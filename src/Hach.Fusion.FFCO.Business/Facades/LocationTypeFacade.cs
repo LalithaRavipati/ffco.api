@@ -72,18 +72,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LocationTypeQueryDto>> Get(Guid id)
         {
-            throw new NotImplementedException();
-
-            /*var result = await Task.Run(() => _context.ExpandedLocations()
+            var result = await Task.Run(() => _context.LocationTypes
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var locationDto = Mapper.Map<Location, LocationQueryDto>(result);
+            var locationDto = _mapper.Map<LocationType, LocationTypeQueryDto>(result);
 
-            return Query.Result(locationDto);*/
+            return Query.Result(locationDto);
         }
 
         /// <summary>

@@ -61,8 +61,13 @@ namespace Hach.Fusion.FFCO.Business
             cfg.CreateMap<Location, LocationQueryDto>();
                 //.ForMember(x => x.Name, opt => opt.Ignore());
 
-            
-            cfg.CreateMap<LocationType, LocationTypeQueryDto>();
+
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
 
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
             cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
