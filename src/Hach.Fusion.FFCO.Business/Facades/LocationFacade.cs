@@ -134,7 +134,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationQueryDto>(validationResponse);
 
             if (dto.Id != Guid.Empty)
-                validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid("Id"));
+                validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(Location.Id)));
 
             var existingTask = _context.Locations.AnyAsync(l => l.Name == dto.Name);
 
@@ -146,11 +146,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 existingTask = _context.Locations.AnyAsync(l => l.Id == dto.ParentId.Value);
 
                 if (!existingTask.Result)
-                    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("ParentId"));
+                    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(Location.ParentId)));
             }
 
-            //if (dto.LocationTypeId != Guid.Empty && !_context.LocationTypes.Any(lt => lt.Id == dto.LocationTypeId))
-            //    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("LocationTypeId"));
+            if (dto.LocationTypeId != Guid.Empty && !_context.LocationTypes.Any(lt => lt.Id == dto.LocationTypeId))
+                validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(Location.LocationTypeId)));
 
             if (validationResponse.IsInvalid)
                 return Command.Error<LocationQueryDto>(validationResponse);
@@ -252,19 +252,19 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
                 if (!existingTask.Result)
                 {
-                    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("ParentId"));
+                    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(Location.ParentId)));
                 }
                 else
                 {
                     // Check for circular references
                     if (await LocationValidator.IsCircularReference(_context.Locations, locationDto, id))
-                        validationResponse.FFErrors.Add(ValidationErrorCode.CircularReferenceNotAllowed("ParentId"));
+                        validationResponse.FFErrors.Add(ValidationErrorCode.CircularReferenceNotAllowed(nameof(Location.ParentId)));
                 }
             }
 
             // Check that Location Type exists
-            //if (locationDto.LocationTypeId != Guid.Empty && !_context.LocationTypes.Any(lt => lt.Id == locationDto.LocationTypeId))
-            //    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("LocationTypeId"));
+            if (locationDto.LocationTypeId != Guid.Empty && !_context.LocationTypes.Any(lt => lt.Id == locationDto.LocationTypeId))
+                validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(Location.LocationTypeId)));
 
             // Including the original Id in the Patch request will not return an error but attempting to change the Id is not allowed.
             if (locationDto.Id != id)
@@ -272,7 +272,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             // Check that unique fields are still unique            
             if (_context.Locations.Any(l => l.Id != id && l.Name == locationDto.Name))
-                validationResponse.FFErrors.Add(ValidationErrorCode.EntityPropertyDuplicateNotAllowed("InternalName"));
+                validationResponse.FFErrors.Add(ValidationErrorCode.EntityPropertyDuplicateNotAllowed(nameof(Location.Name)));
 
             if (validationResponse.IsInvalid)
                 return Command.Error<LocationCommandDto>(validationResponse);
