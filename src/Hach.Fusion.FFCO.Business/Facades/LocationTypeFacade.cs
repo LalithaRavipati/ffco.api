@@ -1,16 +1,20 @@
 ﻿using Hach.Fusion.FFCO.Dtos;
 using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Query;
 using AutoMapper;
+using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Entities;
+using Hach.Fusion.FFCO.Entities.Extensions;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -18,7 +22,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the location repository. 
     /// </summary>    
     public class LocationTypeFacade
-        : FacadeWithCruModelsBase<LocationTypeQueryDto, LocationTypeQueryDto, LocationTypeQueryDto, Guid>
+        : FacadeWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
     {
         private readonly DataContext _context;
 
@@ -30,7 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing location type entities.</param>
         /// <param name="validator">Validator for location DTOs.</param>
-        public LocationTypeFacade(DataContext context, IFFValidator<LocationTypeQueryDto> validator)
+        public LocationTypeFacade(DataContext context, IFFValidator<LocationTypeCommandDto> validator)
         {
             _context = context;
 
@@ -95,33 +99,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LocationTypeQueryDto>> GetProperty(Guid id, string propertyName)
         {
-            throw new NotImplementedException();
-
-            /*var result = await _context.Locations
-                .SingleOrDefaultAsync(l => l.Id == id)
-                .ConfigureAwait(false);
-
-            if (result == null)
-                return Query.Error(EntityErrorCode.EntityNotFound);
-
-            var resultDto = Mapper.Map<Location, LocationQueryDto>(result);
-
-            var property = resultDto.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-
-            if (property == null)
-                return Query.Error(EntityErrorCode.EntityPropertyNotFound);
-
-            var value = property.GetValue(resultDto);
-
-            string valueString;
-            if (property.Name == "Locations" || property.Name == "Point")
-                valueString = JsonConvert.SerializeObject(value);
-            else if (property.PropertyType == typeof(DateTime))
-                valueString = ((DateTime)value).ToString("s");
-            else
-                valueString = value.ToString();
-
-            return new QueryResult<LocationQueryDto>(valueString);*/
+            throw new NotImplementedException();          
         }
 
         #endregion Get Methods
@@ -140,62 +118,44 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// Note that there is no checking for a circular reference for creating a location. This is
         /// because the created item does not have children. So, there cannot be a circular reference.
         /// </remarks>
-        public override async Task<CommandResult<LocationTypeQueryDto, Guid>> Create(LocationTypeQueryDto dto)
+        public override async Task<CommandResult<LocationTypeQueryDto, Guid>> Create(LocationTypeCommandDto dto)
         {
-            throw new NotImplementedException();
 
-            /*//TODO: RFKutz, 09/10/2016
-            //var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            Guid? userId = null;
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            
             // User ID should always be available, but if not ...
             if (userId == null)
-                return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<LocationTypeQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var validationResponse = ValidatorCreate.Validate(dto);
 
             if (dto == null)
-                return Command.Error<LocationQueryDto>(validationResponse);
+                return Command.Error<LocationTypeQueryDto>(validationResponse);
 
             if (dto.Id != Guid.Empty)
                 validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid("Id"));
 
-            var existingTask = _context.Locations.AnyAsync(l => l.Name == dto.Name);
+            var existingTask = _context.Locations.AnyAsync(l => l.Name == dto.I18NKeyName);
 
             if (existingTask.Result)
                 validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
 
-            if (dto.ParentId.HasValue)
-            {
-                existingTask = _context.Locations.AnyAsync(l => l.Id == dto.ParentId.Value);
-
-                if (!existingTask.Result)
-                    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("ParentId"));
-            }
-
-            //if (dto.LocationTypeId != Guid.Empty && !_context.LocationTypes.Any(lt => lt.Id == dto.LocationTypeId))
-            //    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("LocationTypeId"));
-
             if (validationResponse.IsInvalid)
-                return Command.Error<LocationQueryDto>(validationResponse);
+                return Command.Error<LocationTypeQueryDto>(validationResponse);
 
-            var location = new Location
+            var locationType = new LocationType
             {
                 Id = Guid.NewGuid()
             };
 
-            Mapper.Map(dto, location);
+            Mapper.Map(dto, locationType);
 
-            //TODO: RFKutz, 09/10/2016
-            //location.CreatedById = Guid.Parse(userId);
-            location.CreatedById = Guid.NewGuid();
-            location.CreatedOn = DateTime.UtcNow;
-            location.ModifiedById = location.CreatedById;
-            location.ModifiedOn = location.CreatedOn;
-
-            _context.Locations.Add(location);
+            locationType.SetAuditFieldsOnCreate(userId);
+            
+            _context.LocationTypes.Add(locationType);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.Created(Mapper.Map(location, new LocationQueryDto()), location.Id);*/
+            return Command.Created(_mapper.Map(locationType, new LocationTypeQueryDto()), locationType.Id);
         }
 
         #endregion Create Method
@@ -203,31 +163,31 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Delete Method
 
         /// <summary>
-        /// Deletes a location.
+        /// Deletes a location type if it is not associated to any locations.
         /// </summary>
-        /// <param name="id">ID that identifies the location to be deleted.</param>
+        /// <param name="id">ID that identifies the location type to be deleted.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
         public override async Task<CommandResult<LocationTypeQueryDto, Guid>> Delete(Guid id)
         {
-            throw new NotImplementedException();
-
-            /*var location = await _context.Locations
-              .Include(l => l.ChildLocations)
+            var locationType = await _context.LocationTypes                           
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
 
-            if (location == null)
-                return Command.Error<LocationQueryDto>(EntityErrorCode.EntityNotFound);
+            if (locationType == null)
+                return Command.Error<LocationTypeQueryDto>(EntityErrorCode.EntityNotFound);
 
-            if (location.ChildLocations.Count > 0)
-                return Command.Error<LocationQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
+            var cannotDelete = _context.Locations
+                .Any(x => x.LocationTypeId == id);
+               
+            if (cannotDelete)
+                return Command.Error<LocationTypeQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
 
-            _context.Locations.Remove(location);
+            _context.LocationTypes.Remove(locationType);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LocationQueryDto>();*/
+            return Command.NoContent<LocationTypeQueryDto>();
         }
 
         #endregion Delete Method
@@ -245,74 +205,49 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<LocationTypeQueryDto, Guid>> Update(Guid id, Delta<LocationTypeQueryDto> delta)
+        public override async Task<CommandResult<LocationTypeCommandDto, Guid>> Update(Guid id, Delta<LocationTypeCommandDto> delta)
         {
-            throw new NotImplementedException();
-
-            /*//TODO: RFKutz [09/10/2016]
-            //var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            Guid? userId = null;
+           
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            
             // User ID should always be available, but if not ...
             if (userId == null)
-                return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<LocationTypeCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
-                return Command.Error<LocationCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<LocationTypeCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var location = await _context.Locations
+            var locationType = await _context.LocationTypes
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
-            if (location == null)
-                return Command.Error<LocationCommandDto>(EntityErrorCode.EntityNotFound);
+            if (locationType == null)
+                return Command.Error<LocationTypeCommandDto>(EntityErrorCode.EntityNotFound);
 
-            var locationDto = Mapper.Map(location, new LocationCommandDto());
-            delta.Patch(locationDto);
+            var dto = Mapper.Map(locationType, new LocationTypeCommandDto());
+            delta.Patch(dto);
 
-            var validationResponse = ValidatorUpdate.Validate(locationDto);
-
-            if (locationDto.ParentId.HasValue)
-            {
-                var existingTask = _context.Locations.AnyAsync(l => l.Id == locationDto.ParentId.Value);
-
-                if (!existingTask.Result)
-                {
-                    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("ParentId"));
-                }
-                else
-                {
-                    // Check for circular references
-                    if (await LocationValidator.IsCircularReference(_context.Locations, locationDto, id))
-                        validationResponse.FFErrors.Add(ValidationErrorCode.CircularReferenceNotAllowed("ParentId"));
-                }
-            }
-
-            // Check that Location Type exists
-            //if (locationDto.LocationTypeId != Guid.Empty && !_context.LocationTypes.Any(lt => lt.Id == locationDto.LocationTypeId))
-            //    validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("LocationTypeId"));
+            var validationResponse = ValidatorUpdate.Validate(dto);
 
             // Including the original Id in the Patch request will not return an error but attempting to change the Id is not allowed.
-            if (locationDto.Id != id)
+            if (dto.Id != id)
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
 
             // Check that unique fields are still unique            
-            if (_context.Locations.Any(l => l.Id != id && l.Name == locationDto.Name))
-                validationResponse.FFErrors.Add(ValidationErrorCode.EntityPropertyDuplicateNotAllowed("InternalName"));
+            if (_context.LocationTypes.Any(l => l.Id != id && l.I18NKeyName == dto.I18NKeyName))
+                validationResponse.FFErrors.Add(ValidationErrorCode.EntityPropertyDuplicateNotAllowed(nameof(LocationType.I18NKeyName)));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<LocationCommandDto>(validationResponse);
+                return Command.Error<LocationTypeCommandDto>(validationResponse);
 
-            _context.Locations.Attach(location);
-            Mapper.Map(locationDto, location);
+            _context.LocationTypes.Attach(locationType);
+            _mapper.Map(dto, locationType);
 
-            //TODO: RFKutz [09/10/2016]
-            //location.ModifiedById = Guid.Parse(userId);
-            location.ModifiedById = Guid.NewGuid();
-            location.ModifiedOn = DateTime.UtcNow;
+            locationType.SetAuditFieldsOnUpdate(userId);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LocationCommandDto>();*/
+            return Command.NoContent<LocationTypeCommandDto>();
         }
 
         #endregion Update Method

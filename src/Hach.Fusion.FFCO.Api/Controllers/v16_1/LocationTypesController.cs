@@ -29,14 +29,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// </remarks>
     [EnableCors("*", "*", "*")]
     public class LocationTypesController
-        : ControllerWithCruModelsBase<LocationTypeQueryDto, LocationTypeQueryDto, LocationTypeQueryDto, Guid>
+        : ControllerWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="LocationsController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist location data.</param>
-        public LocationTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationTypeQueryDto, LocationTypeQueryDto, LocationTypeQueryDto, Guid> facade) 
+        public LocationTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -105,7 +105,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<LocationTypeQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Post(LocationTypeQueryDto dto)
+        public async Task<IHttpActionResult> Post(LocationTypeCommandDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -126,13 +126,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationTypeQueryDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationTypeCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<LocationTypeQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationTypeQueryDto> delta)
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationTypeCommandDto> delta)
         {
             var result = await Facade.Update(key, delta);
             return Command(result);

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Dtos;
-using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {
@@ -14,7 +11,7 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// In addition to the override of the <see cref="Validate"/> method, this class contains a static method
     /// used to test whether updating the parent of a location would result in a circular reference.
     /// </remarks>
-    public class LocationTypeValidator : FFValidator<LocationTypeQueryDto, Guid>
+    public class LocationTypeValidator : FFValidator<LocationTypeCommandDto, Guid>
     {
         private const int NameMaximumLength = 100;
 
@@ -24,7 +21,7 @@ namespace Hach.Fusion.FFCO.Business.Validators
         /// Validates the state of the specified <see cref="LocationQueryDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(LocationTypeQueryDto dto)
+        public override FFValidationResponse Validate(LocationTypeCommandDto dto)
         {
             IsNull(dto);
 
