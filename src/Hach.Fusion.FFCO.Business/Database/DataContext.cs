@@ -18,7 +18,6 @@ namespace Hach.Fusion.FFCO.Business.Database
     public class DataContext : DbContext
     {
         private const string Schema_dbo = "dbo";
-        private const string Schema_foart = "foart";
         private const string IsDeletedFilter = "IsDeleted";
 
         /// <summary>
@@ -48,8 +47,9 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ProductOffering> ProductOfferings { get; set; }
         public DbSet<ProductOfferingTenantLocation> ProductOfferingTenantLocations { get; set; }
         public DbSet<ParameterType> ParameterTypes { get; set; }
-        public DbSet<UnitType> UnitTypes { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserTenant> UserTenants { get; set; }
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -61,12 +61,6 @@ namespace Hach.Fusion.FFCO.Business.Database
             // Configure dynamic filter for IsDeleted:
             // See: https://github.com/jcachat/EntityFramework.DynamicFilters
             modelBuilder.Filter(IsDeletedFilter, (ISoftDeletableEntity e) => e.IsDeleted, false);
-
-            //modelBuilder.Entity<Tenant>().ToTable("Tenants")
-            //    .HasKey(t => t.Id);
-
-            //modelBuilder.Entity<TenantProductOffering>()
-            //    .HasKey(t => new { t.TenantId, t.ProductOfferingId });
 
             modelBuilder.Entity<ProductOfferingTenantLocation>()
                 .ToTable("ProductOfferingsTenantsLocations")
@@ -86,6 +80,10 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .HasRequired(e => e.Location)
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
+
+            modelBuilder.Entity<UserTenant>()
+                .ToTable("UserTenants")
+                .HasKey(e => new { e.User_Id, e.Tenant_Id });
 
             base.OnModelCreating(modelBuilder);
         }

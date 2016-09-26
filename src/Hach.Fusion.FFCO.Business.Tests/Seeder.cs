@@ -12,21 +12,24 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedLocationTypes(context);
             SeedParameterTypes(context);
             SeedUnitTypes(context);
+            SeedUnitTypeGroups(context);
 
-            //SeedLocations(context);
+            SeedLocations(context);
             SeedParameters(context);
+            SeedProductOfferingTenantLocations(context);
         }
 
         private static void DeleteAllExistingTestData(DataContext context)
         {
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
-
             context.Database.ExecuteSqlCommand("DELETE dbo.Parameters");
+
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
-            context.Database.ExecuteSqlCommand("DELETE dbo.ChemicalFormTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
+            //context.Database.ExecuteSqlCommand("DELETE dbo.ChemicalFormTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
 
             context.SaveChanges();
@@ -37,8 +40,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.LocationTypes.Add(Data.LocationTypes.Plant);
             context.LocationTypes.Add(Data.LocationTypes.Process);
             context.LocationTypes.Add(Data.LocationTypes.SamplingSite);
-
             context.LocationTypes.Add(Data.LocationTypes.Distribution);
+
             context.SaveChanges();
         }
 
@@ -46,13 +49,15 @@ namespace Hach.Fusion.FFCO.Business.Tests
         {
             context.Locations.Add(Data.Locations.Plant_01);
             context.Locations.Add(Data.Locations.Process_Preliminary);
+            context.Locations.Add(Data.Locations.Process_Influent);
+            context.Locations.Add(Data.Locations.Process_PrimaryTreatment);
+            context.Locations.Add(Data.Locations.Process_SecondaryTreatment);
             context.Locations.Add(Data.Locations.SamplingSite_Grit);
             context.Locations.Add(Data.Locations.SamplingSite_Screenings);
             context.Locations.Add(Data.Locations.SamplingSite_Chemical);
-
-            context.Locations.Add(Data.Locations.Process_Influent);
             context.Locations.Add(Data.Locations.SamplingSite_Influent_InfluentCombined);
             context.Locations.Add(Data.Locations.SamplingSite_Influent_HauledWasted);
+            context.Locations.Add(Data.Locations.SamplingSite_Influent_Recycled);
 
             context.Locations.Add(Data.Locations.Test_SoftDeleted);
             context.Locations.Add(Data.Locations.Test_SoftDeletable);
@@ -120,6 +125,15 @@ namespace Hach.Fusion.FFCO.Business.Tests
         {
             context.Parameters.Add(Data.Parameters.Flow);
             context.Parameters.Add(Data.Parameters.pH);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedProductOfferingTenantLocations(DataContext context)
+        {
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant1);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
 
             context.SaveChanges();
         }

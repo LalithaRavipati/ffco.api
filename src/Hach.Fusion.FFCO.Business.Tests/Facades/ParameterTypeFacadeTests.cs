@@ -13,8 +13,8 @@ using System.Web.OData.Routing;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Tests.Data;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Entities.Seed;
 using Moq;
 using NUnit.Framework;
 
@@ -78,14 +78,14 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var results = queryResult.Results;
             Assert.That(results.Count, Is.EqualTo(2));
-            Assert.That(results.Any(x => x.Id == SeedData.ParameterTypes.Chemical.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == SeedData.ParameterTypes.Sensed.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Chemical.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Sensed.Id), Is.True);
         }
 
         [Test]
         public async Task When_Get_ParameterType_Succeeds()
         {
-            var seed = SeedData.ParameterTypes.Chemical;
+            var seed = Data.ParameterTypes.Chemical;
 
             var queryResult = await _facade.Get(seed.Id);
 
