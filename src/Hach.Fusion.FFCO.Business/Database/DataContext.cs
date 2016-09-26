@@ -83,7 +83,7 @@ namespace Hach.Fusion.FFCO.Business.Database
 
             modelBuilder.Entity<UserTenant>()
                 .ToTable("UserTenants")
-                .HasKey(e => new { e.User_Id, e.Tenant_Id });
+                .HasKey(e => new { e.UserId, e.TenantId });
 
             base.OnModelCreating(modelBuilder);
         }
