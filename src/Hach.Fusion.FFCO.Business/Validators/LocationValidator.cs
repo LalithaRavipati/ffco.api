@@ -39,9 +39,6 @@ namespace Hach.Fusion.FFCO.Business.Validators
                 .MaxLength(NameMaximumLength)
                 .MinLength(NameMinimumLength);
 
-            Evaluate(l => l.TenantId, dto.TenantId)
-                .Required();
-
             Evaluate(l => l.LocationTypeId, dto.LocationTypeId)
                 .Required();
 

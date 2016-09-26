@@ -20,7 +20,8 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         {
             return context.Locations
                 .Include(x => x.Parent)
-                .Include(x => x.Locations);
+                .Include(x => x.Locations)
+                .Include(x => x.ProductOfferingTenantLocations);
         }
     }
 }
