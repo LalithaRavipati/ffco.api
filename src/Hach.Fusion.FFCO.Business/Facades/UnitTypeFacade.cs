@@ -15,7 +15,7 @@ using Hach.Fusion.FFCO.Entities;
 namespace Hach.Fusion.FFCO.Business.Facades
 {
     /// <summary>
-    /// Facade for managing the location repository. 
+    /// Facade for managing the Unit Type repository. 
     /// </summary>    
     public class UnitTypeFacade
         : FacadeWithCruModelsBase<UnitTypeQueryDto, UnitTypeQueryDto, UnitTypeQueryDto, Guid>
@@ -25,11 +25,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Constructor for the <see cref="LocationFacade"/> class taking a database context
+        /// Constructor for the <see cref="UnitTypeFacade"/> class taking a database context
         /// and validator argument.
         /// </summary>
-        /// <param name="context">Database context containing location type entities.</param>
-        /// <param name="validator">Validator for location DTOs.</param>
+        /// <param name="context">Database context containing Unit type entities.</param>
+        /// <param name="validator">Validator for Unit Type DTOs.</param>
         public UnitTypeFacade(DataContext context, IFFValidator<UnitTypeQueryDto> validator)
         {
             _context = context;
@@ -43,12 +43,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Get Methods
 
         /// <summary>
-        /// Gets a list of locations from the data store.
+        /// Gets a list of Unit Types from the data store.
         /// </summary>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the list of location DTOs retrieved.
+        /// If successful, the task result contains the list of Unit Type DTOs retrieved.
         /// </returns>
         public override async Task<QueryResult<UnitTypeQueryDto>> Get(ODataQueryOptions<UnitTypeQueryDto> queryOptions)
         {
@@ -63,27 +63,25 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Gets a single location from the data store.
+        /// Gets a single UnitType from the data store.
         /// </summary>
-        /// <param name="id">ID that uniquely identifies the location to be retrieved.</param>
+        /// <param name="id">ID that uniquely identifies the Unit Type to be retrieved.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result includes the location DTO retrieved.
+        /// If successful, the task result includes the Unit Type DTO retrieved.
         /// </returns>
         public override async Task<QueryResult<UnitTypeQueryDto>> Get(Guid id)
         {
-            throw new NotImplementedException();
-
-            /*var result = await Task.Run(() => _context.ExpandedLocations()
+            var result = await Task.Run(() => _context.UnitTypes
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var locationDto = Mapper.Map<Location, LocationQueryDto>(result);
+            var dto = _mapper.Map<UnitType, UnitTypeQueryDto>(result);
 
-            return Query.Result(locationDto);*/
+            return Query.Result(dto);
         }
 
         /// <summary>

@@ -43,12 +43,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Get Methods
 
         /// <summary>
-        /// Gets a list of locations from the data store.
+        /// Gets a list of location types from the data store.
         /// </summary>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the list of location DTOs retrieved.
+        /// If successful, the task result contains the list of location type DTOs retrieved.
         /// </returns>
         public override async Task<QueryResult<LocationTypeQueryDto>> Get(ODataQueryOptions<LocationTypeQueryDto> queryOptions)
         {
@@ -63,27 +63,25 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Gets a single location from the data store.
+        /// Gets a single location type from the data store.
         /// </summary>
-        /// <param name="id">ID that uniquely identifies the location to be retrieved.</param>
+        /// <param name="id">ID that uniquely identifies the location type to be retrieved.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result includes the location DTO retrieved.
+        /// If successful, the task result includes the location type DTO retrieved.
         /// </returns>
         public override async Task<QueryResult<LocationTypeQueryDto>> Get(Guid id)
         {
-            throw new NotImplementedException();
-
-            /*var result = await Task.Run(() => _context.ExpandedLocations()
+            var result = await Task.Run(() => _context.LocationTypes
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var locationDto = Mapper.Map<Location, LocationQueryDto>(result);
+            var locationDto = _mapper.Map<LocationType, LocationTypeQueryDto>(result);
 
-            return Query.Result(locationDto);*/
+            return Query.Result(locationDto);
         }
 
         /// <summary>
