@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design.Serialization;
-using Hach.Fusion.FFCO.Business.Database;
+﻿using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Entities.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -23,11 +22,12 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
 
-            context.Database.ExecuteSqlCommand("DELETE ff.Parameters");
-            context.Database.ExecuteSqlCommand("DELETE ff.LocationTypes");
-            context.Database.ExecuteSqlCommand("DELETE ff.UnitTypes");
-            context.Database.ExecuteSqlCommand("DELETE ff.ChemicalFormTypes");
-            context.Database.ExecuteSqlCommand("DELETE ff.ParameterTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.Parameters");
+            context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
+            context.Database.ExecuteSqlCommand("DELETE dbo.ChemicalFormTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
 
             context.SaveChanges();
         }
@@ -57,17 +57,10 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Locations.Add(Data.Locations.Test_SoftDeleted);
             context.Locations.Add(Data.Locations.Test_SoftDeletable);
             context.Locations.Add(Data.Locations.Test_Updateable);
-
             
             context.SaveChanges();
         }
 
-        /*
-          
-         select 'context.UnitTypeGroups.Add(Data.UnitTypeGroups.' + I18NKeyName + ');'
-         from unitTypeGroups
-
-        */
         private static void SeedUnitTypeGroups(DataContext context)
         {
             context.UnitTypeGroups.Add(Data.UnitTypeGroups.Volume);
@@ -115,26 +108,18 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.SaveChanges();
         }
 
-        private static void SeedUnitTypes(DataContext context)
-        {
-            context.UnitTypes.Add(SeedData.UnitTypes.GallonsPerMinute);
-            context.UnitTypes.Add(SeedData.UnitTypes.pH);
-
-            context.SaveChanges();
-        }
-
         private static void SeedParameterTypes(DataContext context)
         {
-            context.ParameterTypes.Add(SeedData.ParameterTypes.Chemical);
-            context.ParameterTypes.Add(SeedData.ParameterTypes.Sensed);
+            context.ParameterTypes.Add(Data.ParameterTypes.Chemical);
+            context.ParameterTypes.Add(Data.ParameterTypes.Sensed);
 
             context.SaveChanges();
         }
 
         private static void SeedParameters(DataContext context)
         {
-            context.Parameters.Add(SeedData.Parameters.Flow);
-            context.Parameters.Add(SeedData.Parameters.pH);
+            context.Parameters.Add(Data.Parameters.Flow);
+            context.Parameters.Add(Data.Parameters.pH);
 
             context.SaveChanges();
         }

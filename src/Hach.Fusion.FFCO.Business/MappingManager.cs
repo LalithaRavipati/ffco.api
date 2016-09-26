@@ -61,10 +61,9 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeLocations(IProfileExpression cfg)
         {
-            cfg.CreateMap<Location, LocationQueryDto>();
-                //.ForMember(x => x.Name, opt => opt.Ignore());
+            cfg.CreateMap<Location, LocationQueryDto>()
+                .ForMember(x => x.InternalName, opt => opt.Ignore());
 
-            
             cfg.CreateMap<LocationType, LocationTypeQueryDto>();
 
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
@@ -95,17 +94,6 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForMember(x => x.Geography, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
-
-        }
-
-        /// <summary>
-        /// Initializes mapping location entities to Data Transfer Objects (DTOs) for commands and vice versa.
-        /// </summary>
-        private static void InitializeLocationForCommands()
-        private static void InitializeLocations(IProfileExpression cfg)
-        {
-            cfg.CreateMap<Location, LocationQueryDto>()
-                .ForMember(x => x.InternalName, opt => opt.Ignore());
         }
 
         /// <summary>

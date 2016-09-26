@@ -92,20 +92,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
             return Query.Result(locationDto);
         }
 
-        /// <summary>
-        /// Gets the value of the indicated location's property.
-        /// </summary>
-        /// <param name="id">ID that identifies the location to be retrieved.</param>
-        /// <param name="propertyName">Name of the property whose value is to be retrieved.</param>
-        /// <returns>
-        /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the indicated property's value.
-        /// </returns>
-        public override async Task<QueryResult<LocationQueryDto>> GetProperty(Guid id, string propertyName)
-        {
-            throw new NotImplementedException();           
-        }
-
         #endregion Get Methods
 
         #region Create Method
@@ -286,6 +272,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #endregion Update Method
 
         #region Not Implemented Methods
+
+        public override async Task<QueryResult<LocationQueryDto>> GetProperty(Guid id, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
 
         public override Task<CommandResult<LocationQueryDto, Guid>> CreateReference(Guid id, string navigationProperty, object referenceId)
         {

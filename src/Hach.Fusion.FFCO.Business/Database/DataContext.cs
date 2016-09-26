@@ -40,41 +40,15 @@ namespace Hach.Fusion.FFCO.Business.Database
                 (sender, e) => DateTimeKindAttribute.Apply(e.Entity);
         }
 
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="Location"/> entities.
-        /// </summary>
         public DbSet<Location> Locations { get; set; }
-
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="LocationType"/> entities.
-        /// </summary>
         public DbSet<LocationType> LocationTypes { get; set; }
-    
         public DbSet<UnitType> UnitTypes { get; set; }
         public DbSet<UnitTypeGroup> UnitTypeGroups { get; set; }
-    
         public DbSet<Tenant> Tenants { get; set; }
-
         public DbSet<ProductOffering> ProductOfferings { get; set; }
-
         public DbSet<ProductOfferingTenantLocation> ProductOfferingTenantLocations { get; set; }
-
-
-
-
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="ParameterType"/> entities.
-        /// </summary>
         public DbSet<ParameterType> ParameterTypes { get; set; }
-
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="UnitType"/> entities.
-        /// </summary>
         public DbSet<UnitType> UnitTypes { get; set; }
-
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="Parameter"/> entities.
-        /// </summary>
         public DbSet<Parameter> Parameters { get; set; }
 
         /// <inheritdoc />
