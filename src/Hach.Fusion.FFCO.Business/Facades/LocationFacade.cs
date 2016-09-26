@@ -27,8 +27,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     {
         private readonly DataContext _context;
 
-        private readonly IMapper _mapper;
-        private readonly string _userId;
+        private readonly IMapper _mapper;       
 
         /// <summary>
         /// Constructor for the <see cref="LocationFacade"/> class taking a database context
@@ -43,9 +42,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             ValidatorCreate = validator;
             ValidatorUpdate = validator;
 
-            _mapper = MappingManager.AutoMapper;
-
-            _userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            _mapper = MappingManager.AutoMapper;            
         }
 
         #region Get Methods
@@ -123,9 +120,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// because the created item does not have children. So, there cannot be a circular reference.
         /// </remarks>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
-        {                                 
+        {
+            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+
             // User ID should always be available, but if not ...
-            if (_userId == null)
+            if (userId == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var validationResponse = ValidatorCreate.Validate(dto);
@@ -162,7 +162,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper.Map(dto, location);
 
-            location.SetAuditFieldsOnCreate(Guid.Parse(_userId));
+            location.SetAuditFieldsOnCreate(Guid.Parse(userId));
             
             _context.Locations.Add(location);
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -182,7 +182,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Delete(Guid id)
-        {            
+        {
+            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+
             var location = await _context.Locations
               .Include(l => l.Locations)
               .SingleOrDefaultAsync(l => l.Id == id)
@@ -195,7 +198,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
 
             _context.Locations.Attach(location);
-            location.SetAuditFieldsOnUpdate(_userId);
+            location.SetAuditFieldsOnUpdate(userId);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             _context.Locations.Remove(location);
@@ -221,8 +224,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
         {
+            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            
+
             // User ID should always be available, but if not ...
             if (userId == null)
                 return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
@@ -276,7 +280,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Attach(location);
             _mapper.Map(locationDto, location);
 
-            location.SetAuditFieldsOnUpdate(_userId);
+            location.SetAuditFieldsOnUpdate(userId);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
