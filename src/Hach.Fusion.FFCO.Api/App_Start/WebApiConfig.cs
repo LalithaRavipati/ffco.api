@@ -8,6 +8,7 @@ using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
+using Hach.Fusion.Core.Extensions;
 using Hach.Fusion.FFCO.Dtos;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
@@ -84,7 +85,7 @@ namespace Hach.Fusion.FFCO.Api
                         .TokenUrl(authority + "/connect/token")
                         .Scopes(scopes =>
                         {
-                            scopes.Add("FFAccessAPI", "FFCO Web Api");
+                            scopes.Add("FFAccessAPI", "Scope required to access all FFCO API endpoints.");
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
                 })
