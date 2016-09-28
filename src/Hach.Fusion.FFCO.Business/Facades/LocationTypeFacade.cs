@@ -135,7 +135,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (dto.Id != Guid.Empty)
                 validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid("Id"));
 
-            var existingTask = _context.Locations.AnyAsync(l => l.Name == dto.I18NKeyName);
+            var existingTask = _context.LocationTypes.AnyAsync(l => l.I18NKeyName == dto.I18NKeyName);
 
             if (existingTask.Result)
                 validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
