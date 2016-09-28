@@ -18,7 +18,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing UnitTypeGroupGroups.
+    /// Web API controller for managing Unit Type Groups.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -35,7 +35,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// Default constructor for the <see cref="UnitTypeGroupsController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
-        /// <param name="facade">Facade for the repository used to persist UnitTypeGroup data.</param>
+        /// <param name="facade">Facade for the repository used to persist Unit Type Group data.</param>
         public UnitTypeGroupsController(IODataHelper oDataHelper, IFacadeWithCruModels<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
@@ -46,15 +46,16 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of UnitTypeGroupGroups.
+        /// Retrieves a queryable list of Unit Type Group.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
-        /// A list of DTOs for the UnitTypeGroupGroups that satisfy query option criteria.
+        /// A list of DTOs for the Unit Type Groups that satisfy query option criteria.
         /// </returns>
         /// <example>
-        /// GET: ~/odata/v16.1/UnitTypeGroupGroups
+        /// GET: ~/odata/v16.1/UnitTypeGroups
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -67,16 +68,17 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the UnitTypeGroup with the specified ID.
+        /// Retrieves the Unit Type Group with the specified ID.
         /// </summary>
-        /// <param name="key">Id that identifies the UnitTypeGroup to be retrieved.</param>
+        /// <param name="key">ID that identifies the Unit Type Group to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated UnitTypeGroup.
+        /// The DTO for the indicated Unit Type Group.
         /// </returns>
         /// <example>
-        /// GET: ~/odata/v16.1/UnitTypeGroupGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// GET: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -90,15 +92,16 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Creates a UnitTypeGroup.
+        /// Creates a Unit Type Group.
         /// </summary>
-        /// <param name="dto">Data Transfer Object (DTO) of the UnitTypeGroup to be created.</param>
+        /// <param name="dto">Data Transfer Object (DTO) of the Unit Type Group to be created.</param>
         /// <returns>
-        /// The DTO for the newly created UnitTypeGroup.
+        /// The DTO for the newly created Unit Type Group.
         /// </returns>
         /// <example>
-        /// POST: ~/odata/v16.1/UnitTypeGroupGroups
+        /// POST: ~/odata/v16.1/UnitTypeGroups
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="Post"]/*'/>
         [FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationType)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<UnitTypeGroupQueryDto, Guid>))]
@@ -112,17 +115,18 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Replaces the specified properties of the indicated UnitTypeGroup.
+        /// Replaces the specified properties of the indicated Unit Type Group.
         /// </summary>
-        /// <param name="key">Key that uniquely identifies the UnitTypeGroup to be edited.</param>
-        /// <param name="delta">Delta for the updated UnitTypeGroup properties.</param>
+        /// <param name="key">Key that uniquely identifies the Unit Type Group to be edited.</param>
+        /// <param name="delta">Delta for the updated Unit Type Group properties.</param>
         /// <returns>
         /// If successful, this method always returns "No Content".
         /// </returns>
         /// <example>
-        /// PATCH: ~/odata/v16.1/UnitTypeGroupGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
-        /// MERGE: ~/odata/v16.1/UnitTypeGroupGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// PATCH: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// MERGE: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupssController/Methods[@name="Patch"]/*'/>
         [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
@@ -139,15 +143,16 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Deletes the UnitTypeGroup with the specified ID.
+        /// Deletes the Unit Type Group with the specified ID.
         /// </summary>
-        /// <param name="key">ID of the UnitTypeGroup to be deleted.</param>
+        /// <param name="key">ID of the Unit Type Group to be deleted.</param>
         /// <returns>
         /// Status code indicating whether the operation was successful or why it failed.
         /// </returns>
         /// <example>
-        /// DELETE: ~/odata/v16.1/UnitTypeGroupGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// DELETE: ~/odata/v16.1/UnitTypeGroup(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="Delete"]/*'/>
         [FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationType)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.NoContent)]

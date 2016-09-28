@@ -72,6 +72,17 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore());
 
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<UnitType, UnitTypeQueryDto>();
+            cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
+
+
             cfg.CreateMap<Location, LocationCommandDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
                 .ForSourceMember(x => x.Locations, opt => opt.Ignore())
@@ -99,7 +110,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Location entity and Dtos.
+        /// Configure AutoMapper for converting between the LocationType entity and Dtos.
         /// </summary>
         private static void InitializeLocationTypes(IProfileExpression cfg)
         {
@@ -109,6 +120,14 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LocationTypeCommandDto, LocationType>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
         }
 
         /// <summary>
