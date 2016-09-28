@@ -55,6 +55,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/UnitTypes
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypesController.doc' path='UnitTypesController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -77,6 +78,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/UnitTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypesController.doc' path='UnitTypesController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -99,6 +101,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// POST: ~/odata/v16.1/UnitTypes
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypesController.doc' path='UnitTypesController/Methods[@name="Post"]/*'/>
         [FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationType)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<UnitTypeQueryDto, Guid>))]
@@ -123,6 +126,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// PATCH: ~/odata/v16.1/UnitTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// MERGE: ~/odata/v16.1/UnitTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypesController.doc' path='UnitTypesController/Methods[@name="Patch"]/*'/>
         [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
@@ -148,6 +152,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// DELETE: ~/odata/v16.1/UnitTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/UnitTypesController.doc' path='UnitTypesController/Methods[@name="Delete"]/*'/>
         [FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationType)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.NoContent)]
