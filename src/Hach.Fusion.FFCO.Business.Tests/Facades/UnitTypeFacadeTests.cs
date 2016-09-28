@@ -86,7 +86,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             Assert.That(results.Any(x => x.Id == Data.UnitTypes.Centigrade.Id), Is.True);
             Assert.That(results.Any(x => x.Id == Data.UnitTypes.Fahrenheit.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
+            //Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
         }
 
         #endregion Get Tests

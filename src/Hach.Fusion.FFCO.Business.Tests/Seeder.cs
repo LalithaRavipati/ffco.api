@@ -19,6 +19,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
         private static void DeleteAllExistingTestData(DataContext context)
         {
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
+            context.Database.ExecuteSqlCommand("DELETE foart.Measurements");
+            context.Database.ExecuteSqlCommand("DELETE foart.LocationParameters");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
             //context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
