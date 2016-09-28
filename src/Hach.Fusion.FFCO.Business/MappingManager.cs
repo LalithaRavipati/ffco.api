@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Hach.Fusion.Core.Business.Spatial;
 using Hach.Fusion.FFCO.Dtos;
 using Hach.Fusion.FFCO.Entities;
 
@@ -44,7 +43,12 @@ namespace Hach.Fusion.FFCO.Business
             // Initialize groups of mapping classes
             var config = new MapperConfiguration(cfg =>
             {
+                InitializeUnitTypeGroups(cfg);
+                InitializeUnitTypes(cfg);
+                InitializeParameterTypes(cfg);
                 InitializeLocations(cfg);
+                InitializeLocationTypes(cfg);
+                InitializeParameters(cfg);
             });
 
             // Make sure the mapping is valid
@@ -59,8 +63,15 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations(IProfileExpression cfg)
         {
             cfg.CreateMap<Location, LocationQueryDto>();
+
                 //.ForMember(x => x.Name, opt => opt.Ignore());
 
+            cfg.CreateMap<LocationTypeCommandDto, LocationType>()
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
 
             cfg.CreateMap<LocationType, LocationTypeQueryDto>()
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
@@ -72,6 +83,7 @@ namespace Hach.Fusion.FFCO.Business
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
             cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
 
+
             cfg.CreateMap<Location, LocationCommandDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
                 .ForSourceMember(x => x.Locations, opt => opt.Ignore())
@@ -82,8 +94,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForSourceMember(x => x.Geography, opt => opt.Ignore())
-                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());            
-               
+                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore()); 
 
             cfg.CreateMap<LocationCommandDto, Location>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -97,15 +108,54 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForMember(x => x.Geography, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
-
         }
 
         /// <summary>
-        /// Initializes mapping location entities to Data Transfer Objects (DTOs) for commands and vice versa.
+        /// Configure AutoMapper for converting between the Location entity and Dtos.
         /// </summary>
-        private static void InitializeLocationForCommands()
+        private static void InitializeLocationTypes(IProfileExpression cfg)
         {
-           
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Parameter entity and Dtos.
+        /// </summary>
+        private static void InitializeParameters(IProfileExpression cfg)
+        {
+            cfg.CreateMap<Parameter, ParameterDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the UnitTypeGroup entity and Dtos.
+        /// </summary>
+        private static void InitializeUnitTypeGroups(IProfileExpression cfg)
+        {
+            cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the UnitType entity and Dtos.
+        /// </summary>
+        private static void InitializeUnitTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<UnitType, UnitTypeDto>();
+
+            cfg.CreateMap<UnitType, UnitTypeQueryDto>();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the ParameterType entity and Dtos.
+        /// </summary>
+        private static void InitializeParameterTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<ParameterType, ParameterTypeDto>();
         }
     }
 }

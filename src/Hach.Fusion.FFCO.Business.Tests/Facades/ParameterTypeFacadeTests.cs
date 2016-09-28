@@ -13,7 +13,6 @@ using System.Web.OData.Routing;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Dtos;
 using Hach.Fusion.FFCO.Entities.Seed;
 using Moq;
@@ -22,20 +21,20 @@ using NUnit.Framework;
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
-    public class UnitTypeFacadeTests
+    public class ParameterTypeFacadeTests
     {
         private DataContext _context;
-        private readonly Mock<ODataQueryOptions<UnitTypeQueryDto>> _mockDtoOptions;
-        private UnitTypeFacade _facade;
+        private readonly Mock<ODataQueryOptions<ParameterTypeDto>> _mockDtoOptions;
+        private ParameterTypeFacade _facade;
 
-        public UnitTypeFacadeTests()
+        public ParameterTypeFacadeTests()
         {
             MappingManager.Initialize();
 
             var builder = BuildODataModel();
 
-            _mockDtoOptions = new Mock<ODataQueryOptions<UnitTypeQueryDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof(UnitTypeQueryDto), new ODataPath()), new HttpRequestMessage());
+            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterTypeDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterTypeDto), new ODataPath()), new HttpRequestMessage());
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
         }
@@ -44,12 +43,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var builder = new ODataModelBuilder();
 
-            builder.EntitySet<LocationQueryDto>("Locations");
-            builder.EntityType<LocationQueryDto>().HasKey(x => x.Id);
-
-            builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
-            builder.EntityType<UnitTypeQueryDto>().HasKey(x => x.Id);
-
+            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
+            builder.EntityType<ParameterTypeDto>().HasKey(x => x.Id);
 
             return builder;
         }
@@ -62,8 +57,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
             _context = new DataContext(connectionString);
-            var validator = new UnitTypeValidator();
-            _facade = new UnitTypeFacade(_context, validator);
+            _facade = new ParameterTypeFacade(_context);
 
             Seeder.SeedWithTestData(_context);
         }
@@ -77,16 +71,38 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         #region Get Tests
 
         [Test]
-        public async Task When_Get_UnitTypes_Succeeds()
+        public async Task When_Get_ParameterTypes_Succeeds()
         {
             var queryResult = await _facade.Get(_mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
+            Assert.That(results.Count, Is.EqualTo(2));
+            Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Chemical.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Sensed.Id), Is.True);
+        }
 
-            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Centigrade.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Fahrenheit.Id), Is.True);
-            //Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
+        [Test]
+        public async Task When_Get_ParameterType_Succeeds()
+        {
+            var seed = Data.ParameterTypes.Chemical;
+
+            var queryResult = await _facade.Get(seed.Id);
+
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+
+            var dto = queryResult.Dto;
+            Assert.That(dto.Id, Is.EqualTo(seed.Id));
+            Assert.That(dto.I18NKeyName, Is.EqualTo(seed.I18NKeyName));
+        }
+
+        [Test]
+        public async Task When_Get_ParameterType_InvalidId_Fails()
+        {
+            var queryResult = await _facade.Get(Guid.Empty);
+
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
+            Assert.That(queryResult.Dto, Is.Null);
         }
 
         #endregion Get Tests
