@@ -1,16 +1,13 @@
 ﻿using System;
+using Hach.Fusion.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Dtos
 {
     /// <summary>
     /// Data Transfer Object (DTO) for location entities used with create and update controller commands.
     /// </summary>
-    public class LocationCommandDto : LocationBaseDto
+    public class LocationTypeCommandDto : FFDto<Guid>
     {
-        public string Name { get; set; }
-
-        public Guid LocationTypeId { get; set; }
-
-        public Guid? ParentId { get; set; }
+        public string I18NKeyName { get; set; }
     }
 }
