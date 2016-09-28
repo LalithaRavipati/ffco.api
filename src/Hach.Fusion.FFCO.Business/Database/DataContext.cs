@@ -49,14 +49,14 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ParameterType> ParameterTypes { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserTenant> UserTenants { get; set; }
+        
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             ConfigureSchemas(modelBuilder);
 
-            modelBuilder.Conventions.Add(new ForeignKeyNamingConvention());
+            // modelBuilder.Conventions.Add(new ForeignKeyNamingConvention());
 
             // Configure dynamic filter for IsDeleted:
             // See: https://github.com/jcachat/EntityFramework.DynamicFilters
@@ -81,11 +81,9 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
-            modelBuilder.Entity<UserTenant>()
-                .ToTable("UserTenants")
-                .HasKey(e => new { e.UserId, e.TenantId });
 
             base.OnModelCreating(modelBuilder);
+
         }
 
         /// <summary>

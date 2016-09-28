@@ -18,7 +18,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing locations.
+    /// Web API controller for managing Locations.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -35,7 +35,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// Default constructor for the <see cref="LocationsController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
-        /// <param name="facade">Facade for the repository used to persist location data.</param>
+        /// <param name="facade">Facade for the repository used to persist Location data.</param>
         public LocationsController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationCommandDto, LocationCommandDto, LocationQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
@@ -46,17 +46,19 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of locations.
+        /// Retrieves a queryable list of Locations.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
-        /// A list of DTOs for the locations that satisfy query option criteria.
+        /// A list of DTOs for the Locations that satisfy query option criteria.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/Locations
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.Location)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(LocationQueryDto))]
@@ -67,18 +69,20 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the location with the specified ID.
+        /// Retrieves the Location with the specified ID.
         /// </summary>
-        /// <param name="key">Id that identifies the location to be retrieved.</param>
+        /// <param name="key">ID that identifies the Location to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated location.
+        /// The DTO for the indicated Location.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.Location)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -90,17 +94,19 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Creates a location.
+        /// Creates a Location.
         /// </summary>
-        /// <param name="dto">Data Transfer Object (DTO) of the location to be created.</param>
+        /// <param name="dto">Data Transfer Object (DTO) of the Location to be created.</param>
         /// <returns>
-        /// The DTO for the newly created location.
+        /// The DTO for the newly created Location.
         /// </returns>
         /// <example>
         /// POST: ~/odata/v16.1/Locations
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="Post"]/*'/>
         [FFSEAuthorize(PermissionAction.Create, PermissionResource.Location)]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -112,10 +118,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Replaces the specified properties of the indicated location.
+        /// Replaces the specified properties of the indicated Location.
         /// </summary>
-        /// <param name="key">Key that uniquely identifies the location to be edited.</param>
-        /// <param name="delta">Delta for the updated location properties.</param>
+        /// <param name="key">Key that uniquely identifies the Location to be edited.</param>
+        /// <param name="delta">Delta for the updated Location properties.</param>
         /// <returns>
         /// If successful, this method always returns "No Content".
         /// </returns>
@@ -123,9 +129,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// PATCH: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// MERGE: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="Patch"]/*'/>
         [FFSEAuthorize(PermissionAction.Update, PermissionResource.Location)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -139,17 +147,19 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Deletes the location with the specified ID.
+        /// Deletes the Location with the specified ID.
         /// </summary>
-        /// <param name="key">ID of the location to be deleted.</param>
+        /// <param name="key">ID of the Location to be deleted.</param>
         /// <returns>
         /// Status code indicating whether the operation was successful or why it failed.
         /// </returns>
         /// <example>
         /// DELETE: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="Delete"]/*'/>
         [FFSEAuthorize(PermissionAction.Delete, PermissionResource.Location)]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]

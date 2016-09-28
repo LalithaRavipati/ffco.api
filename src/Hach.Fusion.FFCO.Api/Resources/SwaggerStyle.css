@@ -1,0 +1,18 @@
+﻿table.gridtable {
+	border-width: 1px;
+	border-color: grey;
+    border-bottom: 1px solid grey;
+    width: 100%;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 5px;
+	border-style: solid;
+	border-color: grey;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 5px;
+	border-style: solid;
+	border-color: grey;
+}

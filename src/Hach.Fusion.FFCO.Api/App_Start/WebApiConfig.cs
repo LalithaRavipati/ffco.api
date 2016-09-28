@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.OData.Builder;
@@ -8,6 +9,8 @@ using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
+using Hach.Fusion.Core.Extensions;
+using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Dtos;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
@@ -72,7 +75,11 @@ namespace Hach.Fusion.FFCO.Api
             config
                 .EnableSwagger(c =>
                 {
-                    c.SingleApiVersion("v16_1", "FFCO Documentation");
+                    c.SingleApiVersion("v16_1", "Hach.Fusion.FFCO.API Documentation")
+                        .Description("")
+                        .Contact(cc => cc
+                            .Name("Hach Company")
+                            .Url("www.hach.com"));
                     c.CustomProvider(defaultProvider => new ODataSwaggerProvider(defaultProvider, c));
                     c.DescribeAllEnumsAsStrings();
                     c.IncludeXmlComments(GetXmlDocumentationFilename());
@@ -84,18 +91,22 @@ namespace Hach.Fusion.FFCO.Api
                         .TokenUrl(authority + "/connect/token")
                         .Scopes(scopes =>
                         {
-                            scopes.Add("FFAccessAPI", "FFCO Web Api");
+                            scopes.Add("FFAccessAPI", "Scope required to access all FFCO API endpoints.");
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
                 })
                 .EnableSwaggerUi(u =>
                 {
+                    u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                 });
         }
 
         /// <summary>
         /// Builds an Entity Data Model used by the message router and controllers.
+        /// 
+        /// DTOs need an EntitySet so that the OData controller can 'magically' parse the json into an object
+        /// Only ONE DTO can be bound per table, so a BaseDto object is needed
         /// </summary>
         /// <returns>An Entity Data Model.</returns>
         private static IEdmModel GetImplicitEdm()
@@ -103,7 +114,8 @@ namespace Hach.Fusion.FFCO.Api
             var builder = new ODataConventionModelBuilder();
 
             builder.EntitySet<LocationBaseDto>("Locations");
-            builder.EntitySet<LocationTypeQueryDto>("LocationTypes");
+            builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
+            
             builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
             builder.EntitySet<ParameterTypeDto>("ParameterTypes");
