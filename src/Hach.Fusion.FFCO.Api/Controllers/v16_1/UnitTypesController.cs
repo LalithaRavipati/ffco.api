@@ -18,7 +18,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing UnitTypes.
+    /// Web API controller for managing Unit Types.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -35,7 +35,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// Default constructor for the <see cref="UnitTypesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
-        /// <param name="facade">Facade for the repository used to persist UnitType data.</param>
+        /// <param name="facade">Facade for the repository used to persist Unit Type data.</param>
         public UnitTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<UnitTypeQueryDto, UnitTypeQueryDto, UnitTypeQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
@@ -46,11 +46,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of UnitTypes.
+        /// Retrieves a queryable list of Unit Types.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
-        /// A list of DTOs for the UnitTypes that satisfy query option criteria.
+        /// A list of DTOs for the Unit Types that satisfy query option criteria.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/UnitTypes
@@ -68,12 +68,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the UnitType with the specified ID.
+        /// Returns the Unit Type with the specified ID.
         /// </summary>
-        /// <param name="key">Id that identifies the UnitType to be retrieved.</param>
+        /// <param name="key">ID that identifies the Unit Type to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated UnitType.
+        /// The DTO for the indicated Unit Type.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/UnitTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
@@ -92,11 +92,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Creates a UnitType.
+        /// Creates a Unit Type.
         /// </summary>
-        /// <param name="dto">Data Transfer Object (DTO) of the UnitType to be created.</param>
+        /// <param name="dto">Data Transfer Object (DTO) of the Unit Type to be created.</param>
         /// <returns>
-        /// The DTO for the newly created UnitType.
+        /// The DTO for the newly created Unit Type.
         /// </returns>
         /// <example>
         /// POST: ~/odata/v16.1/UnitTypes
@@ -115,10 +115,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Replaces the specified properties of the indicated UnitType.
+        /// Replaces the specified properties of the indicated Unit Type.
         /// </summary>
-        /// <param name="key">Key that uniquely identifies the UnitType to be edited.</param>
-        /// <param name="delta">Delta for the updated UnitType properties.</param>
+        /// <param name="key">Key that uniquely identifies the Unit Type to be edited.</param>
+        /// <param name="delta">Delta for the updated Unit Type properties.</param>
         /// <returns>
         /// If successful, this method always returns "No Content".
         /// </returns>
@@ -143,9 +143,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Deletes the UnitType with the specified ID.
+        /// Deletes the Unit Type with the specified ID.
         /// </summary>
-        /// <param name="key">ID of the UnitType to be deleted.</param>
+        /// <param name="key">ID of the Unit Type to be deleted.</param>
         /// <returns>
         /// Status code indicating whether the operation was successful or why it failed.
         /// </returns>
