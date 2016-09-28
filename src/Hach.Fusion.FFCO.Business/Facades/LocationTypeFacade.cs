@@ -224,7 +224,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (locationType == null)
                 return Command.Error<LocationTypeCommandDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = Mapper.Map(locationType, new LocationTypeCommandDto());
+            var dto = _mapper.Map(locationType, new LocationTypeCommandDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
