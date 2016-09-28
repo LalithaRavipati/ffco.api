@@ -55,8 +55,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/Locations
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.Location)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(LocationQueryDto))]
@@ -77,8 +79,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.Location)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -99,8 +103,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// POST: ~/odata/v16.1/Locations
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="Post"]/*'/>
         [FFSEAuthorize(PermissionAction.Create, PermissionResource.Location)]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -123,9 +129,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// PATCH: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// MERGE: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="Patch"]/*'/>
         [FFSEAuthorize(PermissionAction.Update, PermissionResource.Location)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -148,8 +156,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// DELETE: ~/odata/v16.1/Locations(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/LocationsController.doc' path='LocationsController/Methods[@name="Delete"]/*'/>
         [FFSEAuthorize(PermissionAction.Delete, PermissionResource.Location)]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]

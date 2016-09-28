@@ -25,8 +25,8 @@ namespace Hach.Fusion.FFCO.Api
 
             var oAuthRequirements = new Dictionary<string, IEnumerable<string>>
             {
-                { "oauth2", new List<string> {"FFAccessAPI"} }
-                //{ "oauth2", new List<string> {"openid"} }
+                //{ "oauth2", new List<string> {"FFAccessAPI"} }
+                { "oauth2", new List<string> {"openid"} }
             };
 
             operation.security.Add(oAuthRequirements);
