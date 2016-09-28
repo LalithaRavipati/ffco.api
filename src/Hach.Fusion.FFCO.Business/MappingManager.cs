@@ -115,12 +115,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeLocationTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
-                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>();
 
             cfg.CreateMap<LocationTypeCommandDto, LocationType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -129,6 +124,13 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LocationType, LocationTypeCommandDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
         }
 
         /// <summary>
