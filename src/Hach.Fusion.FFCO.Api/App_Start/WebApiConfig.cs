@@ -104,6 +104,9 @@ namespace Hach.Fusion.FFCO.Api
 
         /// <summary>
         /// Builds an Entity Data Model used by the message router and controllers.
+        /// 
+        /// DTOs need an EntitySet so that the OData controller can 'magically' parse the json into an object
+        /// Only ONE DTO can be bound per table, so a BaseDto object is needed
         /// </summary>
         /// <returns>An Entity Data Model.</returns>
         private static IEdmModel GetImplicitEdm()
@@ -111,7 +114,8 @@ namespace Hach.Fusion.FFCO.Api
             var builder = new ODataConventionModelBuilder();
 
             builder.EntitySet<LocationBaseDto>("Locations");
-            builder.EntitySet<LocationTypeQueryDto>("LocationTypes");
+            builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
+            
             builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
 
