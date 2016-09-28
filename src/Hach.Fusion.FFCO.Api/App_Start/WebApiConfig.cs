@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.OData.Builder;
@@ -9,6 +10,7 @@ using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
 using Hach.Fusion.Core.Extensions;
+using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Dtos;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
@@ -73,7 +75,11 @@ namespace Hach.Fusion.FFCO.Api
             config
                 .EnableSwagger(c =>
                 {
-                    c.SingleApiVersion("v16_1", "FFCO Documentation");
+                    c.SingleApiVersion("v16_1", "Hach.Fusion.FFCO.API Documentation")
+                        .Description("")
+                        .Contact(cc => cc
+                            .Name("Hach Company")
+                            .Url("www.hach.com"));
                     c.CustomProvider(defaultProvider => new ODataSwaggerProvider(defaultProvider, c));
                     c.DescribeAllEnumsAsStrings();
                     c.IncludeXmlComments(GetXmlDocumentationFilename());
@@ -91,6 +97,7 @@ namespace Hach.Fusion.FFCO.Api
                 })
                 .EnableSwaggerUi(u =>
                 {
+                    u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                 });
         }
