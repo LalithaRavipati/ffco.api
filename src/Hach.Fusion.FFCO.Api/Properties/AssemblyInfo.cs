@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Hach.Fusion.FFCO.Api")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Hach Fusion Foundation Common APIs")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Hach Company")]
 [assembly: AssemblyProduct("Hach.Fusion.FFCO.Api")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2016 Hach Company")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
