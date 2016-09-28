@@ -143,7 +143,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (validationResponse.IsInvalid)
                 return Command.Error<LocationTypeQueryDto>(validationResponse);
 
-            var locationType = new LocationType();
+            var locationType = new LocationType
+            {
+                Id = Guid.NewGuid()
+            };
 
             _mapper.Map(dto, locationType);
 
