@@ -59,6 +59,9 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeQueryDto>>();
             builder.RegisterType<UnitTypeGroupValidator>().As<IFFValidator<UnitTypeGroupQueryDto>>();
 
+            builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();
+            builder.RegisterType<ParameterFacade>().As<IFacade<ParameterDto, Guid>>();
+
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<ChemicalFormConverter>().AsSelf().InstancePerLifetimeScope();*/

@@ -18,7 +18,6 @@ namespace Hach.Fusion.FFCO.Business.Database
     public class DataContext : DbContext
     {
         private const string Schema_dbo = "dbo";
-        private const string Schema_foart = "foart";
         private const string IsDeletedFilter = "IsDeleted";
 
         /// <summary>
@@ -40,26 +39,17 @@ namespace Hach.Fusion.FFCO.Business.Database
                 (sender, e) => DateTimeKindAttribute.Apply(e.Entity);
         }
 
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="Location"/> entities.
-        /// </summary>
         public DbSet<Location> Locations { get; set; }
-
-        /// <summary>
-        /// Gets or sets the DbSet containing <see cref="LocationType"/> entities.
-        /// </summary>
         public DbSet<LocationType> LocationTypes { get; set; }
-    
         public DbSet<UnitType> UnitTypes { get; set; }
         public DbSet<UnitTypeGroup> UnitTypeGroups { get; set; }
-    
         public DbSet<Tenant> Tenants { get; set; }
-
         public DbSet<ProductOffering> ProductOfferings { get; set; }
-
         public DbSet<ProductOfferingTenantLocation> ProductOfferingTenantLocations { get; set; }
-
-
+        public DbSet<ParameterType> ParameterTypes { get; set; }
+        public DbSet<Parameter> Parameters { get; set; }
+        public DbSet<User> Users { get; set; }
+        
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -71,12 +61,6 @@ namespace Hach.Fusion.FFCO.Business.Database
             // Configure dynamic filter for IsDeleted:
             // See: https://github.com/jcachat/EntityFramework.DynamicFilters
             modelBuilder.Filter(IsDeletedFilter, (ISoftDeletableEntity e) => e.IsDeleted, false);
-
-            //modelBuilder.Entity<Tenant>().ToTable("Tenants")
-            //    .HasKey(t => t.Id);
-
-            //modelBuilder.Entity<TenantProductOffering>()
-            //    .HasKey(t => new { t.TenantId, t.ProductOfferingId });
 
             modelBuilder.Entity<ProductOfferingTenantLocation>()
                 .ToTable("ProductOfferingsTenantsLocations")
@@ -97,7 +81,9 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
-                        base.OnModelCreating(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
+
         }
 
         /// <summary>

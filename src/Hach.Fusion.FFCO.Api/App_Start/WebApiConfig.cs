@@ -118,6 +118,8 @@ namespace Hach.Fusion.FFCO.Api
             
             builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
+            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
+            builder.EntitySet<ParameterDto>("Parameters");
 
             builder.EnableLowerCamelCase();
 
