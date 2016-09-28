@@ -58,6 +58,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(LocationTypeQueryDto))]
@@ -81,6 +82,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -104,6 +106,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Post"]/*'/>
         [FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationType)]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationTypeQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -130,6 +133,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationTypeCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -155,6 +159,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Delete"]/*'/>
         [FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationType)]
         [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
