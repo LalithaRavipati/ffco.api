@@ -17,7 +17,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing parameter types.
+    /// Web API controller for managing Parameter Types.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -44,7 +44,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of parameter types.
+        /// Retrieves a queryable list of Parameter Types.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
@@ -53,6 +53,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/ParameterTypes
         /// </example>
+        /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.ParameterType)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -65,16 +66,17 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the parameter type with the specified ID.
+        /// Returns the Parameter Type with the specified ID.
         /// </summary>
-        /// <param name="key">Id that identifies the entity to be retrieved.</param>
+        /// <param name="key">ID that identifies the entity to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated entity.
+        /// The DTO for the indicated Parameter Type.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/ParameterTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.ParameterType)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -85,25 +87,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         {
             var results = await _facade.Get(key);
             return Query(results);
-        }
-
-        /// <summary>
-        /// Gets a single property of a specified parameter type.
-        /// </summary>
-        /// <param name="key">Id of the entity whose property is to be retrieved.</param>
-        /// <param name="propertyName">Name of the property to be retrieved.</param>
-        /// <returns>
-        /// The value of the indicated entity property.
-        /// </returns>
-        /// <example>
-        /// GET: ~/odata/v16.1/ParameterTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)/Description
-        /// </example>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.ParameterType)]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetProperty([FromODataUri] Guid key, string propertyName)
-        {
-            var result = await _facade.GetProperty(key, propertyName);
-            return Query(result);
         }
     }
 }

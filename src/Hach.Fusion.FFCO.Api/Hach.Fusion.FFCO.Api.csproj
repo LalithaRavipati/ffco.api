@@ -369,6 +369,8 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypeGroupsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\ParameterTypesController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\ParametersController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
