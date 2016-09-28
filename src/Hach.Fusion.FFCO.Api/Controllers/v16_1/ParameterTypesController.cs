@@ -30,7 +30,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     public class ParameterTypesController : FFAABaseController<ParameterTypeDto, Guid>
     {
         /// <summary>
-        /// Default constructor for the <see cref="ParametersController"/> class taking OData helper and repository facade arguments.
+        /// Default constructor for the <see cref="ParameterTypesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to retrieve location type data.</param>
@@ -66,7 +66,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the Parameter Type with the specified ID.
+        /// Retrieves the Parameter Type with the specified ID.
         /// </summary>
         /// <param name="key">ID that identifies the entity to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>

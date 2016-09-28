@@ -68,7 +68,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the Unit Type with the specified ID.
+        /// Retrieves the Unit Type with the specified ID.
         /// </summary>
         /// <param name="key">ID that identifies the Unit Type to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>

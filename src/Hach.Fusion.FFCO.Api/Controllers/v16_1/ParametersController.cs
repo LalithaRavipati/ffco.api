@@ -44,7 +44,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of Parameters.
+        /// Retrieves a queryable list of ParametersX.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
@@ -66,9 +66,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the Parameter with the specified ID.
+        /// Retrieves the Parameter with the specified IDY.
         /// </summary>
-        /// <param name="id">ID that identifies the entity to be retrieved.</param>
+        /// <param name="key">ID that identifies the entity to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
         /// The DTO for the indicated Parameter.
@@ -83,9 +83,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(ParameterDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid id, ODataQueryOptions<ParameterDto> queryOptions)
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterDto> queryOptions)
         {
-            var results = await _facade.Get(id);
+            var results = await _facade.Get(key);
             return Query(results);
         }
     }
