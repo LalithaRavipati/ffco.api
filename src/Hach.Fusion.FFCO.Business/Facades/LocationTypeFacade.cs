@@ -133,7 +133,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationTypeQueryDto>(validationResponse);
 
             if (dto.Id != Guid.Empty)
-                validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid("Id"));
+                validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(LocationType.Id)));
 
             var existingTask = _context.LocationTypes.AnyAsync(l => l.I18NKeyName == dto.I18NKeyName);
 
