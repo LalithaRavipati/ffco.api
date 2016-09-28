@@ -366,6 +366,9 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationsController.doc" />
+    <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
     <Content Include="Scripts\bootstrap.js" />
