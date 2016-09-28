@@ -63,8 +63,12 @@
       <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.32.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.32\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=0.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.0.0.9\lib\net452\Hach.Fusion.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.40.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.40\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -200,12 +204,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\core\Hach.Fusion.Core\Hach.Fusion.Core.csproj">
-      <Project>{b84271f0-170a-4585-a355-d40f7b94953d}</Project>
-      <Name>Hach.Fusion.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

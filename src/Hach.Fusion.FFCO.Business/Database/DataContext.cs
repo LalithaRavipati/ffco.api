@@ -49,7 +49,6 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ParameterType> ParameterTypes { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserTenant> UserTenants { get; set; }
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
