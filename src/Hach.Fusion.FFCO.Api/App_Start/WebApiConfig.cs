@@ -94,11 +94,16 @@ namespace Hach.Fusion.FFCO.Api
                             scopes.Add("FFAccessAPI", "Scope required to access all FFCO API endpoints.");
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
+                   
                 })
                 .EnableSwaggerUi(u =>
                 {
                     u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
+                    
+                    // Disable swagger validator that shows error when deployed to production
+                    // http://stackoverflow.com/a/31734825/9840
+                    u.DisableValidator();
                 });
         }
 
