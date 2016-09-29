@@ -277,7 +277,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
         #region Not Implemented Methods
 
-        public override async Task<QueryResult<LocationQueryDto>> GetProperty(Guid id, string propertyName)
+        public override Task<QueryResult<LocationQueryDto>> GetProperty(Guid id, string propertyName)
         {
             throw new NotImplementedException();
         }

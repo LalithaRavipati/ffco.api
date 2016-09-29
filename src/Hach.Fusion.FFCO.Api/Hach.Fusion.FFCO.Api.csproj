@@ -369,11 +369,14 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypeGroupsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\ParameterTypesController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\ParametersController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
+    <Content Include="Resources\hach-logo-blue.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
@@ -433,12 +436,15 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ClientTest|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <DocumentationFile>bin\Hach.Fusion.FFCO.Api.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Develop|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <DocumentationFile>bin\Hach.Fusion.FFCO.Api.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <DocumentationFile>bin\Hach.Fusion.FFCO.Api.XML</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

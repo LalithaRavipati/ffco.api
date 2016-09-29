@@ -126,6 +126,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
         #endregion Get Methods
 
+        #region Not Implemented Methods
+
         #region Create Method
 
         /// <summary>
@@ -316,8 +318,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         #endregion Update Method
-
-        #region Not Implemented Methods
 
         public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> CreateReference(Guid id, string navigationProperty, object referenceId)
         {
