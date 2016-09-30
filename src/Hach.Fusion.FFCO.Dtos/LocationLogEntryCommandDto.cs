@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Hach.Fusion.FFCO.Dtos
+﻿namespace Hach.Fusion.FFCO.Dtos
 {
     /// <summary>
     /// Data Transfer Object (DTO) for Location Log Entry entities used with create and update controller commands.

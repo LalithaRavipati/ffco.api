@@ -18,7 +18,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing Location Types.
+    /// Web API controller for managing Location Log Entries.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -46,11 +46,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of Location Types.
+        /// Retrieves a queryable list of Location Log Entries.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
-        /// A list of DTOs for the Location Types that satisfy query option criteria.
+        /// A list of DTOs for the Location Log Entries that satisfy query option criteria.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/LocationLogEntries
@@ -70,12 +70,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves the Location Type with the specified ID.
+        /// Retrieves the Location Log Entry with the specified ID.
         /// </summary>
-        /// <param name="key">ID that identifies the Location Type to be retrieved.</param>
+        /// <param name="key">ID that identifies the Location Log Entry to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated Location Type.
+        /// The DTO for the indicated Location Log Entry.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
@@ -96,11 +96,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Creates a Location Type.
+        /// Creates a Location Log Entry.
         /// </summary>
-        /// <param name="dto">Data Transfer Object (DTO) of the Location Type to be created.</param>
+        /// <param name="dto">Data Transfer Object (DTO) of the Location Log Entry to be created.</param>
         /// <returns>
-        /// The DTO for the newly created Location Type.
+        /// The DTO for the newly created Location Log Entry.
         /// </returns>
         /// <example>
         /// POST: ~/odata/v16.1/LocationLogEntries
@@ -121,10 +121,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Replaces the specified properties of the indicated Location Type.
+        /// Replaces the specified properties of the indicated Location Log Entry.
         /// </summary>
-        /// <param name="key">Key that uniquely identifies the Location Type to be edited.</param>
-        /// <param name="delta">Delta for the updated Location Type properties.</param>
+        /// <param name="key">Key that uniquely identifies the Location Log Entry to be edited.</param>
+        /// <param name="delta">Delta for the updated Location Log Entry properties.</param>
         /// <returns>
         /// If successful, this method always returns "No Content".
         /// </returns>
@@ -151,9 +151,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Deletes the Location Type with the specified ID.
+        /// Deletes the Location Log Entry with the specified ID.
         /// </summary>
-        /// <param name="key">ID of the Location Type to be deleted.</param>
+        /// <param name="key">ID of the Location Log Entry to be deleted.</param>
         /// <returns>
         /// Status code indicating whether the operation was successful or why it failed.
         /// </returns>
