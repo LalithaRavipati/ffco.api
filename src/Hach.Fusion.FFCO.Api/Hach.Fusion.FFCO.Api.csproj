@@ -86,8 +86,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.0.0.6\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.29.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.29\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.1.1\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -340,6 +340,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\v16_1\LocationLogEntriesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
@@ -371,12 +372,13 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypeGroupsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParameterTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParametersController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
-    <Content Include="Resources\hach-logo-blue.png" />
+    <Content Include="Resources\Small-Hach-logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
