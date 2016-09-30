@@ -8,7 +8,7 @@
     /// to function properly. OData controllers must be associated with one and only one entity
     /// type. However, different entity types are allowed if they derive from that one entity.
     /// </remarks>
-    public class LocationLogEntryCommandDto : LocationBaseDto
+    public class LocationLogEntryCommandDto : LocationLogEntryBaseDto
     {
     }
 }

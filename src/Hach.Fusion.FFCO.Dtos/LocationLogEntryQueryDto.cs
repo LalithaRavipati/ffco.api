@@ -7,6 +7,8 @@ namespace Hach.Fusion.FFCO.Dtos
     /// </summary>
     public class LocationLogEntryQueryDto : LocationLogEntryBaseDto
     {
+        public LocationQueryDto Location { get; set; }
+
         public Guid CreatedById { get; set; }
         public DateTime CreatedOn { get; set; }
         public Guid ModifiedById { get; set; }

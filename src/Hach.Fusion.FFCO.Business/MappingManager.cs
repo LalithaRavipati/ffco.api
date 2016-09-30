@@ -47,6 +47,7 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeUnitTypes(cfg);
                 InitializeParameterTypes(cfg);
                 InitializeLocations(cfg);
+                InitializeLocationLogEntries(cfg);
                 InitializeLocationTypes(cfg);
                 InitializeParameters(cfg);
             });
@@ -108,6 +109,33 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForMember(x => x.Geography, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configures AutoMapper for Location Log Entries.
+        /// </summary>
+        /// <param name="cfg">Configuration for profile-specific maps.</param>
+        private static void InitializeLocationLogEntries(IProfileExpression cfg)
+        {
+            cfg.CreateMap<LocationLogEntry, LocationLogEntryQueryDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LocationLogEntryCommandDto, LocationLogEntry>()
+                .ForMember(x => x.Location, opt => opt.Ignore())
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LocationLogEntry, LocationLogEntryCommandDto>()
+                .ForSourceMember(x => x.Location, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
         }
 
         /// <summary>

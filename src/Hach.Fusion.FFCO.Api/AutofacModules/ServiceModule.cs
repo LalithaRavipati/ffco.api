@@ -29,11 +29,6 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
                 .AsSelf()
                 .As<DataContext>()
                 .InstancePerLifetimeScope();
-            /*builder.Register(
-                c => new FFAAContext(ConfigurationManager.ConnectionStrings["IdSvrConnectionString"].ConnectionString))
-                .AsSelf()
-                .As<IIdentityContext>()
-                .InstancePerLifetimeScope();*/
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
@@ -49,12 +44,16 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<LocationTypeFacade>().As<IFacadeWithCruModels<LocationTypeCommandDto, LocationTypeCommandDto,
                 LocationTypeQueryDto, Guid>>();
 
+            builder.RegisterType<LocationLogEntryFacade>().As<IFacadeWithCruModels<LocationLogEntryCommandDto, LocationLogEntryCommandDto,
+                LocationLogEntryQueryDto, Guid>>();
+
             builder.RegisterType<UnitTypeFacade>().As<IFacadeWithCruModels<UnitTypeQueryDto, UnitTypeQueryDto,
                UnitTypeQueryDto, Guid>>();
             builder.RegisterType<UnitTypeGroupFacade>().As<IFacadeWithCruModels<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto,
                UnitTypeGroupQueryDto, Guid>>();
 
             builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
+            builder.RegisterType<LocationLogEntryValidator>().As<IFFValidator<LocationLogEntryCommandDto>>();
             builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeCommandDto>>();
             builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeQueryDto>>();
             builder.RegisterType<UnitTypeGroupValidator>().As<IFFValidator<UnitTypeGroupQueryDto>>();
