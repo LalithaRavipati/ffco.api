@@ -49,7 +49,8 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ParameterType> ParameterTypes { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<User> Users { get; set; }
-        
+        public DbSet<DashboardOption> DashboardOptions { get; set; }
+        public DbSet<Dashboard> Dashboards { get; set; }
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -81,9 +82,7 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
-
             base.OnModelCreating(modelBuilder);
-
         }
 
         /// <summary>
@@ -94,7 +93,6 @@ namespace Hach.Fusion.FFCO.Business.Database
             // Set default schema for tables.               
             modelBuilder.HasDefaultSchema(Schema_dbo);            
         }
-
 
         #region Soft Delete Support
 

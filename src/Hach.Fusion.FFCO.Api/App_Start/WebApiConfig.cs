@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.OData.Builder;
@@ -9,9 +8,9 @@ using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.Core.Extensions;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Dtos.Dashboards;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
@@ -120,7 +119,8 @@ namespace Hach.Fusion.FFCO.Api
 
             builder.EntitySet<LocationBaseDto>("Locations");
             builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
-            
+            builder.EntitySet<DashboardBaseDto>("Dashboards");
+
             builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
             builder.EntitySet<ParameterTypeDto>("ParameterTypes");

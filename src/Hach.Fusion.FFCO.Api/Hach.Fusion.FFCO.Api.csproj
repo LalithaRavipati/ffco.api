@@ -46,6 +46,14 @@
     <DocumentationFile>bin\Hach.Fusion.FFCO.Api.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Akka, Version=1.1.2.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.1.1.2\lib\net45\Akka.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Akka.Remote, Version=1.1.2.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.Remote.1.1.2\lib\net45\Akka.Remote.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
@@ -82,12 +90,24 @@
       <HintPath>..\packages\Flurl.1.1.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=0.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.0.0.6\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Google.ProtocolBuffers, Version=2.4.1.555, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.29.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.29\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Google.ProtocolBuffers.Serialization, Version=2.4.1.555, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hach.Fusion.Core, Version=0.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.0.0.9-FOART-390-A\lib\net452\Hach.Fusion.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.4\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Helios.2.1.2\lib\net45\Helios.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -216,6 +236,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
@@ -340,6 +365,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\v16_1\DashboardsController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
@@ -371,6 +397,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypeGroupsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParameterTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParametersController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\DashboardsController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
