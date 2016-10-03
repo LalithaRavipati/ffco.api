@@ -25,6 +25,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE foart.Measurements");
             context.Database.ExecuteSqlCommand("DELETE foart.LocationParameters");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
+            context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.Parameters");
 
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
