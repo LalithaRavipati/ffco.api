@@ -378,7 +378,8 @@
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
-    <Content Include="Resources\Small-Hach-logo.png" />
+    <EmbeddedResource Include="Resources\Small-Hach-logo.png" />
+    <EmbeddedResource Include="Resources\SwaggerDefault" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />

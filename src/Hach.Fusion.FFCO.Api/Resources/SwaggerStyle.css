@@ -16,3 +16,9 @@ table.gridtable td {
 	border-style: solid;
 	border-color: grey;
 }
+.swagger-section #header {
+    background-color: #0098DB;
+}
+.swagger-section #header #logo {
+    padding: 20px 0 20px 120px;
+}
