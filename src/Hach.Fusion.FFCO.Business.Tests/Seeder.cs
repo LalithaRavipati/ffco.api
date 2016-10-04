@@ -17,6 +17,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedLocations(context);
             SeedParameters(context);
             SeedProductOfferingTenantLocations(context);
+            SeedDashboardOptions(context);
+            SeedDashboards(context);
         }
 
         private static void DeleteAllExistingTestData(DataContext context)
@@ -27,6 +29,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.Parameters");
+            context.Database.ExecuteSqlCommand("DELETE dbo.Dashboards");
+            context.Database.ExecuteSqlCommand("DELETE dbo.DashboardOptions");
 
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
@@ -137,6 +141,29 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant1);
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedDashboardOptions(DataContext context)
+        {
+            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant01_Options);
+            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant02_Options);
+            context.DashboardOptions.Add(Data.DashboardOptions.HachFusion_Options);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedDashboards(DataContext context)
+        {
+            context.Dashboards.Add(Data.Dashboards.tnt01user_Dashboard_1);
+            context.Dashboards.Add(Data.Dashboards.tnt01user_Dashboard_2);
+            context.Dashboards.Add(Data.Dashboards.tnt02user_Dashboard_3);
+            context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_4);
+            context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_5);
+            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_SoftDeleted);
+            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToDelete);
+            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToUpdate);
 
             context.SaveChanges();
         }

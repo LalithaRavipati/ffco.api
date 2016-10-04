@@ -169,7 +169,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Delete(Guid id)
         {
-            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
+            // Thread.CurrentPrincipal is not available in the constructor.  Do not try and move this
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
 
             var location = await _context.Locations

@@ -170,6 +170,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationTypeQueryDto, Guid>> Delete(Guid id)
         {
+            // Thread.CurrentPrincipal is not available in the constructor.  Do not try and move this
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+
             var locationType = await _context.LocationTypes                           
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
@@ -182,6 +185,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
                
             if (cannotDelete)
                 return Command.Error<LocationTypeQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
+
+            _context.LocationTypes.Attach(locationType);
+            locationType.SetAuditFieldsOnUpdate(userId);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             _context.LocationTypes.Remove(locationType);
             await _context.SaveChangesAsync().ConfigureAwait(false);

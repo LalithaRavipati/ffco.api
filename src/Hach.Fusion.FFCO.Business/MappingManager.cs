@@ -168,6 +168,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
 
             cfg.CreateMap<Dashboard, DashboardCommandDto>()
+                .ForSourceMember(x => x.OwnerUserId, opt => opt.Ignore())
                 .ForSourceMember(x => x.OwnerUser, opt => opt.Ignore())
                 .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
                 .ForSourceMember(x => x.DashboardOptions, opt => opt.Ignore())
@@ -179,6 +180,7 @@ namespace Hach.Fusion.FFCO.Business
 
             cfg.CreateMap<DashboardCommandDto, Dashboard>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.OwnerUserId, opt => opt.Ignore())
                 .ForMember(x => x.OwnerUser, opt => opt.Ignore())
                 .ForMember(x => x.Tenant, opt => opt.Ignore())
                 .ForMember(x => x.DashboardOptions, opt => opt.Ignore())

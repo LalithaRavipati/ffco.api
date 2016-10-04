@@ -23,9 +23,6 @@ namespace Hach.Fusion.FFCO.Business.Validators
                     FFErrors = FFErrors
                 };
 
-            Evaluate(x => x.OwnerUserId, dto.OwnerUserId)
-                .Required();
-
             Evaluate(x => x.TenantId, dto.TenantId)
                 .Required();
 

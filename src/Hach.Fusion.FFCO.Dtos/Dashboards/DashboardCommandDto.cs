@@ -7,7 +7,6 @@ namespace Hach.Fusion.FFCO.Dtos.Dashboards
     /// </summary>
     public class DashboardCommandDto : DashboardBaseDto
     {
-        public Guid OwnerUserId { get; set; }
         public Guid TenantId { get; set; }
         public Guid DashboardOptionId { get; set; }
         public string Layout { get; set; }
