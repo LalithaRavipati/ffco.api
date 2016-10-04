@@ -211,6 +211,15 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(queryResult.Dto, Is.Null);
         }
 
+        [Test]
+        public async Task When_Get_BadId_Fails()
+        {
+            var queryResult = await _facade.Get(Guid.NewGuid());
+
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
+            Assert.That(queryResult.Dto, Is.Null);
+        }
+
         #endregion Get Tests
 
         #region Create Tests

@@ -20,8 +20,8 @@
             <td>Retrieves the Id of the tenant that the dashboard belongs to.</td >
           </tr>
           <tr>
-            <td>DashboardOptions</td >
-            <td>Retrieves the Id of the dashboard options associated with the dashboard.</td >
+            <td>DashboardOption</td >
+            <td>Retrieves the Id of the dashboard option associated with the dashboard.</td >
           </tr>
         </table>
       </p>
@@ -70,8 +70,8 @@
             <td>Retrieves the Id of the tenant that the dashboard belongs to.</td >
           </tr>
           <tr>
-            <td>DashboardOptions</td >
-            <td>Retrieves the Id of the dashboard options associated with the dashboard.</td >
+            <td>DashboardOption</td >
+            <td>Retrieves the Id of the dashboard option associated with the dashboard.</td >
           </tr>
         </table>
       </p>
@@ -127,17 +127,27 @@
           <tr>
             <td>FFERR-101</td >
             <td>EntityAlreadyExists</td >
+            <td>The entity format is invalid.</td>
+          </tr>
+          <tr>
+            <td>FFERR-102</td >
+            <td>EntityFormatIsInvalid</td >
             <td>The entity already exists and can't be created.</td>
+          </tr>
+          <tr>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>A property is required (applies to the TenantId and DashboardOptionId).</td>
           </tr>
           <tr>
             <td>FFERR-209</td >
             <td>ForeignKeyValueDoesNotExist</td >
-            <td>A foreign key value does not exist (applies to the ParentId and LocationTypeId fields).</td>
+            <td>A foreign key value does not exist (applies to the TenantId and DashboardOptionId fields).</td>
           </tr>
           <tr>
             <td>FFERR-211</td >
             <td>PropertyIsInvalid</td >
-            <td>A property is invalid (applies to the ID field).</td>
+            <td>A property is invalid (applies to the Id field).</td>
           </tr>
         </table>
       </p>
@@ -176,27 +186,17 @@
           <tr>
             <td>FFERR-203</td >
             <td>EntityIDUpdateNotAllowed</td >
-            <td>Updating the ID field is not allowed.</td>
-          </tr>
-          <tr>
-            <td>FFERR-204</td >
-            <td>EntityPropertyDuplicateNotAllowed</td >
-            <td>A duplicate of the indicated property is not allowed (applies to the Name field).</td>
+            <td>Updating the Id field is not allowed.</td>
           </tr>
           <tr>
             <td>FFERR-209</td >
             <td>ForeignKeyValueDoesNotExist</td >
-            <td>The foreign key value does not exist (applies to the Parent Id and Location Type Id fields).</td>
-          </tr>
-          <tr>
-            <td>FFERR-210</td >
-            <td>CircularReferenceNotAllowed</td >
-            <td>Adding this location with the indicatd ParentId would result in a circular reference.</td>
+            <td>The foreign key value does not exist (applies to the TenantId and Location DashboardOptionId fields).</td>
           </tr>
           <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
-            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+            <td>Information expected in a token is either invalid or missing.</td>
           </tr>
         </table>
       </p>
@@ -226,6 +226,11 @@
             <td>FFERR-100</td >
             <td>EntityNotFound</td >
             <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-106</td >
+            <td>EntityCouldNotBeDeleted</td >
+            <td>The specified entity could not be deleted. Only the creator/owner of a dashboard can delete it.</td>
           </tr>
         </table>
       </p>
