@@ -115,12 +115,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var userTenants = await _context.GetTenantsForUser(userIdGuid).ConfigureAwait(false);
 
-            if (dto.TenantId == Guid.Empty || !userTenants.Any(x => x.Id == dto.TenantId))
+            if (dto.TenantId != Guid.Empty && !userTenants.Any(x => x.Id == dto.TenantId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
 
             var userDashboardOptions = await _context.GetDashboardOptionsForUser(userIdGuid).ConfigureAwait(false);
 
-            if (dto.DashboardOptionId == Guid.Empty || !userDashboardOptions.Any(x => x.Id == dto.DashboardOptionId))
+            if (dto.DashboardOptionId != Guid.Empty && !userDashboardOptions.Any(x => x.Id == dto.DashboardOptionId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("DashboardOptionId"));
 
             if (validationResponse.IsInvalid)
@@ -162,6 +162,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             if (entity == null)
                 return Command.Error<DashboardQueryDto>(EntityErrorCode.EntityNotFound);
+
+            var userIdGuid = Guid.Parse(userId);
+            if (entity.OwnerUserId != userIdGuid)
+                return Command.Error<DashboardQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
 
             _context.Dashboards.Attach(entity);
             entity.SetAuditFieldsOnUpdate(userId);
@@ -221,7 +225,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var userDashboardOptions = await _context.GetDashboardOptionsForUser(Guid.Parse(userId)).ConfigureAwait(false);
 
-            if (dto.DashboardOptionId == Guid.Empty || !userDashboardOptions.Any(x => x.Id == dto.DashboardOptionId))
+            if (dto.DashboardOptionId != Guid.Empty && !userDashboardOptions.Any(x => x.Id == dto.DashboardOptionId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("DashboardOptionId"));
 
             // Including the original Id in the Patch request will not return an error but attempting to change the Id is not allowed.
