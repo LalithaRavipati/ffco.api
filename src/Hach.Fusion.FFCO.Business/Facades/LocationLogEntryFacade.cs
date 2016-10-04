@@ -57,7 +57,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         {
             queryOptions.Validate(ValidationSettings);
 
-            var results = await Task.Run(() => _context.LocationLogEntries
+            // User ID should always be available, but if not ...
+            var userId = GetCurrentUser();
+            if (!userId.HasValue)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var results = await Task.Run(() => GetLocationLogEntriesForUser(userId.Value)
                 .Select(_mapper.Map<LocationLogEntry, LocationLogEntryQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
@@ -75,7 +80,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LocationLogEntryQueryDto>> Get(Guid id)
         {
-            var result = await Task.Run(() => _context.LocationLogEntries
+            // User ID should always be available, but if not ...
+            var userId = GetCurrentUser();
+            if (!userId.HasValue)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var result = await Task.Run(() => GetLocationLogEntriesForUser(userId.Value)
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
@@ -101,10 +111,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationLogEntryQueryDto, Guid>> Create(LocationLogEntryCommandDto dto)
         {
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            
             // User ID should always be available, but if not ...
-            if (userId == null)
+            var userId = GetCurrentUser();
+            if (!userId.HasValue)
                 return Command.Error<LocationLogEntryQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var validationResponse = ValidatorCreate.Validate(dto);
@@ -113,7 +122,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationLogEntryQueryDto>(validationResponse);
 
             if (dto.Id != Guid.Empty)
-                validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(LocationType.Id)));
+                validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(LocationLogEntry.Id)));
+
+            var locationExists = await DoesLocationExist(dto.LocationId);
+            if (!locationExists)
+                validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(LocationLogEntry.LocationId)));
 
             if (validationResponse.IsInvalid)
                 return Command.Error<LocationLogEntryQueryDto>(validationResponse);
@@ -125,7 +138,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper.Map(dto, locationLogEntry);
 
-            locationLogEntry.SetAuditFieldsOnCreate(userId);
+            locationLogEntry.SetAuditFieldsOnCreate(userId.Value);
             
             _context.LocationLogEntries.Add(locationLogEntry);
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -146,20 +159,19 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationLogEntryQueryDto, Guid>> Delete(Guid id)
         {
-            var locationLogEntry = await _context.LocationTypes                           
+            // User ID should always be available, but if not ...
+            var userId = GetCurrentUser();
+            if (!userId.HasValue)
+                return Command.Error<LocationLogEntryQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var locationLogEntry = await GetLocationLogEntriesForUser(userId.Value)                           
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
 
             if (locationLogEntry == null)
                 return Command.Error<LocationLogEntryQueryDto>(EntityErrorCode.EntityNotFound);
 
-            var cannotDelete = _context.Locations
-                .Any(x => x.LocationTypeId == id);
-               
-            if (cannotDelete)
-                return Command.Error<LocationLogEntryQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
-
-            _context.LocationTypes.Remove(locationLogEntry);
+            _context.LocationLogEntries.Remove(locationLogEntry);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             return Command.NoContent<LocationLogEntryQueryDto>();
@@ -182,38 +194,41 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationLogEntryCommandDto, Guid>> Update(Guid id, Delta<LocationLogEntryCommandDto> delta)
         {
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            
             // User ID should always be available, but if not ...
-            if (userId == null)
+            var userId = GetCurrentUser();
+            if (!userId.HasValue)
                 return Command.Error<LocationLogEntryCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
                 return Command.Error<LocationLogEntryCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var locationType = await _context.LocationTypes
+            var locationLogEntry = await GetLocationLogEntriesForUser(userId.Value)
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
-            if (locationType == null)
+            if (locationLogEntry == null)
                 return Command.Error<LocationLogEntryCommandDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map(locationType, new LocationLogEntryCommandDto());
+            var dto = _mapper.Map(locationLogEntry, new LocationLogEntryCommandDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
 
-            // Including the original Id in the Patch request will not return an error but attempting to change the Id is not allowed.
+            // Including the original ID in the Patch request will not return an error but attempting to change the Id is not allowed.
             if (dto.Id != id)
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
+
+            var locationExists = await DoesLocationExist(dto.LocationId);
+            if (!locationExists)
+                validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(LocationLogEntry.LocationId)));
 
             if (validationResponse.IsInvalid)
                 return Command.Error<LocationLogEntryCommandDto>(validationResponse);
 
-            _context.LocationTypes.Attach(locationType);
-            _mapper.Map(dto, locationType);
+            _context.LocationLogEntries.Attach(locationLogEntry);
+            _mapper.Map(dto, locationLogEntry);
 
-            locationType.SetAuditFieldsOnUpdate(userId);
+            locationLogEntry.SetAuditFieldsOnUpdate(userId.Value);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -240,5 +255,44 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         #endregion Not Implemented Methods
+
+        #region Facade Helper Methods
+
+        private async Task<bool> DoesLocationExist(Guid locationId)
+        {
+            var userId = GetCurrentUser();
+
+            return await _context.ProductOfferingTenantLocations.AnyAsync(
+                potl => potl.LocationId == locationId && potl.Tenant.Users.Any(u => u.Id == userId));
+        }
+
+        /// <summary>
+        /// Gets the GUID User ID for the current user.
+        /// </summary>
+        /// <returns>The nullable GUID for the current user.</returns>
+        private Guid? GetCurrentUser()
+        {
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+
+            return userId == null ? null : new Guid?(Guid.Parse(userId));
+        }
+
+        /// <summary>
+        /// Gets a list of Location Log Entities for which the specified user is authorized.
+        /// </summary>
+        /// <returns>
+        /// A queryable list of Location Log Entities for which the specified user is authorized.
+        /// </returns>
+        private IQueryable<LocationLogEntry> GetLocationLogEntriesForUser(Guid userId)
+        {
+            var result = from lle in _context.LocationLogEntries
+                         join potl in _context.ProductOfferingTenantLocations on lle.LocationId equals potl.LocationId
+                         where potl.Tenant.Users.Any(x => x.Id == userId)
+                         select lle;
+
+            return result;
+        }
+
+        #endregion Facade Helper Methods
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.Core.Extensions;
 using Hach.Fusion.FFCO.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Validators
@@ -21,7 +22,13 @@ namespace Hach.Fusion.FFCO.Business.Validators
                 return new FFValidationResponse
                 {
                     FFErrors = FFErrors
-                };   
+                };
+
+            Evaluate(l => l.LocationId, dto.LocationId)
+                .Required();
+
+            Evaluate(l => l.LogEntry, dto.LogEntry)
+                .Required();
 
             return new FFValidationResponse
             {

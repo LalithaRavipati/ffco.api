@@ -130,7 +130,7 @@ namespace Hach.Fusion.FFCO.Api
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
                 })
-                .EnableSwaggerUi(u =>
+                .EnableSwaggerUi("api/{*assetPath}", u =>
                 {
                     u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");

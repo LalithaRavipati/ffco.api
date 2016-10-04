@@ -18,6 +18,11 @@
             <td>ODataQueryInvalid</td >
             <td>The OData query is invalid. Check the OData parameters.</td>
           </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
         </table>
       </p>
     </remarks>
@@ -52,6 +57,11 @@
             <td>EntityNotFound</td >
             <td>The specified entity was not found.</td>
           </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
         </table>
       </p>
     </remarks>
@@ -82,9 +92,14 @@
             <td>The entity already exists and can't be created.</td>
           </tr>
           <tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>The entity includes a foreign key reference to an entity that does not exist (applies to the LocationId field).</td>
+          </tr>
+          <tr>
             <td>FFERR-211</td >
             <td>PropertyIsInvalid</td >
-            <td>A property is invalid (applies to the ID field).</td>
+            <td>A property is invalid (applies to the ID and Log Entry fields). The ID field should not be specified and the Log Entry should not be null.</td>
           </tr>
           <tr>
             <td>FFERR-304</td >
@@ -131,15 +146,10 @@
             <td>Updating the ID field is not allowed.</td>
           </tr>
           <tr>
-            <td>FFERR-204</td >
-            <td>EntityPropertyDuplicateNotAllowed</td >
-            <td>A duplicate of the indicated property is not allowed (applies to the I18NKeyName field).</td>
-          </tr>
-          <tr>
-            <td>FFERR-210</td >
-            <td>CircularReferenceNotAllowed</td >
-            <td>Adding this location with the indicatd ParentId would result in a circular reference.</td>
-          </tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>The entity includes a foreign key reference to an entity that does not exist (applies to the LocationId field).</td>
+          </tr>          
           <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
@@ -178,7 +188,12 @@
             <td>FFERR-106</td >
             <td>EntityCouldNotBeDeleted</td >
             <td>The specified Location Type could not be deleted because one or more Locations refer to it.</td>
-          </tr>          
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
         </table>
       </p>
     </remarks>

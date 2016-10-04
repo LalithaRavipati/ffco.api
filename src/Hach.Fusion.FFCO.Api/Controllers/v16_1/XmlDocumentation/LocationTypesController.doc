@@ -136,11 +136,6 @@
             <td>A duplicate of the indicated property is not allowed (applies to the I18NKeyName field).</td>
           </tr>
           <tr>
-            <td>FFERR-210</td >
-            <td>CircularReferenceNotAllowed</td >
-            <td>Adding this location with the indicatd ParentId would result in a circular reference.</td>
-          </tr>
-          <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
             <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>

@@ -15,6 +15,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedUnitTypeGroups(context);
 
             SeedLocations(context);
+            SeedLocationLogEntries(context);
             SeedParameters(context);
             SeedProductOfferingTenantLocations(context);
         }
@@ -23,8 +24,10 @@ namespace Hach.Fusion.FFCO.Business.Tests
         {
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
             context.Database.ExecuteSqlCommand("DELETE foart.Measurements");
+            context.Database.ExecuteSqlCommand("DELETE dbo.LocationLogEntries");
             context.Database.ExecuteSqlCommand("DELETE foart.LocationParameters");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
+            context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.Parameters");
 
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
@@ -65,6 +68,12 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Locations.Add(Data.Locations.Test_SoftDeletable);
             context.Locations.Add(Data.Locations.Test_Updateable);
             
+            context.SaveChanges();
+        }
+
+        private static void SeedLocationLogEntries(DataContext context)
+        {
+
             context.SaveChanges();
         }
 

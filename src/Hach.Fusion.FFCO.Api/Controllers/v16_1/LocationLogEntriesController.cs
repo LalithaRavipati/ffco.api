@@ -56,8 +56,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/LocationLogEntries
         /// </example>
         /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetAll"]/*'/>
-        // TODO:  
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
+        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -80,9 +79,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
-        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetOne"]/*'/>
-        // TODO: 
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetOne"]/*'/> 
+        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -106,8 +104,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// POST: ~/odata/v16.1/LocationLogEntries
         /// </example>
         /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Post"]/*'/>
-        // TODO: 
-        //[FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationLogEntry)]
+        [FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationLogEntry)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
@@ -132,9 +129,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// PATCH: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// MERGE: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
-        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Patch"]/*'/>
-        // TODO: 
-        //[FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationLogEntry)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Patch"]/*'/> 
+        [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationLogEntry)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -160,9 +156,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// DELETE: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
-        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Delete"]/*'/>
-        // TODO:  
-        //[FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationLogEntry)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Delete"]/*'/>  
+        [FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationLogEntry)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.NoContent)]
