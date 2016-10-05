@@ -51,6 +51,7 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeLocationTypes(cfg);
                 InitializeParameters(cfg);
                 InitializeDashboards(cfg);
+                InitializeDashboardOptions(cfg);
             });
 
             // Make sure the mapping is valid
@@ -171,7 +172,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.OwnerUserId, opt => opt.Ignore())
                 .ForSourceMember(x => x.OwnerUser, opt => opt.Ignore())
                 .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
-                .ForSourceMember(x => x.DashboardOptions, opt => opt.Ignore())
+                .ForSourceMember(x => x.DashboardOption, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
@@ -183,7 +184,37 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.OwnerUserId, opt => opt.Ignore())
                 .ForMember(x => x.OwnerUser, opt => opt.Ignore())
                 .ForMember(x => x.Tenant, opt => opt.Ignore())
-                .ForMember(x => x.DashboardOptions, opt => opt.Ignore())
+                .ForMember(x => x.DashboardOption, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Dashboard option entity and Dtos.
+        /// </summary>
+        private static void InitializeDashboardOptions(IProfileExpression cfg)
+        {
+            cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<DashboardOption, DashboardOptionCommandDto>()
+                .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<DashboardOptionCommandDto, DashboardOption>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Tenant, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())

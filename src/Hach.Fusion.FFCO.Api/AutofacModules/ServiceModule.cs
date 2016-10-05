@@ -9,6 +9,7 @@ using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Dtos.Dashboards;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -61,6 +62,10 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
 
             builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();
             builder.RegisterType<ParameterFacade>().As<IFacade<ParameterDto, Guid>>();
+
+            builder.RegisterType<DashboardFacade>().As<IFacadeWithCruModels<DashboardCommandDto, DashboardCommandDto,
+                DashboardQueryDto, Guid>>();
+            builder.RegisterType<DashboardValidator>().As<IFFValidator<DashboardCommandDto>>();
 
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 

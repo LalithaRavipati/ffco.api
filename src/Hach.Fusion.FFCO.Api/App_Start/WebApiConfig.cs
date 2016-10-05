@@ -98,6 +98,7 @@ namespace Hach.Fusion.FFCO.Api
                 .EnableSwaggerUi(u =>
                 {
                     u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
+                    u.InjectStylesheet(typeof(DashboardsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                     
                     // Disable swagger validator that shows error when deployed to production
@@ -116,7 +117,7 @@ namespace Hach.Fusion.FFCO.Api
         private static IEdmModel GetImplicitEdm()
         {
             var builder = new ODataConventionModelBuilder();
-
+            
             builder.EntitySet<LocationBaseDto>("Locations");
             builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
             builder.EntitySet<DashboardBaseDto>("Dashboards");

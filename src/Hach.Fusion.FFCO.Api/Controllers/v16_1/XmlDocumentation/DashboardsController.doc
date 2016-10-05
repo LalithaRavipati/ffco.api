@@ -1,4 +1,4 @@
-﻿<LocationsController>
+﻿<DashboardsController>
 
 	<Methods name="GetAll">
 
@@ -238,4 +238,4 @@
 
   </Methods>
 
-</LocationsController>
+</DashboardsController>

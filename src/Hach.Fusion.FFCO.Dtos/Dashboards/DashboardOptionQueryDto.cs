@@ -1,16 +1,17 @@
 ﻿using System;
+using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Dtos.Dashboards
 {
     /// <summary>
-    /// Data Transfer Object (DTO) for dashboard entities used with query controller commands.
+    /// Data Transfer Object (DTO) for dashboard option entities used with query controller commands.
     /// </summary>
-    public class DashboardQueryDto : DashboardBaseDto
+    public class DashboardOptionQueryDto : DashboardOptionBaseDto
     {
-        public Guid OwnerUserId { get; set; }
         public Guid TenantId { get; set; }
-        public Guid DashboardOptionId { get; set; }
-        public string Layout { get; set; }
+        public virtual Tenant Tenant { get; set; }
+
+        public string Options { get; set; }
 
         public Guid CreatedById { get; set; }
         public DateTime CreatedOn { get; set; }
