@@ -8,8 +8,14 @@ namespace Hach.Fusion.FFCO.Dtos.Dashboards
     public class DashboardQueryDto : DashboardBaseDto
     {
         public Guid OwnerUserId { get; set; }
+        public UserDto OwnerUser { get; set; }
+
         public Guid TenantId { get; set; }
+        public TenantDto Tenant { get; set; }
+
         public Guid DashboardOptionId { get; set; }
+        public DashboardOptionQueryDto DashboardOption { get; set; }
+
         public string Layout { get; set; }
 
         public Guid CreatedById { get; set; }

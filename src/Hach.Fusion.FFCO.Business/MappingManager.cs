@@ -52,6 +52,8 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeParameters(cfg);
                 InitializeDashboards(cfg);
                 InitializeDashboardOptions(cfg);
+                InitializeTenants(cfg);
+                InitializeUsers(cfg);
             });
 
             // Make sure the mapping is valid
@@ -162,10 +164,6 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeDashboards(IProfileExpression cfg)
         {
             cfg.CreateMap<Dashboard, DashboardQueryDto>()
-                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
 
             cfg.CreateMap<Dashboard, DashboardCommandDto>()
@@ -198,10 +196,6 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeDashboardOptions(IProfileExpression cfg)
         {
             cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>()
-                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
 
             cfg.CreateMap<DashboardOption, DashboardOptionCommandDto>()
@@ -220,6 +214,25 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Tenant entity and Dto.
+        /// </summary>
+        private static void InitializeTenants(IProfileExpression cfg)
+        {
+            cfg.CreateMap<Tenant, TenantDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the User entity and Dto.
+        /// </summary>
+        private static void InitializeUsers(IProfileExpression cfg)
+        {
+            cfg.CreateMap<User, UserDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
+                .ForSourceMember(x => x.Tenants, opt => opt.Ignore());
         }
     }
 }

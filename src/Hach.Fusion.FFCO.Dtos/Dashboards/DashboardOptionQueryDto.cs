@@ -1,5 +1,4 @@
 ﻿using System;
-using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Dtos.Dashboards
 {
@@ -9,7 +8,7 @@ namespace Hach.Fusion.FFCO.Dtos.Dashboards
     public class DashboardOptionQueryDto : DashboardOptionBaseDto
     {
         public Guid TenantId { get; set; }
-        public virtual Tenant Tenant { get; set; }
+        public TenantDto Tenant { get; set; }
 
         public string Options { get; set; }
 
