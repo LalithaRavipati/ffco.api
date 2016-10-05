@@ -67,8 +67,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.0.0.11\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.6\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.7\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">

@@ -5,7 +5,7 @@ namespace Hach.Fusion.FFCO.Dtos.Dashboards
     /// <summary>
     /// Data Transfer Object (DTO) for dashboard option entities used with create and update controller commands.
     /// </summary>
-    public class DashboardOptionCommandDto
+    public class DashboardOptionCommandDto : DashboardOptionBaseDto
     {
         public Guid TenantId { get; set; }
 

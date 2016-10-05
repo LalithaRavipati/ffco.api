@@ -67,6 +67,10 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
                 DashboardQueryDto, Guid>>();
             builder.RegisterType<DashboardValidator>().As<IFFValidator<DashboardCommandDto>>();
 
+            builder.RegisterType<DashboardOptionFacade>().As<IFacadeWithCruModels<DashboardOptionCommandDto, DashboardOptionCommandDto,
+                DashboardOptionQueryDto, Guid>>();
+            builder.RegisterType<DashboardOptionValidator>().As<IFFValidator<DashboardOptionCommandDto>>();
+
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<ChemicalFormConverter>().AsSelf().InstancePerLifetimeScope();*/

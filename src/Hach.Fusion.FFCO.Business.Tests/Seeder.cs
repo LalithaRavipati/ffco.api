@@ -150,6 +150,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.DashboardOptions.Add(Data.DashboardOptions.DevTenant01_Options);
             context.DashboardOptions.Add(Data.DashboardOptions.DevTenant02_Options);
             context.DashboardOptions.Add(Data.DashboardOptions.HachFusion_Options);
+            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant01_ToDelete);
 
             context.SaveChanges();
         }

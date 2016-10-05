@@ -99,6 +99,7 @@ namespace Hach.Fusion.FFCO.Api
                 {
                     u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.InjectStylesheet(typeof(DashboardsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
+                    u.InjectStylesheet(typeof(DashboardOptionsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                     
                     // Disable swagger validator that shows error when deployed to production
@@ -121,6 +122,7 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<LocationBaseDto>("Locations");
             builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
             builder.EntitySet<DashboardBaseDto>("Dashboards");
+            builder.EntitySet<DashboardOptionBaseDto>("DashboardOptions");
 
             builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
