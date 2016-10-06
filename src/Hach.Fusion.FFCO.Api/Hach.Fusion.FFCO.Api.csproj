@@ -400,6 +400,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
