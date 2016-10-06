@@ -164,7 +164,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!userId.HasValue)
                 return Command.Error<LocationLogEntryQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var locationLogEntry = await GetLocationLogEntriesForUser(userId.Value)                           
+            var locationLogEntry = await GetLocationLogEntriesForUser(userId.Value)                        
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
 
@@ -285,10 +285,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         private IQueryable<LocationLogEntry> GetLocationLogEntriesForUser(Guid userId)
         {
-            var result = from lle in _context.LocationLogEntries
-                         join potl in _context.ProductOfferingTenantLocations on lle.LocationId equals potl.LocationId
-                         where potl.Tenant.Users.Any(x => x.Id == userId)
-                         select lle;
+            var result =
+                _context.LocationLogEntries.Join(_context.ProductOfferingTenantLocations, lle => lle.LocationId,
+                    potl => potl.LocationId, (lle, potl) => new {lle, potl})
+                    .Where(@t => @t.potl.Tenant.Users.Any(x => x.Id == userId))
+                    .Select(@t => @t.lle).Distinct();
 
             return result;
         }

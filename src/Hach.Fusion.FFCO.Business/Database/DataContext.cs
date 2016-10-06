@@ -83,6 +83,7 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .HasForeignKey(e => e.LocationId);
 
 
+
             base.OnModelCreating(modelBuilder);
 
         }

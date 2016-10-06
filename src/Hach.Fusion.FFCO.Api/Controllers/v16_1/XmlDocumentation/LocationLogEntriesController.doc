@@ -5,7 +5,7 @@
 	  <remarks>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <br/>
         <table class="gridtable" >
           <tr>
@@ -34,7 +34,7 @@
     <remarks>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <table class="gridtable" >
           <tr>
             <th>
@@ -72,7 +72,7 @@
 
     <remarks>
       <h4>Errors</h4>
-      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>The following error codes are returned:</p>
       <p>
         <table class="gridtable" >
           <tr>
@@ -87,10 +87,10 @@
             </th>
           </tr>
           <tr>
-            <td>FFERR-101</td >
-            <td>EntityAlreadyExists</td >
-            <td>The entity already exists and can't be created.</td>
-          </tr>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>A property is invalid (applies to the EntryLog field). The Log Entry should not be null.</td>
+          </tr>          
           <tr>
             <td>FFERR-209</td >
             <td>ForeignKeyValueDoesNotExist</td >
@@ -99,7 +99,7 @@
           <tr>
             <td>FFERR-211</td >
             <td>PropertyIsInvalid</td >
-            <td>A property is invalid (applies to the ID and Log Entry fields). The ID field should not be specified and the Log Entry should not be null.</td>
+            <td>A property is invalid (applies to the ID field). The ID field should not be specified.</td>
           </tr>
           <tr>
             <td>FFERR-304</td >
@@ -112,11 +112,45 @@
     
   </Methods>
 
+  <Methods name="Delete">
+
+    <remarks>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>  
+
   <Methods name="Patch">
 
     <remarks>
       <h4>Errors</h4>
-      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>The following error codes are returned:</p>
       <p>
         <table class="gridtable" >
           <tr>
@@ -150,45 +184,6 @@
             <td>ForeignKeyValueDoesNotExist</td >
             <td>The entity includes a foreign key reference to an entity that does not exist (applies to the LocationId field).</td>
           </tr>          
-          <tr>
-            <td>FFERR-304</td >
-            <td>TokenInvalid</td >
-            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
-          </tr>
-        </table>
-      </p>
-    </remarks>
-
-  </Methods>
-
-  <Methods name="Delete">
-
-    <remarks>
-      <p>
-        <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
-        <table class="gridtable" >
-          <tr>
-            <th>
-              <b>Code</b>
-            </th>
-            <th>
-              <b>Name</b>
-            </th>
-            <th>
-              <b>Description</b>
-            </th>
-          </tr>
-          <tr>
-            <td>FFERR-100</td >
-            <td>EntityNotFound</td >
-            <td>The specified entity was not found.</td>
-          </tr>
-          <tr>
-            <td>FFERR-106</td >
-            <td>EntityCouldNotBeDeleted</td >
-            <td>The specified Location Type could not be deleted because one or more Locations refer to it.</td>
-          </tr>
           <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >

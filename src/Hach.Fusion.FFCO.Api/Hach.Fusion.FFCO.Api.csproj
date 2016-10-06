@@ -102,8 +102,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.0.0.9-FOART643\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.3\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.8\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -405,6 +405,7 @@
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
     <EmbeddedResource Include="Resources\Small-Hach-logo.png" />
     <EmbeddedResource Include="Resources\SwaggerDefault" />
+    <EmbeddedResource Include="Resources\SwaggerFavIcon.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />

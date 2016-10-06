@@ -136,6 +136,7 @@ namespace Hach.Fusion.FFCO.Api
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                     u.CustomAsset("index", typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerDefault");
                     u.CustomAsset("images/logo_small-png", typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.Small-Hach-logo.png");
+                    u.CustomAsset("images/SwaggerFavIcon", typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerFavIcon.png");
 
                     // Disable swagger validator that shows error when deployed to production
                     // http://stackoverflow.com/a/31734825/9840

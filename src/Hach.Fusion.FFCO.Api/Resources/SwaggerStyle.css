@@ -22,3 +22,6 @@ table.gridtable td {
 .swagger-section #header #logo {
     padding: 20px 0 20px 120px;
 }
+.swagger-section .swagger-ui-wrap a {
+    color: #0098DB;
+}
