@@ -404,9 +404,9 @@
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
-    <EmbeddedResource Include="Resources\Small-Hach-logo.png" />
+    <EmbeddedResource Include="Resources\HachLogo.png" />
     <EmbeddedResource Include="Resources\SwaggerDefault" />
-    <EmbeddedResource Include="Resources\SwaggerFavIcon.png" />
+    <EmbeddedResource Include="Resources\HachTabLogo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
