@@ -12,6 +12,10 @@
             <th><b>Description</b></th>
           </tr>
           <tr>
+            <td>LocationType</td >
+            <td>Retrieves the related LocationType</td >
+          </tr>
+          <tr>
             <td>Locations</td >
             <td>Retrieves a list of child locations for each location retrieved.</td >
           </tr>
