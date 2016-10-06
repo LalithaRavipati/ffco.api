@@ -9,7 +9,6 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Facades
@@ -93,35 +92,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the indicated property's value.
         /// </returns>
-        public override async Task<QueryResult<UnitTypeQueryDto>> GetProperty(Guid id, string propertyName)
+        public override Task<QueryResult<UnitTypeQueryDto>> GetProperty(Guid id, string propertyName)
         {
             throw new NotImplementedException();
-
-            /*var result = await _context.Locations
-                .SingleOrDefaultAsync(l => l.Id == id)
-                .ConfigureAwait(false);
-
-            if (result == null)
-                return Query.Error(EntityErrorCode.EntityNotFound);
-
-            var resultDto = Mapper.Map<Location, LocationQueryDto>(result);
-
-            var property = resultDto.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-
-            if (property == null)
-                return Query.Error(EntityErrorCode.EntityPropertyNotFound);
-
-            var value = property.GetValue(resultDto);
-
-            string valueString;
-            if (property.Name == "Locations" || property.Name == "Point")
-                valueString = JsonConvert.SerializeObject(value);
-            else if (property.PropertyType == typeof(DateTime))
-                valueString = ((DateTime)value).ToString("s");
-            else
-                valueString = value.ToString();
-
-            return new QueryResult<LocationQueryDto>(valueString);*/
         }
 
         #endregion Get Methods

@@ -12,7 +12,6 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Entities;
 using Hach.Fusion.FFCO.Entities.Extensions;
 
@@ -97,7 +96,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the indicated property's value.
         /// </returns>
-        public override async Task<QueryResult<LocationTypeQueryDto>> GetProperty(Guid id, string propertyName)
+        public override Task<QueryResult<LocationTypeQueryDto>> GetProperty(Guid id, string propertyName)
         {
             throw new NotImplementedException();          
         }
@@ -224,7 +223,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (locationType == null)
                 return Command.Error<LocationTypeCommandDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = Mapper.Map(locationType, new LocationTypeCommandDto());
+            var dto = _mapper.Map(locationType, new LocationTypeCommandDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);

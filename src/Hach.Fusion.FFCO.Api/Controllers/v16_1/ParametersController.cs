@@ -17,7 +17,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing parameters.
+    /// Web API controller for managing Parameters.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -44,7 +44,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of parameters.
+        /// Retrieves a queryable list of ParametersX.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
@@ -53,8 +53,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <example>
         /// GET: ~/odata/v16.1/Parameters
         /// </example>
+        /// <include file='XmlDocumentation/ParametersController.doc' path='ParametersController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.Parameter)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(ParameterDto))]
@@ -65,18 +67,20 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Returns the parameter with the specified ID.
+        /// Retrieves the Parameter with the specified IDY.
         /// </summary>
-        /// <param name="key">Id that identifies the entity to be retrieved.</param>
+        /// <param name="key">ID that identifies the entity to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated entity.
+        /// The DTO for the indicated Parameter.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/Parameters(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
+        /// <include file='XmlDocumentation/ParametersController.doc' path='ParametersController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.Parameter)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -85,25 +89,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         {
             var results = await _facade.Get(key);
             return Query(results);
-        }
-
-        /// <summary>
-        /// Gets a single property of a specified parameter.
-        /// </summary>
-        /// <param name="key">Id of the entity whose property is to be retrieved.</param>
-        /// <param name="propertyName">Name of the property to be retrieved.</param>
-        /// <returns>
-        /// The value of the indicated entity property.
-        /// </returns>
-        /// <example>
-        /// GET: ~/odata/v16.1/Parameters(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)/Description
-        /// </example>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.Parameter)]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetProperty([FromODataUri] Guid key, string propertyName)
-        {
-            var result = await _facade.GetProperty(key, propertyName);
-            return Query(result);
         }
     }
 }

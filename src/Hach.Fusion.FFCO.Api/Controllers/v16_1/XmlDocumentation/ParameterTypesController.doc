@@ -1,17 +1,23 @@
-﻿<UnitTypeGroupsController>
+﻿<ParameterTypesController>
 
-	<Methods name="GetAll">
+  <Methods name="GetAll">
 
-	  <remarks>
+    <remarks>
       <p>
         <h4>Errors</h4>
         <p>The following are error codes returned when a BadRequest status code is returned:</p>
         <br/>
         <table class="gridtable" >
           <tr>
-            <th><b>Code</b></th>
-            <th><b>Name</b></th>
-            <th><b>Description</b></th>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
           </tr>
           <tr>
             <td>FFERR-001</td >
@@ -21,8 +27,8 @@
         </table>
       </p>
     </remarks>
-		
-	</Methods>
+
+  </Methods>
 
   <Methods name="GetOne">
 
@@ -58,4 +64,4 @@
 
   </Methods>
 
-</UnitTypeGroupsController>
+</ParameterTypesController>
