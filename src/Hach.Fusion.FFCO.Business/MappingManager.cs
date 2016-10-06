@@ -68,8 +68,7 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations(IProfileExpression cfg)
         {
             cfg.CreateMap<Location, LocationQueryDto>();
-<<<<<<< HEAD
-=======
+
                 //.ForMember(x => x.Name, opt => opt.Ignore());
 
             cfg.CreateMap<LocationTypeCommandDto, LocationType>()
@@ -88,8 +87,6 @@ namespace Hach.Fusion.FFCO.Business
 
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
             cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
-
->>>>>>> 74b64062f872c2357e9a04576f0a917e0c5826ac
 
             cfg.CreateMap<Location, LocationCommandDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())

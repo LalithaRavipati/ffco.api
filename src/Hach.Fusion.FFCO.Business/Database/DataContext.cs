@@ -49,11 +49,8 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ParameterType> ParameterTypes { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<User> Users { get; set; }
-<<<<<<< HEAD
         public DbSet<DashboardOption> DashboardOptions { get; set; }
         public DbSet<Dashboard> Dashboards { get; set; }
-=======
->>>>>>> 74b64062f872c2357e9a04576f0a917e0c5826ac
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -85,11 +82,7 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
-<<<<<<< HEAD
             base.OnModelCreating(modelBuilder);
-=======
-                        base.OnModelCreating(modelBuilder);
->>>>>>> 74b64062f872c2357e9a04576f0a917e0c5826ac
         }
 
         /// <summary>
