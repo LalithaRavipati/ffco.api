@@ -8,7 +8,6 @@ using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Dtos;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
