@@ -49,7 +49,7 @@
       }
 
       window.swashbuckleConfig = {
-        rootUrl: 'http://localhost:57000',
+        rootUrl: '%(RootUrl)',
         discoveryPaths: arrayFrom('swagger/docs/v16_1'),
         booleanValues: arrayFrom('true|false'),
         validatorUrl: stringOrNullFrom('null'),
