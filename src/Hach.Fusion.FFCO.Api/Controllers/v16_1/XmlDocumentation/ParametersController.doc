@@ -4,6 +4,32 @@
 
     <remarks>
       <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>ParameterType</td >
+            <td>Retrieves related ParameterType.</td >
+          </tr>
+          <tr>
+            <td>BaseUnitType</td >
+            <td>Retrieves related UnitType.</td >
+          </tr>
+          <tr>
+            <td>BaseChemicalFormType</td >
+            <td>Retrieves related ChemicalFormType.</td >
+          </tr>
+        </table>
+      </p>
+      <p>
         <h4>Errors</h4>
         <p>The following are error codes returned when a BadRequest status code is returned:</p>
         <br/>
