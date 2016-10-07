@@ -13,6 +13,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedParameterTypes(context);
             SeedUnitTypes(context);
             SeedUnitTypeGroups(context);
+            SeedLimitTypes(context);
 
             SeedLocations(context);
             SeedParameters(context);
@@ -38,6 +39,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
             //context.Database.ExecuteSqlCommand("DELETE dbo.ChemicalFormTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.LimitTypes");
 
             context.SaveChanges();
         }
@@ -165,6 +167,17 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Dashboards.Add(Data.Dashboards.Test_tnt01user_SoftDeleted);
             context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToDelete);
             context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToUpdate);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedLimitTypes(DataContext context)
+        {
+            context.LimitTypes.Add(Data.LimitTypes.Under);
+            context.LimitTypes.Add(Data.LimitTypes.Over);
+            context.LimitTypes.Add(Data.LimitTypes.NearUnder);
+            context.LimitTypes.Add(Data.LimitTypes.NearOver);
+            context.LimitTypes.Add(Data.LimitTypes.ToDelete);
 
             context.SaveChanges();
         }

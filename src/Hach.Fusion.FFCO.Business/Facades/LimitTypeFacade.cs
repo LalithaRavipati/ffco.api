@@ -56,6 +56,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
         {
             queryOptions.Validate(ValidationSettings);
 
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            if (userId == null)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
             var results = await Task.Run(() => _context.LimitTypes
                 .Select(_mapper.Map<LimitType, LimitTypeQueryDto>)
                 .AsQueryable())
@@ -74,6 +78,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LimitTypeQueryDto>> Get(Guid id)
         {
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            if (userId == null)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
             var result = await Task.Run(() => _context.LimitTypes
                 .FirstOrDefault(x => x.Id == id))
                 .ConfigureAwait(false);

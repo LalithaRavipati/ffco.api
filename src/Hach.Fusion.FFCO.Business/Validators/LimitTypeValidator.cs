@@ -9,6 +9,9 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// </summary>
     public class LimitTypeValidator : FFValidator<LimitTypeCommandDto, Guid>
     {
+        private const int NameMaximumLength = 100;
+        private const int NameMinimumLength = 4;
+
         /// <summary>
         /// Validates the state of the specified <see cref="LimitTypeCommandDto"/>.
         /// </summary>
@@ -24,7 +27,9 @@ namespace Hach.Fusion.FFCO.Business.Validators
                 };
 
             Evaluate(x => x.I18NKeyName, dto.I18NKeyName)
-                .Required();
+                .Required()
+                .MaxLength(NameMaximumLength)
+                .MinLength(NameMinimumLength);
 
             Evaluate(x => x.Polarity, dto.Polarity)
                 .Required();
