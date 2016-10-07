@@ -51,6 +51,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<User> Users { get; set; }
         public DbSet<DashboardOption> DashboardOptions { get; set; }
         public DbSet<Dashboard> Dashboards { get; set; }
+        public DbSet<LimitType> LimitTypes { get; set; }
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

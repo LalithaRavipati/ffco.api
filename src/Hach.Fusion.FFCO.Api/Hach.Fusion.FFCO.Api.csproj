@@ -98,8 +98,8 @@
       <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2016.58.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2016.58.16\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2016.58.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2016.58.18\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.7.0, Culture=neutral, processorArchitecture=MSIL">
@@ -367,6 +367,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\v16_1\DashboardOptionsController.cs" />
     <Compile Include="Controllers\v16_1\DashboardsController.cs" />
+    <Compile Include="Controllers\v16_1\LimitTypesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
@@ -400,6 +401,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\ParametersController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\DashboardsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\DashboardOptionsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\LimitTypesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />

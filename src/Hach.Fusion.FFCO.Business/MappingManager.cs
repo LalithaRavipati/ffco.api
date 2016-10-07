@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Hach.Fusion.FFCO.Dtos;
 using Hach.Fusion.FFCO.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Dtos.LimitTypes;
 using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Business
@@ -54,6 +55,7 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeDashboardOptions(cfg);
                 InitializeTenants(cfg);
                 InitializeUsers(cfg);
+                InitializeLimitTypes(cfg);
             });
 
             // Make sure the mapping is valid
@@ -233,6 +235,30 @@ namespace Hach.Fusion.FFCO.Business
             cfg.CreateMap<User, UserDto>()
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForSourceMember(x => x.Tenants, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the LimitType entity and Dtos.
+        /// </summary>
+        private static void InitializeLimitTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<LimitType, LimitTypeQueryDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LimitType, LimitTypeCommandDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LimitTypeCommandDto, LimitType>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
         }
     }
 }

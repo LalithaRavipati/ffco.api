@@ -11,6 +11,7 @@ using Hach.Fusion.Core.Api.Handlers;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Dtos;
 using Hach.Fusion.FFCO.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Dtos.LimitTypes;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
@@ -98,8 +99,6 @@ namespace Hach.Fusion.FFCO.Api
                 .EnableSwaggerUi(u =>
                 {
                     u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
-                    u.InjectStylesheet(typeof(DashboardsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
-                    u.InjectStylesheet(typeof(DashboardOptionsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                     
                     // Disable swagger validator that shows error when deployed to production
@@ -128,6 +127,7 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
             builder.EntitySet<ParameterTypeDto>("ParameterTypes");
             builder.EntitySet<ParameterDto>("Parameters");
+            builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
 
             builder.EnableLowerCamelCase();
 
