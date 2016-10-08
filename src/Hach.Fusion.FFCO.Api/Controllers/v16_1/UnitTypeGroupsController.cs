@@ -57,6 +57,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -81,6 +82,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]

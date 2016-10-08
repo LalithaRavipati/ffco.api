@@ -58,6 +58,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
@@ -82,6 +83,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetOne"]/*'/> 
         [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
         [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
