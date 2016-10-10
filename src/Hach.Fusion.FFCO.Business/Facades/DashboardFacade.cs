@@ -118,6 +118,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (dto.TenantId != Guid.Empty && !userTenants.Any(x => x.Id == dto.TenantId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
 
+            if (_context.Dashboards.Any(x => x.OwnerUserId == userIdGuid && x.Name == dto.Name))
+                validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
+
             var userDashboardOptions = await _context.GetDashboardOptionsForUser(userIdGuid).ConfigureAwait(false);
 
             if (dto.DashboardOptionId != Guid.Empty && !userDashboardOptions.Any(x => x.Id == dto.DashboardOptionId))
@@ -217,6 +220,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
+
+            if (_context.Dashboards.Any(x => x.Id != id && x.OwnerUserId == userIdGuid && x.Name == dto.Name))
+                validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
 
             var userTenants = await _context.GetTenantsForUser(Guid.Parse(userId)).ConfigureAwait(false);
 

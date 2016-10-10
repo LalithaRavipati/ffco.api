@@ -229,6 +229,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
             var callTime = DateTime.UtcNow;
 
@@ -242,6 +243,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var dto = queryResult.Dto;
             Assert.That(dto.TenantId, Is.EqualTo(toCreate.TenantId));
             Assert.That(dto.OwnerUserId, Is.EqualTo(_userId));
+            Assert.That(dto.Name, Is.EqualTo(toCreate.Name));
             Assert.That(dto.DashboardOptionId, Is.EqualTo(toCreate.DashboardOptionId));
             Assert.That(dto.Layout, Is.EqualTo(toCreate.Layout));
             Assert.That(dto.CreatedById, Is.EqualTo(_userId));
@@ -255,6 +257,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt02user_Dashboard_3);
             toCreate.Id = Guid.Empty;
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
 
             var commandResult = await _facade.Create(toCreate);
@@ -290,6 +293,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.NewGuid();
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
 
             var commandResult = await _facade.Create(toCreate);
@@ -300,11 +304,27 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
         [Test]
+        public async Task When_Create_BadName_Fails()
+        {
+            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            toCreate.Id = Guid.Empty;
+            toCreate.Name = "123";
+            toCreate.Layout = "New Dashboard";
+
+            var commandResult = await _facade.Create(toCreate);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
+            Assert.That(commandResult.ErrorCodes.Any(x => x.Code == "FFERR-207"), Is.True);
+        }
+
+        [Test]
         public async Task When_Create_EmptyTenantId_Fails()
         {
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.Empty;
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
 
             var commandResult = await _facade.Create(toCreate);
@@ -320,6 +340,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.NewGuid();
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
 
             var commandResult = await _facade.Create(toCreate);
@@ -335,6 +356,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.DashboardOptionId = Guid.Empty;
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
 
             var commandResult = await _facade.Create(toCreate);
@@ -350,6 +372,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.DashboardOptionId = Guid.NewGuid();
+            toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
 
             var commandResult = await _facade.Create(toCreate);
@@ -357,6 +380,19 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
             Assert.That(commandResult.ErrorCodes.Any(x => x.Code == "FFERR-209"), Is.True);
+        }
+
+        [Test]
+        public async Task When_Create_Duplicate_Fails()
+        {
+            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            toCreate.Id = Guid.Empty;
+
+            var commandResult = await _facade.Create(toCreate);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
+            Assert.That(commandResult.ErrorCodes.Any(x => x.Code == "FFERR-101"), Is.True);
         }
 
         #endregion Create Tests
@@ -549,6 +585,19 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
             Assert.That(commandResult.ErrorCodes.Any(x => x.Code == "FFERR-209"), Is.True);
+        }
+
+        [Test]
+        public async Task When_Update_Duplicate_Fails()
+        {
+            var delta = new Delta<DashboardCommandDto>();
+            delta.TrySetPropertyValue("Name", Data.Dashboards.Test_tnt01user_ToDelete.Name);
+
+            var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
+            Assert.That(commandResult.ErrorCodes.Any(x => x.Code == "FFERR-101"), Is.True);
         }
 
         #endregion Update Tests

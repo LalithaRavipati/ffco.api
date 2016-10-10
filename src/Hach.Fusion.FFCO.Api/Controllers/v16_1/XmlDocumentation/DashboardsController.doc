@@ -140,6 +140,16 @@
             <td>A property is required (applies to the TenantId and DashboardOptionId).</td>
           </tr>
           <tr>
+            <td>FFERR-206</td >
+            <td>PropertyLengthExceedsMax</td >
+            <td>A property value does not meet the maximum length requirements.</td>
+          </tr>
+          <tr>
+            <td>FFERR-207</td >
+            <td>PropertyLengthTooShort</td >
+            <td>A property value does not meet the minimum length requirements.</td>
+          </tr>
+          <tr>
             <td>FFERR-209</td >
             <td>ForeignKeyValueDoesNotExist</td >
             <td>A foreign key value does not exist (applies to the TenantId and DashboardOptionId fields).</td>
@@ -187,6 +197,16 @@
             <td>FFERR-203</td >
             <td>EntityIDUpdateNotAllowed</td >
             <td>Updating the Id field is not allowed.</td>
+          </tr>
+          <tr>
+            <td>FFERR-206</td >
+            <td>PropertyLengthExceedsMax</td >
+            <td>A property value does not meet the maximum length requirements.</td>
+          </tr>
+          <tr>
+            <td>FFERR-207</td >
+            <td>PropertyLengthTooShort</td >
+            <td>A property value does not meet the minimum length requirements.</td>
           </tr>
           <tr>
             <td>FFERR-209</td >
