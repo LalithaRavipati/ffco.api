@@ -115,6 +115,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             if (dto.TenantId != Guid.Empty && !userTenants.Any(x => x.Id == dto.TenantId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+            else if (_context.DashboardOptions.Any(x => x.TenantId == dto.TenantId))
+                validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
 
             if (validationResponse.IsInvalid)
                 return Command.Error<DashboardOptionQueryDto>(validationResponse);
@@ -204,6 +206,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             if (dto.TenantId != Guid.Empty && !userTenants.Any(x => x.Id == dto.TenantId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+            else if (_context.DashboardOptions.Any(x => x.Id != id && x.TenantId == dto.TenantId))
+                validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
 
             // Including the original Id in the Patch request will not return an error but attempting to change the Id is not allowed.
             if (dto.Id != id)
