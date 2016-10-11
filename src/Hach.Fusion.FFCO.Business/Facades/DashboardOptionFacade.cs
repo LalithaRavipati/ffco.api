@@ -157,6 +157,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (entity == null)
                 return Command.Error<DashboardOptionQueryDto>(EntityErrorCode.EntityNotFound);
 
+            if (_context.Dashboards.Any(x => x.DashboardOptionId == id))
+                return Command.Error<DashboardOptionQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
+
             _context.DashboardOptions.Attach(entity);
             entity.SetAuditFieldsOnUpdate(userId);
             await _context.SaveChangesAsync().ConfigureAwait(false);
