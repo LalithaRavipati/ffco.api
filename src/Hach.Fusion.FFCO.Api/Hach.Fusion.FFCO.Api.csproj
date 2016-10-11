@@ -98,12 +98,12 @@
       <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=0.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.0.0.9\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2016.58.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2016.58.18\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=0.0.40.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.0.0.40\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.13\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -365,6 +365,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\v16_1\DashboardOptionsController.cs" />
+    <Compile Include="Controllers\v16_1\DashboardsController.cs" />
+    <Compile Include="Controllers\v16_1\LimitTypesController.cs" />
+    <Compile Include="Controllers\v16_1\LocationLogEntriesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
@@ -398,14 +402,19 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\UnitTypeGroupsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParameterTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParametersController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\DashboardsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\DashboardOptionsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\LimitTypesController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <EmbeddedResource Include="Resources\SwaggerStyle.css" />
-    <Content Include="Global.asax" />
-    <Content Include="Resources\hach-logo-blue.png" />
+    <EmbeddedResource Include="Resources\HachLogo.png" />
+    <EmbeddedResource Include="Resources\SwaggerDefault" />
+    <EmbeddedResource Include="Resources\HachTabLogo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />

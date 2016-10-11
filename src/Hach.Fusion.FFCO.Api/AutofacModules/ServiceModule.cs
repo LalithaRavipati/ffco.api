@@ -9,6 +9,8 @@ using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Dtos.LimitTypes;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -29,11 +31,6 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
                 .AsSelf()
                 .As<DataContext>()
                 .InstancePerLifetimeScope();
-            /*builder.Register(
-                c => new FFAAContext(ConfigurationManager.ConnectionStrings["IdSvrConnectionString"].ConnectionString))
-                .AsSelf()
-                .As<IIdentityContext>()
-                .InstancePerLifetimeScope();*/
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
@@ -49,18 +46,34 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<LocationTypeFacade>().As<IFacadeWithCruModels<LocationTypeCommandDto, LocationTypeCommandDto,
                 LocationTypeQueryDto, Guid>>();
 
+            builder.RegisterType<LocationLogEntryFacade>().As<IFacadeWithCruModels<LocationLogEntryCommandDto, LocationLogEntryCommandDto,
+                LocationLogEntryQueryDto, Guid>>();
+
             builder.RegisterType<UnitTypeFacade>().As<IFacadeWithCruModels<UnitTypeQueryDto, UnitTypeQueryDto,
                UnitTypeQueryDto, Guid>>();
             builder.RegisterType<UnitTypeGroupFacade>().As<IFacadeWithCruModels<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto,
                UnitTypeGroupQueryDto, Guid>>();
 
             builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
+            builder.RegisterType<LocationLogEntryValidator>().As<IFFValidator<LocationLogEntryCommandDto>>();
             builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeCommandDto>>();
             builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeQueryDto>>();
             builder.RegisterType<UnitTypeGroupValidator>().As<IFFValidator<UnitTypeGroupQueryDto>>();
 
             builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();
             builder.RegisterType<ParameterFacade>().As<IFacade<ParameterDto, Guid>>();
+
+            builder.RegisterType<DashboardFacade>().As<IFacadeWithCruModels<DashboardCommandDto, DashboardCommandDto,
+                DashboardQueryDto, Guid>>();
+            builder.RegisterType<DashboardValidator>().As<IFFValidator<DashboardCommandDto>>();
+
+            builder.RegisterType<DashboardOptionFacade>().As<IFacadeWithCruModels<DashboardOptionCommandDto, DashboardOptionCommandDto,
+                DashboardOptionQueryDto, Guid>>();
+            builder.RegisterType<DashboardOptionValidator>().As<IFFValidator<DashboardOptionCommandDto>>();
+
+            builder.RegisterType<LimitTypeValidator>().As<IFFValidator<LimitTypeCommandDto>>();
+            builder.RegisterType<LimitTypeFacade>().As<IFacadeWithCruModels<LimitTypeCommandDto, LimitTypeCommandDto,
+               LimitTypeQueryDto, Guid>>();
 
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 

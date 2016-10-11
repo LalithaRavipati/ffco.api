@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Dtos.LimitTypes;
 using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Business
@@ -47,8 +49,14 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeUnitTypes(cfg);
                 InitializeParameterTypes(cfg);
                 InitializeLocations(cfg);
+                InitializeLocationLogEntries(cfg);
                 InitializeLocationTypes(cfg);
                 InitializeParameters(cfg);
+                InitializeDashboards(cfg);
+                InitializeDashboardOptions(cfg);
+                InitializeTenants(cfg);
+                InitializeUsers(cfg);
+                InitializeLimitTypes(cfg);
             });
 
             // Make sure the mapping is valid
@@ -63,25 +71,6 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations(IProfileExpression cfg)
         {
             cfg.CreateMap<Location, LocationQueryDto>();
-                //.ForMember(x => x.Name, opt => opt.Ignore());
-
-            cfg.CreateMap<LocationTypeCommandDto, LocationType>()
-                .ForMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
-
-            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
-                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
-
-            cfg.CreateMap<UnitType, UnitTypeQueryDto>();
-            cfg.CreateMap<UnitTypeGroup, UnitTypeGroupQueryDto>();
-
 
             cfg.CreateMap<Location, LocationCommandDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
@@ -107,6 +96,33 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForMember(x => x.Geography, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configures AutoMapper for Location Log Entries.
+        /// </summary>
+        /// <param name="cfg">Configuration for profile-specific maps.</param>
+        private static void InitializeLocationLogEntries(IProfileExpression cfg)
+        {
+            cfg.CreateMap<LocationLogEntry, LocationLogEntryQueryDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LocationLogEntryCommandDto, LocationLogEntry>()
+                .ForMember(x => x.Location, opt => opt.Ignore())
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LocationLogEntry, LocationLogEntryCommandDto>()
+                .ForSourceMember(x => x.Location, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
         }
 
         /// <summary>
@@ -165,6 +181,105 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeParameterTypes(IProfileExpression cfg)
         {
             cfg.CreateMap<ParameterType, ParameterTypeDto>();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Dashboard entity and Dtos.
+        /// </summary>
+        private static void InitializeDashboards(IProfileExpression cfg)
+        {
+            cfg.CreateMap<Dashboard, DashboardQueryDto>();
+
+            cfg.CreateMap<Dashboard, DashboardCommandDto>()
+                .ForSourceMember(x => x.OwnerUserId, opt => opt.Ignore())
+                .ForSourceMember(x => x.OwnerUser, opt => opt.Ignore())
+                .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
+                .ForSourceMember(x => x.DashboardOption, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<DashboardCommandDto, Dashboard>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.OwnerUserId, opt => opt.Ignore())
+                .ForMember(x => x.OwnerUser, opt => opt.Ignore())
+                .ForMember(x => x.Tenant, opt => opt.Ignore())
+                .ForMember(x => x.DashboardOption, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Dashboard option entity and Dtos.
+        /// </summary>
+        private static void InitializeDashboardOptions(IProfileExpression cfg)
+        {
+            cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>();
+
+            cfg.CreateMap<DashboardOption, DashboardOptionCommandDto>()
+                .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<DashboardOptionCommandDto, DashboardOption>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Tenant, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Tenant entity and Dto.
+        /// </summary>
+        private static void InitializeTenants(IProfileExpression cfg)
+        {
+            cfg.CreateMap<Tenant, TenantDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the User entity and Dto.
+        /// </summary>
+        private static void InitializeUsers(IProfileExpression cfg)
+        {
+            cfg.CreateMap<User, UserDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
+                .ForSourceMember(x => x.Tenants, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the LimitType entity and Dtos.
+        /// </summary>
+        private static void InitializeLimitTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<LimitType, LimitTypeQueryDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LimitType, LimitTypeCommandDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+
+            cfg.CreateMap<LimitTypeCommandDto, LimitType>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
+                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
         }
     }
 }

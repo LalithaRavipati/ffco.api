@@ -5,7 +5,7 @@
 	  <remarks>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <br/>
         <table class="gridtable" >
           <tr>
@@ -29,7 +29,7 @@
     <remarks>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <table class="gridtable" >
           <tr>
             <th>
@@ -62,7 +62,7 @@
 
     <remarks>
       <h4>Errors</h4>
-      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>The following error codes are returned:</p>
       <p>
         <table class="gridtable" >
           <tr>
@@ -101,7 +101,7 @@
 
     <remarks>
       <h4>Errors</h4>
-      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>The following error codes are returned:</p>
       <p>
         <table class="gridtable" >
           <tr>
@@ -136,11 +136,6 @@
             <td>A duplicate of the indicated property is not allowed (applies to the I18NKeyName field).</td>
           </tr>
           <tr>
-            <td>FFERR-210</td >
-            <td>CircularReferenceNotAllowed</td >
-            <td>Adding this location with the indicatd ParentId would result in a circular reference.</td>
-          </tr>
-          <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
             <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
@@ -156,7 +151,7 @@
     <remarks>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <table class="gridtable" >
           <tr>
             <th>

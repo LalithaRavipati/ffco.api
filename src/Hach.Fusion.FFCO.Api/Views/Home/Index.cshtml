@@ -22,10 +22,16 @@
             .Cast<AssemblyCompanyAttribute>();
         var companyAttrib = companyAttribs.FirstOrDefault();
         var company = companyAttrib == null ? string.Empty : companyAttrib.Company;
+
+        var fileVersionAttribs = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
+            .Cast<AssemblyFileVersionAttribute>();
+        var fileVersionAttrib = fileVersionAttribs.FirstOrDefault();
+        var fileVersion = fileVersionAttrib == null ? string.Empty : fileVersionAttrib.Version;
     }
     <h2>@title</h2>
     <p class="lead">Product: @product</p>
     <p class="lead">Description: @description</p>
     <p class="lead">Version: @assembly.GetName().Version</p>
+    <p class="lead">File Version: @fileVersion</p>
     <p class="lead">Company: @company</p>
 </div>

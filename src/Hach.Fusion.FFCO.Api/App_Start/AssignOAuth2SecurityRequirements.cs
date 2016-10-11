@@ -8,8 +8,10 @@ namespace Hach.Fusion.FFCO.Api
 {
     /// <summary>
     /// Operation filter enabling the swagger ui to use the web api.
-    /// <see cref="http://knowyourtoolset.com/2015/08/secure-web-apis-with-swagger-swashbuckle-and-oauth2-part-2/"/>
     /// </summary>
+    /// <remarks>
+    /// See http://knowyourtoolset.com/2015/08/secure-web-apis-with-swagger-swashbuckle-and-oauth2-part-2/.
+    /// </remarks>
     public class AssignOAuth2SecurityRequirements : IOperationFilter
     {
         /// <inheritdoc/>

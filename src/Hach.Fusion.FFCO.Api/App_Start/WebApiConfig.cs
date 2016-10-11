@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.OData.Builder;
@@ -9,9 +8,10 @@ using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.Core.Extensions;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Dtos.LimitTypes;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
@@ -30,7 +30,7 @@ namespace Hach.Fusion.FFCO.Api
         /// <summary>
         /// Registers Web API services.
         /// </summary>
-        /// <param name="config"></param>
+        /// <param name="config">Configuration information for the server.</param>
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -69,6 +69,46 @@ namespace Hach.Fusion.FFCO.Api
             config.MessageHandlers.Add(new LogRequestAndResponseHandler());
             config.EnableCaseInsensitive(true);
 
+            ConfigureSwagger(config);
+        }
+
+        /// <summary>
+        /// Builds an Entity Data Model used by the message router and controllers.
+        /// </summary>
+        /// <returns>An Entity Data Model.</returns>
+        /// <remarks>
+        /// DTOs need an EntitySet so that the OData controller can 'magically' parse the json into an object.
+        /// Only ONE DTO can be bound per table, so a BaseDto object is needed. 
+        /// </remarks>
+        /// 
+
+        private static IEdmModel GetImplicitEdm()
+        {
+            var builder = new ODataConventionModelBuilder();
+
+            builder.EntitySet<LocationBaseDto>("Locations");
+            builder.EntitySet<LocationLogEntryBaseDto>("LocationLogEntries");
+            builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
+            builder.EntitySet<DashboardBaseDto>("Dashboards");
+            builder.EntitySet<DashboardOptionBaseDto>("DashboardOptions");
+
+            builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
+            builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
+            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
+            builder.EntitySet<ParameterDto>("Parameters");
+            builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
+
+            builder.EnableLowerCamelCase();
+
+            return builder.GetEdmModel();
+        }        
+
+        /// <summary>
+        /// Configure Swagger API documentation.
+        /// </summary>
+        /// <param name="config">Configuration information for the server.</param>
+        private static void ConfigureSwagger(HttpConfiguration config)
+        {
             // Configure swagger for api documentation.
             var authority = ConfigurationManager.AppSettings["IdServerUri"];
             // https://github.com/rbeauchamp/Swashbuckle.OData
@@ -94,41 +134,19 @@ namespace Hach.Fusion.FFCO.Api
                             scopes.Add("FFAccessAPI", "Scope required to access all FFCO API endpoints.");
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
-                   
                 })
-                .EnableSwaggerUi(u =>
+                .EnableSwaggerUi("api/{*assetPath}", u =>
                 {
-                    u.InjectStylesheet(typeof(LocationsController).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
+                    u.InjectStylesheet(typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
-                    
+                    u.CustomAsset("index", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerDefault");
+                    u.CustomAsset("images/logo_small-png", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.HachLogo.png");
+                    u.CustomAsset("images/HachTabLogo", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.HachTabLogo.png");
+
                     // Disable swagger validator that shows error when deployed to production
                     // http://stackoverflow.com/a/31734825/9840
                     u.DisableValidator();
                 });
-        }
-
-        /// <summary>
-        /// Builds an Entity Data Model used by the message router and controllers.
-        /// 
-        /// DTOs need an EntitySet so that the OData controller can 'magically' parse the json into an object
-        /// Only ONE DTO can be bound per table, so a BaseDto object is needed
-        /// </summary>
-        /// <returns>An Entity Data Model.</returns>
-        private static IEdmModel GetImplicitEdm()
-        {
-            var builder = new ODataConventionModelBuilder();
-
-            builder.EntitySet<LocationBaseDto>("Locations");
-            builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
-            
-            builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
-            builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
-            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
-            builder.EntitySet<ParameterDto>("Parameters");
-
-            builder.EnableLowerCamelCase();
-
-            return builder.GetEdmModel();
         }
 
         /// <summary>

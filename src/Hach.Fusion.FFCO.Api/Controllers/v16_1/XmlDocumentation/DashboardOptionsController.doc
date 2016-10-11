@@ -1,0 +1,225 @@
+﻿<DashboardOptionsController>
+
+	<Methods name="GetAll">
+
+	  <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th><b>Valid $expand Fields</b></th>
+            <th><b>Description</b></th>
+          </tr>
+          <tr>
+            <td>Tenant</td >
+            <td>Retrieves the Id of the tenant that the dashboard option belongs to.</td >
+          </tr>
+        </table>
+      </p>
+      <p>
+        <h4>Errors</h4>
+        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <br/>
+        <table class="gridtable" >
+          <tr>
+            <th><b>Code</b></th>
+            <th><b>Name</b></th>
+            <th><b>Description</b></th>
+          </tr>
+          <tr>
+            <td>FFERR-001</td >
+            <td>ODataQueryInvalid</td >
+            <td>The OData query is invalid. Check the OData parameters.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+		
+	</Methods>
+
+  <Methods name="GetOne">
+
+    <remarks>
+      <p>
+        The following table lists applicable navigation properties that may be used with th
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>Tenant</td >
+            <td>Retrieves the Id of the tenant that the dashboard option belongs to.</td >
+          </tr>
+        </table>
+      </p>
+      <p>
+        <h4>Errors</h4>
+        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-001</td >
+            <td>ODataQueryInvalid</td >
+            <td>The OData query is invalid. Check the OData parameters.</td>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>
+
+  <Methods name="Post">
+
+    <remarks>
+      <h4>Errors</h4>
+      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-101</td >
+            <td>EntityAlreadyExists</td >
+            <td>The entity format is invalid.</td>
+          </tr>
+          <tr>
+            <td>FFERR-102</td >
+            <td>EntityFormatIsInvalid</td >
+            <td>The entity already exists and can't be created.</td>
+          </tr>
+          <tr>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>A property is required (applies to the TenantId field).</td>
+          </tr>
+          <tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>A foreign key value does not exist (applies to the TenantId field).</td>
+          </tr>
+          <tr>
+            <td>FFERR-211</td >
+            <td>PropertyIsInvalid</td >
+            <td>A property is invalid (applies to the Id field).</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>    
+    
+  </Methods>
+
+  <Methods name="Patch">
+
+    <remarks>
+      <h4>Errors</h4>
+      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-102</td >
+            <td>EntityFormatIsInvalid</td >
+            <td>The entity format is not valid or is null.</td>
+          </tr>
+          <tr>
+            <td>FFERR-203</td >
+            <td>EntityIDUpdateNotAllowed</td >
+            <td>Updating the Id field is not allowed.</td>
+          </tr>
+          <tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>The foreign key value does not exist (applies to the TenantId field).</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>
+
+  <Methods name="Delete">
+
+    <remarks>
+      <p>
+        <h4>Errors</h4>
+        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-106</td >
+            <td>EntityCouldNotBeDeleted</td >
+            <td>The specified entity could not be deleted.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>
+
+</DashboardOptionsController>
