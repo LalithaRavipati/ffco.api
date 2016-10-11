@@ -4,6 +4,20 @@
 
 	  <remarks>
       <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th><b>Valid $expand Fields</b></th>
+            <th><b>Description</b></th>
+          </tr>
+          <tr>
+            <td>Location</td >
+            <td>Retrieves information for the associated location.</td >
+          </tr>
+        </table>
+      </p>
+      <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
         <br/>
@@ -32,6 +46,20 @@
   <Methods name="GetOne">
 
     <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th><b>Valid $expand Fields</b></th>
+            <th><b>Description</b></th>
+          </tr>
+          <tr>
+            <td>Location</td >
+            <td>Retrieves information for the associated location.</td >
+          </tr>
+        </table>
+      </p>
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
