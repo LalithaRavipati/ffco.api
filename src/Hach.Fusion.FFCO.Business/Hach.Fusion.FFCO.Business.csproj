@@ -206,6 +206,7 @@
     <Compile Include="Facades\DashboardFacade.cs" />
     <Compile Include="Facades\DashboardOptionFacade.cs" />
     <Compile Include="Facades\LimitTypeFacade.cs" />
+    <Compile Include="Facades\LocationLogEntryFacade.cs" />
     <Compile Include="Facades\UnitTypeGroupFacade.cs" />
     <Compile Include="Facades\UnitTypeFacade.cs" />
     <Compile Include="Facades\LocationTypeFacade.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Validators\DashboardOptionValidator.cs" />
     <Compile Include="Validators\DashboardValidator.cs" />
     <Compile Include="Validators\LimitTypeValidator.cs" />
+    <Compile Include="Validators\LocationLogEntryValidator.cs" />
     <Compile Include="Validators\UnitTypeGroupsValidator.cs" />
     <Compile Include="Validators\UnitTypeValidator.cs" />
     <Compile Include="Validators\LocationTypeValidator.cs" />

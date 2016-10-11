@@ -211,6 +211,7 @@
     <Compile Include="Facades\DashboardFacadeTests.cs" />
     <Compile Include="Facades\DashboardOptionFacadeTests.cs" />
     <Compile Include="Facades\LimitTypeFacadeTests.cs" />
+    <Compile Include="Facades\LocationLogEntryFacadeTests.cs" />
     <Compile Include="Facades\UnitTypeFacadeTests.cs" />
     <Compile Include="Facades\LocationTypeFacadeTests.cs" />
     <Compile Include="Facades\LocationFacadeTests.cs" />

@@ -18,7 +18,7 @@ using Hach.Fusion.FFCO.Entities.Extensions;
 namespace Hach.Fusion.FFCO.Business.Facades
 {
     /// <summary>
-    /// Facade for managing the location repository. 
+    /// Facade for managing the Location Type repository. 
     /// </summary>    
     public class LocationTypeFacade
         : FacadeWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
@@ -28,11 +28,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Constructor for the <see cref="LocationFacade"/> class taking a database context
+        /// Constructor for the <see cref="LocationTypeFacade"/> class taking a database context
         /// and validator argument.
         /// </summary>
-        /// <param name="context">Database context containing location type entities.</param>
-        /// <param name="validator">Validator for location DTOs.</param>
+        /// <param name="context">Database context containing Location Type entities.</param>
+        /// <param name="validator">Validator for Location Type DTOs.</param>
         public LocationTypeFacade(DataContext context, IFFValidator<LocationTypeCommandDto> validator)
         {
             _context = context;
@@ -46,12 +46,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Get Methods
 
         /// <summary>
-        /// Gets a list of location types from the data store.
+        /// Gets a list of Location Types from the data store.
         /// </summary>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the list of location type DTOs retrieved.
+        /// If successful, the task result contains the list of Location Type DTOs retrieved.
         /// </returns>
         public override async Task<QueryResult<LocationTypeQueryDto>> Get(ODataQueryOptions<LocationTypeQueryDto> queryOptions)
         {
@@ -66,12 +66,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Gets a single location type from the data store.
+        /// Gets a single Location Type from the data store.
         /// </summary>
-        /// <param name="id">ID that uniquely identifies the location type to be retrieved.</param>
+        /// <param name="id">ID that uniquely identifies the Location Type to be retrieved.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result includes the location type DTO retrieved.
+        /// If successful, the task result includes the Location Type DTO retrieved.
         /// </returns>
         public override async Task<QueryResult<LocationTypeQueryDto>> Get(Guid id)
         {
@@ -82,23 +82,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (result == null)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var locationDto = _mapper.Map<LocationType, LocationTypeQueryDto>(result);
+            var locationTypeDto = _mapper.Map<LocationType, LocationTypeQueryDto>(result);
 
-            return Query.Result(locationDto);
-        }
-
-        /// <summary>
-        /// Gets the value of the indicated location's property.
-        /// </summary>
-        /// <param name="id">ID that identifies the location to be retrieved.</param>
-        /// <param name="propertyName">Name of the property whose value is to be retrieved.</param>
-        /// <returns>
-        /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the indicated property's value.
-        /// </returns>
-        public override Task<QueryResult<LocationTypeQueryDto>> GetProperty(Guid id, string propertyName)
-        {
-            throw new NotImplementedException();          
+            return Query.Result(locationTypeDto);
         }
 
         #endregion Get Methods
@@ -106,20 +92,15 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Create Method
 
         /// <summary>
-        /// Creates a location.
+        /// Creates a Location Type.
         /// </summary>
-        /// <param name="dto">Data Transfer Object (DTO) used to create a location.</param>
+        /// <param name="dto">Data Transfer Object (DTO) used to create a Location Type.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the DTO associated with the location.
+        /// If successful, the task result contains the DTO associated with the Location Type.
         /// </returns>
-        /// <remarks>
-        /// Note that there is no checking for a circular reference for creating a location. This is
-        /// because the created item does not have children. So, there cannot be a circular reference.
-        /// </remarks>
         public override async Task<CommandResult<LocationTypeQueryDto, Guid>> Create(LocationTypeCommandDto dto)
         {
-
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             
             // User ID should always be available, but if not ...
@@ -162,9 +143,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Delete Method
 
         /// <summary>
-        /// Deletes a location type if it is not associated to any locations.
+        /// Deletes a Location Type if no Locations are associated with it.
         /// </summary>
-        /// <param name="id">ID that identifies the location type to be deleted.</param>
+        /// <param name="id">ID that identifies the Location Type to be deleted.</param>
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
@@ -201,11 +182,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Update Method
 
         /// <summary>
-        /// Updates a location using a <see cref="Delta"/> object.
+        /// Updates a Location Type using a <see cref="Delta"/> object.
         /// </summary>
-        /// <param name="id">ID of the location to be updated.</param>
+        /// <param name="id">ID of the Location Type to be updated.</param>
         /// <param name="delta">
-        /// Delta containing a list of location properties.  Web Api does the magic of converting the JSON to 
+        /// Delta containing a list of Location Type properties.  Web Api does the magic of converting the JSON to 
         /// a delta.
         /// </param>
         /// <returns>
@@ -259,6 +240,19 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #endregion Update Method
 
         #region Not Implemented Methods
+
+        /// <summary>
+        /// Gets the value of the indicated Location Type's property (not implemented).
+        /// </summary>
+        /// <param name="id">ID that identifies the Location Type to be retrieved.</param>
+        /// <param name="propertyName">Name of the property whose value is to be retrieved.</param>
+        /// <returns>
+        /// Always throws a NotImplemented exception.
+        /// </returns>
+        public override Task<QueryResult<LocationTypeQueryDto>> GetProperty(Guid id, string propertyName)
+        {
+            throw new NotImplementedException();
+        }
 
         public override Task<CommandResult<LocationTypeQueryDto, Guid>> CreateReference(Guid id, string navigationProperty, object referenceId)
         {

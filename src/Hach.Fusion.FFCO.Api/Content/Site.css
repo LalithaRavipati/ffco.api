@@ -26,3 +26,7 @@ textarea {
 .navbar-inverse .navbar-nav > li > a {
     color: gainsboro;
 }
+
+.img-left {
+    float: left
+}

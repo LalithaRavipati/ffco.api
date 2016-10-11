@@ -18,7 +18,7 @@ using Swashbuckle.Swagger.Annotations;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing Location Types.
+    /// Web API controller for managing Location Log Entries.
     /// </summary>
     /// <remarks>
     /// All of the public methods below return an asynchronous task result containing information needed to create
@@ -28,15 +28,15 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     [EnableCors("*", "*", "*")]
-    public class LocationTypesController
-        : ControllerWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
+    public class LocationLogEntriesController
+        : ControllerWithCruModelsBase<LocationLogEntryCommandDto, LocationLogEntryCommandDto, LocationLogEntryQueryDto, Guid>
     {
         /// <summary>
-        /// Default constructor for the <see cref="LocationTypesController"/> class taking OData helper and repository facade arguments.
+        /// Default constructor for the <see cref="LocationLogEntriesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist Location Type data.</param>
-        public LocationTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid> facade) 
+        public LocationLogEntriesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationLogEntryCommandDto, LocationLogEntryCommandDto, LocationLogEntryQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -46,127 +46,127 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of Location Types.
+        /// Retrieves a queryable list of Location Log Entries.
         /// </summary>
         /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
         /// <returns>
-        /// A list of DTOs for the Location Types that satisfy query option criteria.
+        /// A list of DTOs for the Location Log Entries that satisfy query option criteria.
         /// </returns>
         /// <example>
-        /// GET: ~/odata/v16.1/LocationTypes
+        /// GET: ~/odata/v16.1/LocationLogEntries
         /// </example>
-        /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="GetAll"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetAll"]/*'/>
+        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(LocationTypeQueryDto))]
-        public async Task<IHttpActionResult> Get(ODataQueryOptions<LocationTypeQueryDto> queryOptions)
+        [ResponseType(typeof(LocationLogEntryQueryDto))]
+        public async Task<IHttpActionResult> Get(ODataQueryOptions<LocationLogEntryQueryDto> queryOptions)
         {
             var results = await Facade.Get(queryOptions);
             return Query(results);
         }
 
         /// <summary>
-        /// Retrieves the Location Type with the specified ID.
+        /// Retrieves the Location Log Entry with the specified ID.
         /// </summary>
-        /// <param name="key">ID that identifies the Location Type to be retrieved.</param>
+        /// <param name="key">ID that identifies the Location Log Entry to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
-        /// The DTO for the indicated Location Type.
+        /// The DTO for the indicated Location Log Entry.
         /// </returns>
         /// <example>
-        /// GET: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// GET: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
-        /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="GetOne"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="GetOne"]/*'/> 
+        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(LocationTypeQueryDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<LocationTypeQueryDto> queryOptions)
+        [ResponseType(typeof(LocationLogEntryQueryDto))]
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<LocationLogEntryQueryDto> queryOptions)
         {
             var results = await Facade.Get(key);
             return Query(results);
         }
 
         /// <summary>
-        /// Creates a Location Type.
+        /// Creates a Location Log Entry.
         /// </summary>
-        /// <param name="dto">Data Transfer Object (DTO) of the Location Type to be created.</param>
+        /// <param name="dto">Data Transfer Object (DTO) of the Location Log Entry to be created.</param>
         /// <returns>
-        /// The DTO for the newly created Location Type.
+        /// The DTO for the newly created Location Log Entry.
         /// </returns>
         /// <example>
-        /// POST: ~/odata/v16.1/LocationTypes
+        /// POST: ~/odata/v16.1/LocationLogEntries
         /// </example>
-        /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Post"]/*'/>
-        [FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationType)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Post"]/*'/>
+        [FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationLogEntry)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationTypeQueryDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LocationTypeQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Post(LocationTypeCommandDto dto)
+        [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Post(LocationLogEntryCommandDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
         }
 
         /// <summary>
-        /// Replaces the specified properties of the indicated Location Type.
+        /// Replaces the specified properties of the indicated Location Log Entry.
         /// </summary>
-        /// <param name="key">Key that uniquely identifies the Location Type to be edited.</param>
-        /// <param name="delta">Delta for the updated Location Type properties.</param>
+        /// <param name="key">Key that uniquely identifies the Location Log Entry to be edited.</param>
+        /// <param name="delta">Delta for the updated Location Log Entry properties.</param>
         /// <returns>
         /// If successful, this method always returns "No Content".
         /// </returns>
         /// <example>
-        /// PATCH: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
-        /// MERGE: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// PATCH: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// MERGE: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
-        /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Patch"]/*'/>
-        [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Patch"]/*'/> 
+        [FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationLogEntry)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationTypeCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationLogEntryCommandDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LocationTypeQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationTypeCommandDto> delta)
+        [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationLogEntryCommandDto> delta)
         {
             var result = await Facade.Update(key, delta);
             return Command(result);
         }
 
         /// <summary>
-        /// Deletes the Location Type with the specified ID.
+        /// Deletes the Location Log Entry with the specified ID.
         /// </summary>
-        /// <param name="key">ID of the Location Type to be deleted.</param>
+        /// <param name="key">ID of the Location Log Entry to be deleted.</param>
         /// <returns>
         /// Status code indicating whether the operation was successful or why it failed.
         /// </returns>
         /// <example>
-        /// DELETE: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// DELETE: ~/odata/v16.1/LocationLogEntries(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
-        /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Delete"]/*'/>
-        [FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationType)]
+        /// <include file='XmlDocumentation/LocationLogEntriesController.doc' path='LocationLogEntriesController/Methods[@name="Delete"]/*'/>  
+        [FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationLogEntry)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LocationTypeQueryDto, Guid>))]
+        [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
         public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
         {
             var result = await Facade.Delete(key);

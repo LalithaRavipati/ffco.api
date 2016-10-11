@@ -23,7 +23,7 @@
       </p>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <br/>
         <table class="gridtable" >
           <tr>
@@ -65,7 +65,7 @@
       </p>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <table class="gridtable" >
           <tr>
             <th>
@@ -98,7 +98,7 @@
 
     <remarks>
       <h4>Errors</h4>
-      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>The following error codes are returned:</p>
       <p>
         <table class="gridtable" >
           <tr>
@@ -137,7 +137,7 @@
 
     <remarks>
       <h4>Errors</h4>
-      <p>The following are error codes returned when a BadRequest status code is returned:</p>
+      <p>The following error codes are returned:</p>
       <p>
         <table class="gridtable" >
           <tr>
@@ -197,7 +197,7 @@
     <remarks>
       <p>
         <h4>Errors</h4>
-        <p>The following are error codes returned when a BadRequest status code is returned:</p>
+        <p>The following error codes are returned:</p>
         <table class="gridtable" >
           <tr>
             <th>

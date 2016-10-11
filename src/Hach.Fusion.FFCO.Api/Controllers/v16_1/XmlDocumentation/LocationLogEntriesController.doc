@@ -1,8 +1,22 @@
-﻿<LocationTypesController>
+﻿<LocationLogEntriesController>
 
 	<Methods name="GetAll">
 
 	  <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th><b>Valid $expand Fields</b></th>
+            <th><b>Description</b></th>
+          </tr>
+          <tr>
+            <td>Location</td >
+            <td>Retrieves information for the associated location.</td >
+          </tr>
+        </table>
+      </p>
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
@@ -18,6 +32,11 @@
             <td>ODataQueryInvalid</td >
             <td>The OData query is invalid. Check the OData parameters.</td>
           </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
         </table>
       </p>
     </remarks>
@@ -27,6 +46,20 @@
   <Methods name="GetOne">
 
     <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th><b>Valid $expand Fields</b></th>
+            <th><b>Description</b></th>
+          </tr>
+          <tr>
+            <td>Location</td >
+            <td>Retrieves information for the associated location.</td >
+          </tr>
+        </table>
+      </p>
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
@@ -51,6 +84,11 @@
             <td>FFERR-100</td >
             <td>EntityNotFound</td >
             <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
           </tr>
         </table>
       </p>
@@ -77,14 +115,19 @@
             </th>
           </tr>
           <tr>
-            <td>FFERR-101</td >
-            <td>EntityAlreadyExists</td >
-            <td>The entity already exists and can't be created.</td>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>A property is invalid (applies to the LocationId and EntryLog fields). The Log Entry should not be null.</td>
+          </tr>
+          <tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>The entity includes a foreign key reference to an entity that does not exist (applies to the LocationId field).</td>
           </tr>
           <tr>
             <td>FFERR-211</td >
             <td>PropertyIsInvalid</td >
-            <td>A property is invalid (applies to the ID field).</td>
+            <td>A property is invalid (applies to the ID field). The ID field should not be specified.</td>
           </tr>
           <tr>
             <td>FFERR-304</td >
@@ -96,6 +139,40 @@
     </remarks>    
     
   </Methods>
+
+  <Methods name="Delete">
+
+    <remarks>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>  
 
   <Methods name="Patch">
 
@@ -126,15 +203,20 @@
             <td>The entity format is not valid or is null.</td>
           </tr>
           <tr>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>A property is invalid (applies to the LocationId and EntryLog fields). The Log Entry should not be null.</td>
+          </tr>          
+          <tr>
             <td>FFERR-203</td >
             <td>EntityIDUpdateNotAllowed</td >
             <td>Updating the ID field is not allowed.</td>
           </tr>
           <tr>
-            <td>FFERR-204</td >
-            <td>EntityPropertyDuplicateNotAllowed</td >
-            <td>A duplicate of the indicated property is not allowed (applies to the I18NKeyName field).</td>
-          </tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>The entity includes a foreign key reference to an entity that does not exist (applies to the LocationId field).</td>
+          </tr>          
           <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
@@ -146,38 +228,4 @@
 
   </Methods>
 
-  <Methods name="Delete">
-
-    <remarks>
-      <p>
-        <h4>Errors</h4>
-        <p>The following error codes are returned:</p>
-        <table class="gridtable" >
-          <tr>
-            <th>
-              <b>Code</b>
-            </th>
-            <th>
-              <b>Name</b>
-            </th>
-            <th>
-              <b>Description</b>
-            </th>
-          </tr>
-          <tr>
-            <td>FFERR-100</td >
-            <td>EntityNotFound</td >
-            <td>The specified entity was not found.</td>
-          </tr>
-          <tr>
-            <td>FFERR-106</td >
-            <td>EntityCouldNotBeDeleted</td >
-            <td>The specified Location Type could not be deleted because one or more Locations refer to it.</td>
-          </tr>          
-        </table>
-      </p>
-    </remarks>
-
-  </Methods>
-
-</LocationTypesController>
+</LocationLogEntriesController>

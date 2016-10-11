@@ -196,6 +196,9 @@
     <Compile Include="LimitTypes\LimitTypeBaseDto.cs" />
     <Compile Include="LimitTypes\LimitTypeCommandDto.cs" />
     <Compile Include="LimitTypes\LimitTypeQueryDto.cs" />
+    <Compile Include="LocationLogEntryCommandDto.cs" />
+    <Compile Include="LocationLogEntryBaseDto.cs" />
+    <Compile Include="LocationLogEntryQueryDto.cs" />
     <Compile Include="LocationTypeBaseDto.cs" />
     <Compile Include="LocationBaseDto.cs" />
     <Compile Include="LocationCommandDto.cs" />

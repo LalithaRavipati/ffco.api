@@ -41,6 +41,7 @@ namespace Hach.Fusion.FFCO.Business.Database
 
         public DbSet<Location> Locations { get; set; }
         public DbSet<LocationType> LocationTypes { get; set; }
+        public DbSet<LocationLogEntry> LocationLogEntries { get; set; }
         public DbSet<UnitType> UnitTypes { get; set; }
         public DbSet<UnitTypeGroup> UnitTypeGroups { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
@@ -152,7 +153,7 @@ namespace Hach.Fusion.FFCO.Business.Database
 
         /// <summary>
         /// Handles soft deletes for entities that implement <see cref="ISoftDeletableEntity"/>.
-        /// Some soft delete implementation from <see cref="https://putshello.wordpress.com/2014/08/20/entity-framework-soft-deletes-are-easy/"/>
+        /// Some soft delete implementation from <see cref="http://putshello.wordpress.com/2014/08/20/entity-framework-soft-deletes-are-easy/"/>
         /// </summary>
         private void SoftDeleteSaveChanges()
         {
