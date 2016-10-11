@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.OData;
@@ -30,7 +31,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         private readonly Mock<ODataQueryOptions<DashboardOptionQueryDto>> _mockDtoOptions;
         private DashboardOptionFacade _facade;
         private readonly IMapper _mapper;
-        private readonly Guid _userId = Data.Users.tnt01user.Id;
+        private readonly IPrincipal _adHachClaims;
+        private readonly IPrincipal _tnt01Claims;
+        private readonly IPrincipal _tnt01And02Claims;
 
         public DashboardOptionFacadeTests()
         {
@@ -43,6 +46,15 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 new ODataQueryContext(builder.GetEdmModel(), typeof(DashboardOptionQueryDto), new ODataPath()), new HttpRequestMessage());
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
+
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.Adhach.Id.ToString());
+            _adHachClaims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
+            claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01user.Id.ToString());
+            _tnt01Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
+            claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01and02user.Id.ToString());
+            _tnt01And02Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
         }
 
         private static ODataModelBuilder BuildODataModel()
@@ -58,8 +70,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            Thread.CurrentPrincipal = _tnt01Claims;
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
             _context = new DataContext(connectionString);
@@ -86,16 +97,14 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var results = queryResult.Results;
 
             // Only dashboard options for DevTenant01 should be returned.
-            Assert.That(results.Count(), Is.EqualTo(2));
+            Assert.That(results.Count(), Is.EqualTo(1));
             Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant01_Options.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant01_ToDelete.Id), Is.True);
         }
 
         [Test]
         public async Task When_GetAll_DevTenant01andDevTenant02_Succeeds()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01and02user.Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            Thread.CurrentPrincipal = _tnt01And02Claims;
 
             var queryResult = await _facade.Get(_mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
@@ -103,26 +112,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var results = queryResult.Results;
 
             // DashboardsOptions for DevTenant01 and DevTenant02 should be returned.
-            Assert.That(results.Count(), Is.EqualTo(3));
+            Assert.That(results.Count(), Is.EqualTo(2));
             Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant01_Options.Id), Is.True);
             Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant02_Options.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant01_ToDelete.Id), Is.True);
-        }
-
-        [Test]
-        public async Task When_GetAll_HachFusion_Succeeds()
-        {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.Adhach.Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
-            var queryResult = await _facade.Get(_mockDtoOptions.Object);
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
-
-            var results = queryResult.Results;
-
-            // There are no dashboards in the Hach Fusion tenant so zero dashboards should be returned.
-            Assert.That(results.Count(), Is.EqualTo(1));
-            Assert.That(results.Any(x => x.Id == Data.DashboardOptions.HachFusion_Options.Id), Is.True);
         }
 
         [Test]
@@ -153,8 +145,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Get_Other_Tenant_Succeeds()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01and02user.Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            Thread.CurrentPrincipal = _tnt01And02Claims;
 
             var seed = Data.DashboardOptions.DevTenant02_Options;
 
@@ -217,9 +208,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_DashboardOption_Succeeds()
         {
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.DevTenant01_Options);
+            Thread.CurrentPrincipal = _adHachClaims;
+            var user = Data.Users.Adhach;
+
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.Empty;
-            toCreate.Options = "New Options";
             var callTime = DateTime.UtcNow;
 
             var commandResult = await _facade.Create(toCreate);
@@ -232,8 +225,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var dto = queryResult.Dto;
             Assert.That(dto.TenantId, Is.EqualTo(toCreate.TenantId));
             Assert.That(dto.Options, Is.EqualTo(toCreate.Options));
-            Assert.That(dto.CreatedById, Is.EqualTo(_userId));
-            Assert.That(dto.ModifiedById, Is.EqualTo(_userId));
+            Assert.That(dto.CreatedById, Is.EqualTo(user.Id));
+            Assert.That(dto.ModifiedById, Is.EqualTo(user.Id));
             Assert.That(dto.CreatedOn, Is.EqualTo(callTime).Within(TimeSpan.FromSeconds(5)));
             Assert.That(dto.ModifiedOn, Is.EqualTo(callTime).Within(TimeSpan.FromSeconds(5)));
         }
@@ -241,6 +234,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_OtherTenant_Fails()
         {
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.Adhach.Id.ToString());
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
             var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.DevTenant02_Options);
             toCreate.Id = Guid.Empty;
             toCreate.Options = "New Options";
@@ -265,6 +261,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_Null_Fails()
         {
+            Thread.CurrentPrincipal = _adHachClaims;
             var commandResult = await _facade.Create(null);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
@@ -275,7 +272,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_IdNotEmpty_Fails()
         {
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.DevTenant01_Options);
+            Thread.CurrentPrincipal = _adHachClaims;
+
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.NewGuid();
             toCreate.Options = "New Options";
 
@@ -289,7 +288,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_EmptyTenantId_Fails()
         {
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.DevTenant01_Options);
+            Thread.CurrentPrincipal = _adHachClaims;
+
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.Empty;
             toCreate.Options = "New Options";
@@ -304,7 +305,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadTenantId_Fails()
         {
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.DevTenant01_Options);
+            Thread.CurrentPrincipal = _adHachClaims;
+
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.NewGuid();
             toCreate.Options = "New Options";
@@ -323,7 +326,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Delete_Succeeds()
         {
-            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant01_ToDelete.Id);
+            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant01_Options.Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
             Assert.That(commandResult.ErrorCodes, Is.Null);
@@ -334,7 +337,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant01_ToDelete.Id);
+            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant01_Options.Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }

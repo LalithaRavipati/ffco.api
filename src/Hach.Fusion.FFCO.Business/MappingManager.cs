@@ -102,12 +102,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeLocationTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
-                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>();
 
             cfg.CreateMap<LocationTypeCommandDto, LocationType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -165,8 +160,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeDashboards(IProfileExpression cfg)
         {
-            cfg.CreateMap<Dashboard, DashboardQueryDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<Dashboard, DashboardQueryDto>();
 
             cfg.CreateMap<Dashboard, DashboardCommandDto>()
                 .ForSourceMember(x => x.OwnerUserId, opt => opt.Ignore())
@@ -197,8 +191,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeDashboardOptions(IProfileExpression cfg)
         {
-            cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>();
 
             cfg.CreateMap<DashboardOption, DashboardOptionCommandDto>()
                 .ForSourceMember(x => x.Tenant, opt => opt.Ignore())

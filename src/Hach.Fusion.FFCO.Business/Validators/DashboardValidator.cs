@@ -9,6 +9,9 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// </summary>
     public class DashboardValidator : FFValidator<DashboardCommandDto, Guid>
     {
+        private const int NameMaximumLength = 100;
+        private const int NameMinimumLength = 4;
+
         /// <summary>
         /// Validates the state of the specified <see cref="DashboardCommandDto"/>.
         /// </summary>
@@ -25,6 +28,11 @@ namespace Hach.Fusion.FFCO.Business.Validators
 
             Evaluate(x => x.TenantId, dto.TenantId)
                 .Required();
+
+            Evaluate(l => l.Name, dto.Name)
+                .Required()
+                .MaxLength(NameMaximumLength)
+                .MinLength(NameMinimumLength);
 
             Evaluate(x => x.DashboardOptionId, dto.DashboardOptionId)
                 .Required();

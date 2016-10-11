@@ -10,5 +10,7 @@ namespace Hach.Fusion.FFCO.Dtos.Dashboards
         public Guid TenantId { get; set; }
         public Guid DashboardOptionId { get; set; }
         public string Layout { get; set; }
+        public string Name { get; set; }
+        public bool IsPrivate { get; set; }
     }
 }

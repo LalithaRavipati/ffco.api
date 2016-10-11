@@ -17,6 +17,8 @@ namespace Hach.Fusion.FFCO.Dtos.Dashboards
         public DashboardOptionQueryDto DashboardOption { get; set; }
 
         public string Layout { get; set; }
+        public string Name { get; set; }
+        public bool IsPrivate { get; set; }
 
         public Guid CreatedById { get; set; }
         public DateTime CreatedOn { get; set; }
