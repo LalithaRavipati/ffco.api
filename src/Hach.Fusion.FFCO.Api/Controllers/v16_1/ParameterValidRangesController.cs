@@ -68,7 +68,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves the Parameter Valid Ranges with the specified ID.
+        /// Retrieves the Parameter Valid Range with the specified ID.
         /// </summary>
         /// <param name="key">ID that identifies the entity to be retrieved.</param>
         /// <param name="queryOptions">OData query options.</param>

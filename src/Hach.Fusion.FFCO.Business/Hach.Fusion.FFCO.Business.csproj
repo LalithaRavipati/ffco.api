@@ -207,6 +207,7 @@
     <Compile Include="Facades\DashboardOptionFacade.cs" />
     <Compile Include="Facades\LimitTypeFacade.cs" />
     <Compile Include="Facades\LocationLogEntryFacade.cs" />
+    <Compile Include="Facades\ParameterValidRangeFacade.cs" />
     <Compile Include="Facades\UnitTypeGroupFacade.cs" />
     <Compile Include="Facades\UnitTypeFacade.cs" />
     <Compile Include="Facades\LocationTypeFacade.cs" />

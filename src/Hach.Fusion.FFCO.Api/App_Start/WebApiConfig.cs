@@ -81,7 +81,6 @@ namespace Hach.Fusion.FFCO.Api
         /// Only ONE DTO can be bound per table, so a BaseDto object is needed. 
         /// </remarks>
         /// 
-
         private static IEdmModel GetImplicitEdm()
         {
             var builder = new ODataConventionModelBuilder();
@@ -96,6 +95,7 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
             builder.EntitySet<ParameterTypeDto>("ParameterTypes");
             builder.EntitySet<ParameterDto>("Parameters");
+            builder.EntitySet<ParameterValidRangeQueryDto>("ParameterValidRanges");
             builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
 
             builder.EnableLowerCamelCase();
