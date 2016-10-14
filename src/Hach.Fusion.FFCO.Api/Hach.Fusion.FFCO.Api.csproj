@@ -98,12 +98,12 @@
       <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2016.58.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2016.58.18\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2016.59.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2016.59.1\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.58.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.58.13\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.59.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.59.2\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -369,6 +369,7 @@
     <Compile Include="Controllers\v16_1\DashboardsController.cs" />
     <Compile Include="Controllers\v16_1\LimitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationLogEntriesController.cs" />
+    <Compile Include="Controllers\v16_1\ParameterValidRangesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
@@ -406,6 +407,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\DashboardOptionsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\LimitTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\ParameterValidRangesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />

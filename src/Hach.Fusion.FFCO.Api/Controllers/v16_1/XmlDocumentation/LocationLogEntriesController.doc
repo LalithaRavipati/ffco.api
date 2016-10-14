@@ -117,7 +117,7 @@
           <tr>
             <td>FFERR-201</td >
             <td>PropertyRequired</td >
-            <td>A property is invalid (applies to the LocationId and EntryLog fields). The Log Entry should not be null.</td>
+            <td>A property is invalid (applies to the LocationId and EntryLog fields). The Log Entry should not be null or an empty string.</td>
           </tr>
           <tr>
             <td>FFERR-209</td >
@@ -205,7 +205,7 @@
           <tr>
             <td>FFERR-201</td >
             <td>PropertyRequired</td >
-            <td>A property is invalid (applies to the LocationId and EntryLog fields). The Log Entry should not be null.</td>
+            <td>A property is invalid (applies to the LocationId and EntryLog fields). The Log Entry should not be null or an empty string.</td>
           </tr>          
           <tr>
             <td>FFERR-203</td >
