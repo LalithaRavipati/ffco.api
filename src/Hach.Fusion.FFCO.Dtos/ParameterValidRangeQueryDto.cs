@@ -9,8 +9,8 @@ namespace Hach.Fusion.FFCO.Dtos
     public class ParameterValidRangeQueryDto : FFDto<Guid>
     {
         public Guid ParameterId { get; set; }
-        public double MinValue { get; set; }
-        public double MaxValue { get; set; }
+        public double? MinValue { get; set; }
+        public double? MaxValue { get; set; }
 
         public ParameterDto Parameter { get; set; }
 
