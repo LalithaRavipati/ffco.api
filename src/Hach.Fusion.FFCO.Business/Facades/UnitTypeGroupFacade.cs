@@ -93,7 +93,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the indicated property's value.
         /// </returns>
-        public override async Task<QueryResult<UnitTypeGroupQueryDto>> GetProperty(Guid id, string propertyName)
+        public override Task<QueryResult<UnitTypeGroupQueryDto>> GetProperty(Guid id, string propertyName)
         {
             throw new NotImplementedException();
 
@@ -142,7 +142,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// Note that there is no checking for a circular reference for creating a location. This is
         /// because the created item does not have children. So, there cannot be a circular reference.
         /// </remarks>
-        public override async Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Create(UnitTypeGroupQueryDto dto)
+        public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Create(UnitTypeGroupQueryDto dto)
         {
             throw new NotImplementedException();
 
@@ -211,7 +211,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Delete(Guid id)
+        public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Delete(Guid id)
         {
             throw new NotImplementedException();
 
@@ -247,7 +247,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Update(Guid id, Delta<UnitTypeGroupQueryDto> delta)
+        public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Update(Guid id, Delta<UnitTypeGroupQueryDto> delta)
         {
             throw new NotImplementedException();
 

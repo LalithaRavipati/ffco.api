@@ -417,6 +417,7 @@
     <EmbeddedResource Include="Resources\HachLogo.png" />
     <EmbeddedResource Include="Resources\SwaggerDefault" />
     <EmbeddedResource Include="Resources\HachTabLogo.png" />
+    <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
