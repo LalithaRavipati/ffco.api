@@ -109,14 +109,16 @@ namespace Hach.Fusion.FFCO.Api
         /// <param name="config">Configuration information for the server.</param>
         private static void ConfigureSwagger(HttpConfiguration config)
         {
+            var version = typeof(WebApiApplication).Assembly.GetName().Version;
+
             // Configure swagger for api documentation.
             var authority = ConfigurationManager.AppSettings["IdServerUri"];
             // https://github.com/rbeauchamp/Swashbuckle.OData
             config
                 .EnableSwagger(c =>
                 {
-                    c.SingleApiVersion("v16_1", "Hach.Fusion.FFCO.API Documentation")
-                        .Description("")
+                    c.SingleApiVersion("v16_1", "FFCO API")
+                        .Description($"Version {version}")
                         .Contact(cc => cc
                             .Name("Hach Company")
                             .Url("www.hach.com"));

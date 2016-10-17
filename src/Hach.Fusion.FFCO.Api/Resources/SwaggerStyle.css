@@ -18,6 +18,7 @@ table.gridtable td {
 }
 .swagger-section #header {
     background-color: #0098DB;
+    padding: 28px;
 }
 .swagger-section #header #logo {
     padding: 20px 0 20px 120px;
@@ -25,3 +26,5 @@ table.gridtable td {
 .swagger-section .swagger-ui-wrap a {
     color: #0098DB;
 }
+.swagger-section .swagger-ui-wrap .info_url,
+.swagger-section .swagger-ui-wrap .info_name { display: none;}
