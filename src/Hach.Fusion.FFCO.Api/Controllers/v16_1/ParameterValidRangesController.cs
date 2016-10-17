@@ -46,9 +46,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <summary>
         /// Retrieves a queryable list of Parameter Valid Ranges.
         /// </summary>
-        /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
+        /// <param name="queryOptions">OData query options that provide for things like sorting and filtering.</param>
         /// <returns>
-        /// A list of DTOs for the entity types that satisfy query option criteria.
+        /// A list of DTOs for the Parameter Valid Ranges that satisfy query option criteria.
         /// </returns>
         /// <example>
         /// GET: ~/odata/v16.1/ParameterValidRanges
