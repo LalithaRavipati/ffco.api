@@ -45,6 +45,7 @@ namespace Hach.Fusion.FFCO.Business
             // Initialize groups of mapping classes
             var config = new MapperConfiguration(cfg =>
             {
+                InitializeChemicalFormTypes(cfg);
                 InitializeUnitTypeGroups(cfg);
                 InitializeUnitTypes(cfg);
                 InitializeParameterTypes(cfg);
@@ -67,6 +68,14 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
+        /// Configure AutoMapper for converting between the ChemicalFormType entity and Dtos.
+        /// </summary>
+        private static void InitializeChemicalFormTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>();
+        }
+
+        /// <summary>
         /// Configure AutoMapper for converting between the Location entity and Dtos.
         /// </summary>
         private static void InitializeLocations(IProfileExpression cfg)
@@ -83,7 +92,10 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForSourceMember(x => x.Geography, opt => opt.Ignore())
-                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore()); 
+                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+
+            cfg.CreateMap<Location, LocationParentDto>()
+                .ForSourceMember(x => x.Locations, opt => opt.Ignore());
 
             cfg.CreateMap<LocationCommandDto, Location>()
                 .ForMember(x => x.Id, opt => opt.Ignore())

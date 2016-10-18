@@ -16,17 +16,17 @@
             </th>
           </tr>
           <tr>
-            <td>ParameterType</td >
-            <td>Retrieves related ParameterType.</td >
-          </tr>
+            <td>BaseChemicalFormType</td >
+            <td>Retrieves the base Chemical Form Type of each Parameter retrieved.</td >
+          </tr>          
           <tr>
             <td>BaseUnitType</td >
-            <td>Retrieves related UnitType.</td >
+            <td>Retrieves the base Unit Type of each Parameter retrieved.</td >
           </tr>
           <tr>
-            <td>BaseChemicalFormType</td >
-            <td>Retrieves related ChemicalFormType.</td >
-          </tr>
+            <td>ParameterType</td >
+            <td>Retrieves the Parameter Type of each Parameter retrieved.</td >
+          </tr>          
         </table>
       </p>
       <p>
@@ -59,6 +59,32 @@
   <Methods name="GetOne">
 
     <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>BaseChemicalFormType</td >
+            <td>Retrieves the base Chemical Form Type of the Parameter retrieved.</td >
+          </tr>
+          <tr>
+            <td>BaseUnitType</td >
+            <td>Retrieves the base Unit Type of the Parameter retrieved.</td >
+          </tr>
+          <tr>
+            <td>ParameterType</td >
+            <td>Retrieves the Parameter Type of the Parameter retrieved.</td >
+          </tr>
+        </table>
+      </p>      
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
