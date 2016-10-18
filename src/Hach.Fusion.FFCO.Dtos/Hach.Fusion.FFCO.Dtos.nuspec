@@ -8,7 +8,7 @@
     <owners>Hach Company</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>Modified DTOs to ref other DTOs instead of Entities (FOART-1047).</releaseNotes>
     <copyright>Copyright 2016 Hach Company</copyright>
     <tags></tags>
   </metadata>
