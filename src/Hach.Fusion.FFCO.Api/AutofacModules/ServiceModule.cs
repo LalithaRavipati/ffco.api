@@ -63,6 +63,8 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();
             builder.RegisterType<ParameterFacade>().As<IFacade<ParameterDto, Guid>>();
 
+            builder.RegisterType<ParameterValidRangeFacade>().As<IFacade <ParameterValidRangeQueryDto, Guid >> ();
+
             builder.RegisterType<DashboardFacade>().As<IFacadeWithCruModels<DashboardCommandDto, DashboardCommandDto,
                 DashboardQueryDto, Guid>>();
             builder.RegisterType<DashboardValidator>().As<IFFValidator<DashboardCommandDto>>();

@@ -48,6 +48,7 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeUnitTypeGroups(cfg);
                 InitializeUnitTypes(cfg);
                 InitializeParameterTypes(cfg);
+                InitializeParameterValidRanges(cfg);
                 InitializeLocations(cfg);
                 InitializeLocationLogEntries(cfg);
                 InitializeLocationTypes(cfg);
@@ -154,6 +155,15 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeParameters(IProfileExpression cfg)
         {
             cfg.CreateMap<Parameter, ParameterDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Parameter Valid Range entity and Dtos.
+        /// </summary>
+        private static void InitializeParameterValidRanges(IProfileExpression cfg)
+        {
+            cfg.CreateMap<ParameterValidRange, ParameterValidRangeQueryDto>()
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
         }
 

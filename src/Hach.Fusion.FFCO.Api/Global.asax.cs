@@ -1,5 +1,4 @@
 ﻿using System.Web;
-using Hach.Fusion.Core.CommonActorSystem;
 
 namespace Hach.Fusion.FFCO.Api
 {
@@ -13,7 +12,6 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         protected void Application_End()
         {
-            ActorSystemReferences.Terminate().Wait();
         }
     }
 }

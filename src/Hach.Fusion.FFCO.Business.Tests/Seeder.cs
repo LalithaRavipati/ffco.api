@@ -20,8 +20,10 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedProductOfferingTenantLocations(context);
             SeedDashboardOptions(context);
             SeedDashboards(context);
-            SeedLocationLogEntries(context);
+            // TODO: Uncomment next line after resolving "null TimeStamp" matter [RFKutz, 10/17/2016]
+            //SeedLocationLogEntries(context);
             SeedParameters(context);
+            SeedParameterValidRanges(context);
 
         }
 
@@ -41,6 +43,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.LimitTypes");
 
             context.SaveChanges();
@@ -149,6 +152,16 @@ namespace Hach.Fusion.FFCO.Business.Tests
         {
             context.Parameters.Add(Data.Parameters.Flow);
             context.Parameters.Add(Data.Parameters.pH);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedParameterValidRanges(DataContext context)
+        {
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.pH);
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMinAndMax);
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMinOnly);
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMaxOnly);
 
             context.SaveChanges();
         }

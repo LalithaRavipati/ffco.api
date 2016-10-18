@@ -113,7 +113,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// Note that there is no checking for a circular reference for creating a location. This is
         /// because the created item does not have children. So, there cannot be a circular reference.
         /// </remarks>
-        public override async Task<CommandResult<UnitTypeQueryDto, Guid>> Create(UnitTypeQueryDto dto)
+        public override Task<CommandResult<UnitTypeQueryDto, Guid>> Create(UnitTypeQueryDto dto)
         {
             throw new NotImplementedException();
 
@@ -182,7 +182,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<UnitTypeQueryDto, Guid>> Delete(Guid id)
+        public override Task<CommandResult<UnitTypeQueryDto, Guid>> Delete(Guid id)
         {
             throw new NotImplementedException();
 
@@ -218,7 +218,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<UnitTypeQueryDto, Guid>> Update(Guid id, Delta<UnitTypeQueryDto> delta)
+        public override Task<CommandResult<UnitTypeQueryDto, Guid>> Update(Guid id, Delta<UnitTypeQueryDto> delta)
         {
             throw new NotImplementedException();
 

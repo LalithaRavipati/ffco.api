@@ -49,6 +49,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ProductOfferingTenantLocation> ProductOfferingTenantLocations { get; set; }
         public DbSet<ParameterType> ParameterTypes { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
+        public DbSet<ParameterValidRange> ParameterValidRanges { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<DashboardOption> DashboardOptions { get; set; }
         public DbSet<Dashboard> Dashboards { get; set; }
