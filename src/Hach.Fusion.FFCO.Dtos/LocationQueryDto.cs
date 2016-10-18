@@ -22,12 +22,6 @@ namespace Hach.Fusion.FFCO.Dtos
         // Expandable properties
         public virtual LocationTypeQueryDto LocationType { get; set; }
 
-        // Having an expandable Parent property with an entity will result in the following error, so don't uncomment this property
-        // The complex type 'Hach.Fusion.FFCO.Entities.Location' has a reference to itself through the property 'Parent'. 
-        // A recursive loop of complex types is not allowed. Parameter name: propertyInfo
-        // public virtual Location Parent { get; set; }
-
-        // Having an expandable Parent property with a DTO will result in a stack overflow error, so don't uncomment this property
         public virtual LocationParentDto Parent { get; set; }
 
         // Expandable One-to-Many relationships
