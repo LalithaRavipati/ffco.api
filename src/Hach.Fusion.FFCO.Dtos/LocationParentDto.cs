@@ -24,8 +24,8 @@ namespace Hach.Fusion.FFCO.Dtos
         public DateTime ModifiedOn { get; set; }
 
         // Expandable properties
-        public virtual LocationTypeQueryDto LocationType { get; set; }
+        public LocationTypeQueryDto LocationType { get; set; }
 
-        public virtual LocationParentDto Parent { get; set; }
+        public LocationParentDto Parent { get; set; }
     }
 }

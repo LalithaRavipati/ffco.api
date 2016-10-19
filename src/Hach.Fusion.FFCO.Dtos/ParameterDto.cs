@@ -21,8 +21,8 @@ namespace Hach.Fusion.FFCO.Dtos
         public DateTime ModifiedOn { get; set; }
 
         // Expandable Properties
-        public virtual ParameterTypeDto ParameterType { get; set; }
-        public virtual UnitTypeQueryDto BaseUnitType { get; set; }
-        public virtual ChemicalFormTypeQueryDto BaseChemicalFormType { get; set; }
+        public ParameterTypeDto ParameterType { get; set; }
+        public UnitTypeQueryDto BaseUnitType { get; set; }
+        public ChemicalFormTypeQueryDto BaseChemicalFormType { get; set; }
     }
 }
