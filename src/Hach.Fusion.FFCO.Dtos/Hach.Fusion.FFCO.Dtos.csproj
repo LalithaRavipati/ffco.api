@@ -199,11 +199,13 @@
     <Compile Include="LocationLogEntryCommandDto.cs" />
     <Compile Include="LocationLogEntryBaseDto.cs" />
     <Compile Include="LocationLogEntryQueryDto.cs" />
+    <Compile Include="LocationParentDto.cs" />
     <Compile Include="LocationTypeBaseDto.cs" />
     <Compile Include="LocationBaseDto.cs" />
     <Compile Include="LocationCommandDto.cs" />
     <Compile Include="ParameterValidRangeQueryDto.cs" />
     <Compile Include="TenantDto.cs" />
+    <Compile Include="ChemicalFormTypeQueryDto.cs" />
     <Compile Include="UnitTypeGroupQueryDto.cs" />
     <Compile Include="UnitTypeQueryDto.cs" />
     <Compile Include="LocationTypeCommandDto.cs" />

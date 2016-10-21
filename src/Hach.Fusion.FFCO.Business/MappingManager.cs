@@ -45,6 +45,7 @@ namespace Hach.Fusion.FFCO.Business
             // Initialize groups of mapping classes
             var config = new MapperConfiguration(cfg =>
             {
+                InitializeChemicalFormTypes(cfg);
                 InitializeUnitTypeGroups(cfg);
                 InitializeUnitTypes(cfg);
                 InitializeParameterTypes(cfg);
@@ -67,7 +68,15 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Location entity and Dtos.
+        /// Configure AutoMapper for converting between the Chemical Form Type entity and DTO.
+        /// </summary>
+        private static void InitializeChemicalFormTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Location entity and DTOs.
         /// </summary>
         private static void InitializeLocations(IProfileExpression cfg)
         {
@@ -83,7 +92,10 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForSourceMember(x => x.Geography, opt => opt.Ignore())
-                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore()); 
+                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+
+            cfg.CreateMap<Location, LocationParentDto>()
+                .ForSourceMember(x => x.Locations, opt => opt.Ignore());
 
             cfg.CreateMap<LocationCommandDto, Location>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -100,7 +112,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configures AutoMapper for Location Log Entries.
+        /// Configures AutoMapper for converting between Location Log Entries and DTOs.
         /// </summary>
         /// <param name="cfg">Configuration for profile-specific maps.</param>
         private static void InitializeLocationLogEntries(IProfileExpression cfg)
@@ -127,7 +139,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the LocationType entity and Dtos.
+        /// Configure AutoMapper for converting between the Location Type entity and DTOs.
         /// </summary>
         private static void InitializeLocationTypes(IProfileExpression cfg)
         {
@@ -150,7 +162,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Parameter entity and Dtos.
+        /// Configure AutoMapper for converting between the Parameter entity and DTO.
         /// </summary>
         private static void InitializeParameters(IProfileExpression cfg)
         {
@@ -159,7 +171,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Parameter Valid Range entity and Dtos.
+        /// Configure AutoMapper for converting between the Parameter Valid Range entity and DTO.
         /// </summary>
         private static void InitializeParameterValidRanges(IProfileExpression cfg)
         {
@@ -168,7 +180,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the UnitTypeGroup entity and Dtos.
+        /// Configure AutoMapper for converting between the Unit Type Group entity and DTO.
         /// </summary>
         private static void InitializeUnitTypeGroups(IProfileExpression cfg)
         {
@@ -176,7 +188,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the UnitType entity and Dtos.
+        /// Configure AutoMapper for converting between the Unit Type entity and DTOs.
         /// </summary>
         private static void InitializeUnitTypes(IProfileExpression cfg)
         {
@@ -186,7 +198,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the ParameterType entity and Dtos.
+        /// Configure AutoMapper for converting between the Parameter Type entity and DTO.
         /// </summary>
         private static void InitializeParameterTypes(IProfileExpression cfg)
         {
@@ -194,7 +206,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Dashboard entity and Dtos.
+        /// Configure AutoMapper for converting between the Dashboard entity and DTOs.
         /// </summary>
         private static void InitializeDashboards(IProfileExpression cfg)
         {
@@ -225,7 +237,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Dashboard option entity and Dtos.
+        /// Configure AutoMapper for converting between the Dashboard Option entity and DTOs.
         /// </summary>
         private static void InitializeDashboardOptions(IProfileExpression cfg)
         {
@@ -250,7 +262,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Tenant entity and Dto.
+        /// Configure AutoMapper for converting between the Tenant entity and DTO.
         /// </summary>
         private static void InitializeTenants(IProfileExpression cfg)
         {
@@ -259,7 +271,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the User entity and Dto.
+        /// Configure AutoMapper for converting between the User entity and DTO.
         /// </summary>
         private static void InitializeUsers(IProfileExpression cfg)
         {
@@ -269,7 +281,7 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the LimitType entity and Dtos.
+        /// Configure AutoMapper for converting between the Limit Type entity and DTOs.
         /// </summary>
         private static void InitializeLimitTypes(IProfileExpression cfg)
         {

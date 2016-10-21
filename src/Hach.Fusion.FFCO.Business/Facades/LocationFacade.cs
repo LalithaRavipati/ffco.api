@@ -12,7 +12,6 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Entities;
 using Hach.Fusion.FFCO.Entities.Extensions;
@@ -59,7 +58,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         {
             queryOptions.Validate(ValidationSettings);
 
-            var results = await Task.Run(() => _context.ExpandedLocations()
+            var results = await Task.Run(() => _context.Locations
                 .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
@@ -76,8 +75,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// If successful, the task result includes the location DTO retrieved.
         /// </returns>
         public override async Task<QueryResult<LocationQueryDto>> Get(Guid id)
-        {            
-            var result = await Task.Run(() => _context.ExpandedLocations()
+        {
+            var result = await Task.Run(() => _context.Locations
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 

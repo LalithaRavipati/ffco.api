@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Dtos
 {
     /// <summary>
-    /// Data Transfer Object (DTO) for location entities used with query controller commands.
+    /// Data Transfer Object (DTO) for Location entity parents used with query controller commands.
     /// </summary>
-    public class LocationQueryDto : LocationBaseDto
+    /// <remarks>
+    /// This DTO is the same as the <see cref="LocationQueryDto"/> except that it does not include
+    /// the Locations property. It is used for referencing a Location's parent. If the Locations
+    /// property were included, it would result in a circular reference and a stack overflow when
+    /// retrieving Locations.
+    /// </remarks>
+    public class LocationParentDto : LocationBaseDto
     {
         public string Name { get; set; }
 
@@ -23,8 +27,5 @@ namespace Hach.Fusion.FFCO.Dtos
         public LocationTypeQueryDto LocationType { get; set; }
 
         public LocationParentDto Parent { get; set; }
-
-        // Expandable One-to-Many relationships
-        public ICollection<LocationQueryDto> Locations { get; set; }
     }
 }

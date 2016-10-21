@@ -194,3 +194,4 @@ src/packages/
 src/.vs/config/applicationhost.config
 /src/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 Hach.Fusion.FFCO.Api/packages/
+*.nupkg
