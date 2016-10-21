@@ -11,11 +11,11 @@ namespace Hach.Fusion.FFCO.Business.Extensions
     public static class DataContextExtensions
     { 
         /// <summary>
-        /// Returns a task that gets all tenants that the user has access to.
+        /// Returns all tenants that the user has access to.
         /// </summary>
         /// <param name="context">Database context.</param>
         /// <param name="userId">Identifies the user.</param>
-        /// <returns>Task that returns the results.</returns>
+        /// <returns>Queryable list of tenants.</returns>
         public static IQueryable<Tenant> GetTenantsForUser(this DataContext context, Guid userId)
         {
             return (
@@ -26,12 +26,11 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         }
 
         /// <summary>
-        /// Returns a task that gets all dashboards that are in any of the tenants that
-        /// the user has access to.
+        /// Returns all dashboards that are in any of the tenants that the user has access to.
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="userId">Identifies the user.</param>
-        /// <returns>Task that returns the results.</returns>
+        /// <returns>Queryable list of dashboards.</returns>
         public static IQueryable<Dashboard> GetDashboardsForUser(this DataContext context, Guid userId)
         {
             return (
@@ -42,12 +41,11 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         }
 
         /// <summary>
-        /// Returns a task that gets all dashboard options that are in any of the tenants that
-        /// the user has access to.
+        /// Returns all dashboard options that are in any of the tenants that the user has access to.
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="userId">Identifies the user.</param>
-        /// <returns>Task that returns the results.</returns>
+        /// <returns>Queryable list of dashboard options.</returns>
         public static IQueryable<DashboardOption> GetDashboardOptionsForUser(this DataContext context, Guid userId)
         {
             return (
@@ -58,12 +56,12 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         }
 
         /// <summary>
-        /// Returns a task that gets all location log entries that are in any of the tenants that
+        /// Returns all location log entries that are in any of the tenants that
         /// the user has access to.
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="userId">Identifies the user.</param>
-        /// <returns>Task that returns the results.</returns>
+        /// <returns>Queryable list of location log entries.</returns>
         public static IQueryable<LocationLogEntry> GetLocationLogEntriesForUser(this DataContext context, Guid userId)
         {
             return
