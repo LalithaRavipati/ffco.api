@@ -9,7 +9,7 @@ namespace Hach.Fusion.FFCO.Dtos
     public class LocationLogEntryBaseDto : FFDto<Guid>
     {
         public Guid LocationId { get; set; }
-
         public string LogEntry { get; set; }
+        public DateTimeOffset? TimeStamp { get; set; }
     }
 }

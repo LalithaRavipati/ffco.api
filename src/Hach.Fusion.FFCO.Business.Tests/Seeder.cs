@@ -20,8 +20,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedProductOfferingTenantLocations(context);
             SeedDashboardOptions(context);
             SeedDashboards(context);
-            // TODO: Uncomment next line after resolving "null TimeStamp" matter [RFKutz, 10/17/2016]
-            //SeedLocationLogEntries(context);
+            SeedLocationLogEntries(context);
             SeedParameters(context);
             SeedParameterValidRanges(context);
 

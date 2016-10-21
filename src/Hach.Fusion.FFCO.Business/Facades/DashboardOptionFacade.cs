@@ -58,9 +58,13 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await _context.GetDashboardOptionsForUser(Guid.Parse(userId)).ConfigureAwait(false);
+            var result = await Task.Run(() => 
+                _context.GetDashboardOptionsForUser(Guid.Parse(userId))
+                .Select(_mapper.Map<DashboardOption, DashboardOptionQueryDto>)
+                .AsQueryable())
+                .ConfigureAwait(false);
 
-            return Query.Result(result.Select(_mapper.Map<DashboardOption, DashboardOptionQueryDto>).AsQueryable());
+            return Query.Result(result);
         }
 
         /// <summary>
@@ -77,12 +81,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await _context.GetDashboardOptionsForUser(Guid.Parse(userId)).ConfigureAwait(false);
+            var result = await Task.Run(() => 
+                _context.GetDashboardOptionsForUser(Guid.Parse(userId))
+                .FirstOrDefault(x => x.Id == id))
+                .ConfigureAwait(false);
 
-            var dto = result.FirstOrDefault(x => x.Id == id);
-            return dto == null
+            return result == null
                 ? Query.Error(EntityErrorCode.EntityNotFound)
-                : Query.Result(_mapper.Map<DashboardOption, DashboardOptionQueryDto>(dto));
+                : Query.Result(_mapper.Map<DashboardOption, DashboardOptionQueryDto>(result));
         }
 
         #endregion Get Methods
@@ -111,7 +117,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (dto.Id != Guid.Empty)
                 validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid("Id"));
 
-            var userTenants = await _context.GetTenantsForUser(Guid.Parse(userId)).ConfigureAwait(false);
+            var userTenants = _context.GetTenantsForUser(Guid.Parse(userId));
 
             if (dto.TenantId != Guid.Empty && !userTenants.Any(x => x.Id == dto.TenantId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
@@ -151,7 +157,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Command.Error<DashboardOptionQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var userDashboardOptions = await _context.GetDashboardOptionsForUser(Guid.Parse(userId)).ConfigureAwait(false);
+            var userDashboardOptions = _context.GetDashboardOptionsForUser(Guid.Parse(userId));
             var entity = userDashboardOptions.SingleOrDefault(x => x.Id == id);
 
             if (entity == null)
@@ -194,7 +200,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (delta == null)
                 return Command.Error<DashboardOptionCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var userDashboardOptions = await _context.GetDashboardOptionsForUser(Guid.Parse(userId)).ConfigureAwait(false);
+            var userDashboardOptions = _context.GetDashboardOptionsForUser(Guid.Parse(userId));
             var entity = userDashboardOptions.SingleOrDefault(x => x.Id == id);
 
             if (entity == null)
@@ -205,7 +211,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var validationResponse = ValidatorUpdate.Validate(dto);
 
-            var userTenants = await _context.GetTenantsForUser(Guid.Parse(userId)).ConfigureAwait(false);
+            var userTenants = _context.GetTenantsForUser(Guid.Parse(userId));
 
             if (dto.TenantId != Guid.Empty && !userTenants.Any(x => x.Id == dto.TenantId))
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));

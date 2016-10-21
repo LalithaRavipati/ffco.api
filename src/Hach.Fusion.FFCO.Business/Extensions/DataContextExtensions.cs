@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Extensions
@@ -20,13 +16,13 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         /// <param name="context">Database context.</param>
         /// <param name="userId">Identifies the user.</param>
         /// <returns>Task that returns the results.</returns>
-        public static Task<IQueryable<Tenant>> GetTenantsForUser(this DataContext context, Guid userId)
+        public static IQueryable<Tenant> GetTenantsForUser(this DataContext context, Guid userId)
         {
-            return Task.Run(() => (
+            return (
                 from t in context.Tenants
                 where t.Users.Any(x => x.Id == userId)
                 select t)
-                .Distinct());
+                .Distinct();
         }
 
         /// <summary>
@@ -36,13 +32,13 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         /// <param name="context">Database context</param>
         /// <param name="userId">Identifies the user.</param>
         /// <returns>Task that returns the results.</returns>
-        public static Task<IQueryable<Dashboard>> GetDashboardsForUser(this DataContext context, Guid userId)
+        public static IQueryable<Dashboard> GetDashboardsForUser(this DataContext context, Guid userId)
         {
-            return Task.Run(() => (
+            return (
                 from d in context.Dashboards
                 where d.Tenant.Users.Any(x => x.Id == userId)
                 select d)
-                .Distinct());
+                .Distinct();
         }
 
         /// <summary>
@@ -52,13 +48,29 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         /// <param name="context">Database context</param>
         /// <param name="userId">Identifies the user.</param>
         /// <returns>Task that returns the results.</returns>
-        public static Task<IQueryable<DashboardOption>> GetDashboardOptionsForUser(this DataContext context, Guid userId)
+        public static IQueryable<DashboardOption> GetDashboardOptionsForUser(this DataContext context, Guid userId)
         {
-            return Task.Run(() => (
+            return (
                 from d in context.DashboardOptions
                 where d.Tenant.Users.Any(x => x.Id == userId)
                 select d)
-                .Distinct());
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Returns a task that gets all location log entries that are in any of the tenants that
+        /// the user has access to.
+        /// </summary>
+        /// <param name="context">Database context</param>
+        /// <param name="userId">Identifies the user.</param>
+        /// <returns>Task that returns the results.</returns>
+        public static IQueryable<LocationLogEntry> GetLocationLogEntriesForUser(this DataContext context, Guid userId)
+        {
+            return
+                from le in context.LocationLogEntries
+                join potl in context.ProductOfferingTenantLocations on le.LocationId equals potl.LocationId
+                where potl.Tenant.Users.Any(x => x.Id == userId)
+                select le;
         }
     }
 }
