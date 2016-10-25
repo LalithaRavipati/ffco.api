@@ -86,8 +86,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!userId.HasValue)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await Task.Run(() => _context.GetLocationLogEntriesForUser(userId.Value)
-                .FirstOrDefault(l => l.Id == id))
+            var result = await _context.GetLocationLogEntriesForUser(userId.Value)
+                .FirstOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
             if (result == null)
