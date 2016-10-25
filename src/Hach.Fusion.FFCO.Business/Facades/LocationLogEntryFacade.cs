@@ -12,6 +12,7 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Entities;
 using Hach.Fusion.FFCO.Entities.Extensions;
 
@@ -62,7 +63,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!userId.HasValue)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var results = await Task.Run(() => GetLocationLogEntriesForUser(userId.Value)
+            var results = await Task.Run(() => _context.GetLocationLogEntriesForUser(userId.Value)
                 .Select(_mapper.Map<LocationLogEntry, LocationLogEntryQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
@@ -85,8 +86,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!userId.HasValue)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await Task.Run(() => GetLocationLogEntriesForUser(userId.Value)
-                .FirstOrDefault(l => l.Id == id))
+            var result = await _context.GetLocationLogEntriesForUser(userId.Value)
+                .FirstOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
             if (result == null)
@@ -164,7 +165,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!userId.HasValue)
                 return Command.Error<LocationLogEntryQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var locationLogEntry = await GetLocationLogEntriesForUser(userId.Value)                        
+            var locationLogEntry = await _context.GetLocationLogEntriesForUser(userId.Value)                        
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
 
@@ -204,7 +205,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (delta == null)
                 return Command.Error<LocationLogEntryCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var locationLogEntry = await GetLocationLogEntriesForUser(userId.Value)
+            var locationLogEntry = await _context.GetLocationLogEntriesForUser(userId.Value)
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
@@ -260,11 +261,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
         #region Facade Helper Methods
 
-        private async Task<bool> DoesLocationExist(Guid locationId)
+        private Task<bool> DoesLocationExist(Guid locationId)
         {
             var userId = GetCurrentUser();
 
-            return await _context.ProductOfferingTenantLocations.AnyAsync(
+            return _context.ProductOfferingTenantLocations.AnyAsync(
                 potl => potl.LocationId == locationId && potl.Tenant.Users.Any(u => u.Id == userId));
         }
 
@@ -272,28 +273,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// Gets the GUID User ID for the current user.
         /// </summary>
         /// <returns>The nullable GUID for the current user.</returns>
-        private Guid? GetCurrentUser()
+        private static Guid? GetCurrentUser()
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
 
             return userId == null ? null : new Guid?(Guid.Parse(userId));
-        }
-
-        /// <summary>
-        /// Gets a list of Location Log Entities for which the specified user is authorized.
-        /// </summary>
-        /// <returns>
-        /// A queryable list of Location Log Entities for which the specified user is authorized.
-        /// </returns>
-        private IQueryable<LocationLogEntry> GetLocationLogEntriesForUser(Guid userId)
-        {
-            var result =
-                _context.LocationLogEntries.Join(_context.ProductOfferingTenantLocations, lle => lle.LocationId,
-                    potl => potl.LocationId, (lle, potl) => new {lle, potl})
-                    .Where(@t => @t.potl.Tenant.Users.Any(x => x.Id == userId))
-                    .Select(@t => @t.lle).Distinct();
-
-            return result;
         }
 
         #endregion Facade Helper Methods

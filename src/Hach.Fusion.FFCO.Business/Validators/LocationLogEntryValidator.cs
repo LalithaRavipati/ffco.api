@@ -30,6 +30,9 @@ namespace Hach.Fusion.FFCO.Business.Validators
             Evaluate(l => l.LogEntry, dto.LogEntry)
                 .Required();
 
+            Evaluate(l => l.TimeStamp, dto.TimeStamp)
+                .Required();
+
             return new FFValidationResponse
             {
                 FFErrors = FFErrors

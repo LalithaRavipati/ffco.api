@@ -22,14 +22,12 @@ using NUnit.Framework;
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
-    // TODO: Remove Ignore attribute after resolving TimeStamp problem. [RFKutz, 2016/10/17]
-    [Ignore("Addition of TimeStamp field to FFCO.Entities broke unit tests")]
     public class LocationLogEntryFacadeTests
     {
         private DataContext _context;
         private readonly Mock<ODataQueryOptions<LocationLogEntryQueryDto>> _mockDtoOptions;
         private LocationLogEntryFacade _facade;
-        private const string UserGuid = "501286bf-ce04-417a-ae69-f9c5c0160c83";
+        private Guid _userId = Data.Users.tnt01user.Id;
 
         public LocationLogEntryFacadeTests()
         {
@@ -59,7 +57,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public void Setup()
         {
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-                UserGuid);
+                _userId.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> {claim}));
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
@@ -162,7 +160,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var locationLogEntryDto = new LocationLogEntryCommandDto()
             {
                 LocationId = Data.Locations.Plant_01.Id,
-                LogEntry = "Create Log Entry"
+                LogEntry = "Create Log Entry",
+                TimeStamp = DateTimeOffset.UtcNow
             };
 
             var commandResult = await _facade.Create(locationLogEntryDto);
@@ -170,9 +169,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
             Assert.That(commandResult.Entity.LocationId, Is.EqualTo(Data.Locations.Plant_01.Id));
             Assert.That(commandResult.Entity.LogEntry, Is.EqualTo("Create Log Entry"));
-            Assert.That(commandResult.Entity.CreatedById, Is.EqualTo(Guid.Parse(UserGuid)));
+            Assert.That(commandResult.Entity.CreatedById, Is.EqualTo(_userId));
             Assert.That((DateTime.Now - commandResult.Entity.CreatedOn).Seconds, Is.LessThanOrEqualTo(10));
-            Assert.That(commandResult.Entity.ModifiedById, Is.EqualTo(Guid.Parse(UserGuid)));
+            Assert.That(commandResult.Entity.ModifiedById, Is.EqualTo(_userId));
             Assert.That((DateTime.Now - commandResult.Entity.ModifiedOn).Seconds, Is.LessThanOrEqualTo(10));
         }
 
@@ -182,7 +181,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var locationLogEntryDto = new LocationLogEntryCommandDto()
             {
                 LocationId = Guid.NewGuid(),
-                LogEntry = "Create Log Entry"
+                LogEntry = "Create Log Entry",
+                TimeStamp = DateTimeOffset.UtcNow
             };
 
             var commandResult = await _facade.Create(locationLogEntryDto);
@@ -199,7 +199,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             {
                 Id = Guid.NewGuid(),
                 LocationId = Data.Locations.Plant_01.Id,
-                LogEntry = "Create Log Entry"
+                LogEntry = "Create Log Entry",
+                TimeStamp = DateTimeOffset.UtcNow
             };
 
             var commandResult = await _facade.Create(locationLogEntryDto);
@@ -215,7 +216,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var locationLogEntryDto = new LocationLogEntryCommandDto()
             {
                 LocationId = Data.Locations.Plant_01.Id,
-                LogEntry = null
+                LogEntry = null,
+                TimeStamp = DateTimeOffset.UtcNow
             };
 
             var commandResult = await _facade.Create(locationLogEntryDto);
@@ -241,6 +243,22 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
             Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo("FFERR-304"));
+        }
+
+        [Test]
+        public async Task When_Create_MissingTimestamp()
+        {
+            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            {
+                LocationId = Data.Locations.Plant_01.Id,
+                LogEntry = "Create Log Entry"
+            };
+
+            var commandResult = await _facade.Create(locationLogEntryDto);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
+            Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo("FFERR-201"));
         }
 
         #endregion
@@ -291,7 +309,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
             Assert.That(queryResult.Dto.LogEntry, Is.EqualTo("Update Log Entry"));
-            Assert.That(queryResult.Dto.ModifiedById, Is.EqualTo(Guid.Parse(UserGuid)));
+            Assert.That(queryResult.Dto.ModifiedById, Is.EqualTo(_userId));
             Assert.That((DateTime.Now - queryResult.Dto.ModifiedOn).Seconds, Is.LessThanOrEqualTo(10));
         }
 
@@ -347,6 +365,20 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
             Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo("FFERR-209"));
+        }
+
+        [Test]
+        public async Task When_Update_NullTimestamp()
+        {
+            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            delta.TrySetPropertyValue("TimeStamp", null);
+
+            var commandResult = await _facade.Update(
+                Data.LocationLogEntries.Plant1Log1.Id, delta);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
+            Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo("FFERR-201"));
         }
 
         [Test]
