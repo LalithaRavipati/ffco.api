@@ -24,33 +24,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
     [TestFixture]
     public class LocationFacadeTests
     {
-        private DataContext _context;
-        private readonly Mock<ODataQueryOptions<LocationQueryDto>> _mockDtoOptions;
-        private LocationFacade _facade;
-
-        public LocationFacadeTests()
-        {
-            MappingManager.Initialize();
-
-            var builder = BuildODataModel();
-
-            _mockDtoOptions = new Mock<ODataQueryOptions<LocationQueryDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof (LocationQueryDto), new ODataPath()),
-                new HttpRequestMessage());
-
-            _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
-        }
-
-        private static ODataModelBuilder BuildODataModel()
-        {
-            var builder = new ODataModelBuilder();
-
-            builder.EntitySet<LocationQueryDto>("Locations");
-            builder.EntityType<LocationQueryDto>().HasKey(x => x.Id);
-
-            return builder;
-        }
-
         [SetUp]
         public void Setup()
         {
@@ -72,19 +45,69 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _context.Dispose();
         }
 
-        #region Get Tests
+        private DataContext _context;
+        private readonly Mock<ODataQueryOptions<LocationQueryDto>> _mockDtoOptions;
+        private LocationFacade _facade;
 
-        [Test, Ignore("Disabled so unit test does not fail. Being worked on in a different story")]
-        public async Task When_Get_Locations_Succeeds()
+        public LocationFacadeTests()
         {
-            var queryResult = await _facade.Get(_mockDtoOptions.Object);
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            MappingManager.Initialize();
 
-            var results = queryResult.Results;
+            var builder = BuildODataModel();
 
-            Assert.That(results.Any(x => x.Id == Data.Locations.Plant_01.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Preliminary.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Influent.Id), Is.True);
+            _mockDtoOptions = new Mock<ODataQueryOptions<LocationQueryDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(LocationQueryDto), new ODataPath()),
+                new HttpRequestMessage());
+
+            _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
+        }
+
+        private static ODataModelBuilder BuildODataModel()
+        {
+            var builder = new ODataModelBuilder();
+
+            builder.EntitySet<LocationQueryDto>("Locations");
+            builder.EntityType<LocationQueryDto>().HasKey(x => x.Id);
+
+            return builder;
+        }
+
+        [Test]
+        public async Task When_Create_ValidNoChildren_Should_Succeed()
+        {
+            var location = new LocationCommandDto
+            {
+                Name = Data.Locations.Location_2_Parent_NoDescendants.Name,
+                LocationTypeId = Data.Locations.Location_2_Parent_NoDescendants.LocationTypeId
+            };
+
+            var commandResult = await _facade.Create(location);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
+            Assert.That(commandResult.GeneratedId, Is.Not.EqualTo(Guid.Empty));
+
+            var queryResult = await _facade.Get(commandResult.GeneratedId);
+
+            Assert.That(queryResult.Dto.Name, Is.EqualTo(Data.Locations.Location_2_Parent_NoDescendants.Name));
+            Assert.That(queryResult.Dto.ParentId.HasValue,
+                Is.EqualTo(Data.Locations.Location_2_Parent_NoDescendants.ParentId.HasValue));
+            //Assert.That(queryResult.Dto.LocationTypeId, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.LocationTypeId));
+            //Assert.That(queryResult.Dto.Point.X, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.Point.X));
+            //Assert.That(queryResult.Dto.Point.Y, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.Point.Y));
+            //Assert.That(queryResult.Dto.Point.SpatialReference.Wkid, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.Point.SpatialReference.Wkid));
+        }
+
+        [Test]
+        public async Task When_Delete_NoChildren_Should_Succeed()
+        {
+            var commandResult = await _facade.Delete(Data.Locations.Test_SoftDeletable.Id);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
+            Assert.That(commandResult.ErrorCodes, Is.Null);
+
+            var queryResult = await _facade.Get(Data.Locations.Test_SoftDeletable.Id);
+
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
         }
 
         [Test]
@@ -102,70 +125,95 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var queryResult = await _facade.Get(Data.Locations.Test_SoftDeleted.Id);
 
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));            
-        }
-
-        #endregion Get Tests
-
-        #region Delete Tests
-
-        [Test]
-        public async Task When_Delete_NoChildren_Should_Succeed()
-        {
-            var commandResult = await _facade.Delete(Data.Locations.Test_SoftDeletable.Id);
-
-            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
-            Assert.That(commandResult.ErrorCodes, Is.Null);
-
-            var queryResult = await _facade.Get(Data.Locations.Test_SoftDeletable.Id);
-
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
         }
 
-
-        #endregion
-
-        #region Create Tests
-
         [Test]
-        public async Task When_Create_ValidNoChildren_Should_Succeed()
+        [Ignore("Disabled so unit test does not fail. Being worked on in a different story")]
+        public async Task When_Get_Locations_Succeeds()
         {
-            var location = new LocationCommandDto()
-            {
-                Name = Data.Locations.Location_2_Parent_NoDescendants.Name,
-                LocationTypeId = Data.Locations.Location_2_Parent_NoDescendants.LocationTypeId
-            };
+            var queryResult = await _facade.Get(_mockDtoOptions.Object);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-            var commandResult = await _facade.Create(location);
+            var results = queryResult.Results;
 
-            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
-            Assert.That(commandResult.GeneratedId, Is.Not.EqualTo(Guid.Empty));
-
-            var queryResult = await _facade.Get(commandResult.GeneratedId);
-
-            Assert.That(queryResult.Dto.Name, Is.EqualTo(Data.Locations.Location_2_Parent_NoDescendants.Name));
-            Assert.That(queryResult.Dto.ParentId.HasValue, Is.EqualTo(Data.Locations.Location_2_Parent_NoDescendants.ParentId.HasValue));
-            //Assert.That(queryResult.Dto.LocationTypeId, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.LocationTypeId));
-            //Assert.That(queryResult.Dto.Point.X, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.Point.X));
-            //Assert.That(queryResult.Dto.Point.Y, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.Point.Y));
-            //Assert.That(queryResult.Dto.Point.SpatialReference.Wkid, Is.EqualTo(SeedData.Locations.Location_3_ToCreateNoChildren.Point.SpatialReference.Wkid));
+            Assert.That(results.Any(x => x.Id == Data.Locations.Plant_01.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Preliminary.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Influent.Id), Is.True);
         }
 
-        //[Test]
-        //public async Task When_Create_ValidAsChild_Should_Succeed()
-        //{
-        //    var commandResult = await _facade.Create(SeedData.Locations.Location_2_1_ToCreateAsChild);
+        [Test]
+        public async Task When_Update_NoLoggedInUser()
+        {
+            Thread.CurrentPrincipal = null;
 
-        //    Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
-        //    Assert.That(commandResult.GeneratedId, Is.Not.EqualTo(Guid.Empty));
+            var seed = Data.Locations.Test_Updateable;
+            var delta = new Delta<LocationCommandDto>();
+            delta.TrySetPropertyValue("Name", "New Name");
 
-        //    var queryResult = await _facade.Get(commandResult.GeneratedId);
+            var commandResult = await _facade.Update(seed.Id, delta);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
+        }
+
+        [Test]
+        public async Task When_Update_SetAndRemoveSortOrder()
+        {
+            var seed = Data.Locations.Test_Updateable;
+            var delta = new Delta<LocationCommandDto>();
+            delta.TrySetPropertyValue("SortOrder", 1);
+
+            var commandResult = await _facade.Update(seed.Id, delta);
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
+
+            var queryResult = await _facade.Get(Data.Locations.Test_Updateable.Id);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(queryResult.Dto.SortOrder, Is.EqualTo(1));
+
+            delta.TrySetPropertyValue("SortOrder", null);
+            commandResult = await _facade.Update(seed.Id, delta);
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
+
+            queryResult = await _facade.Get(Data.Locations.Test_Updateable.Id);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(queryResult.Dto.SortOrder, Is.Null);
+        }
+
+        [Test]
+        public async Task When_Update_With_ValidData()
+        {
+            var seed = Data.Locations.Test_Updateable;
+            var delta = new Delta<LocationCommandDto>();
+            delta.TrySetPropertyValue("Name", Data.Locations.Test_ForUpdate.Name);
+            delta.TrySetPropertyValue("SortOrder", 1);
+
+            var commandResult = await _facade.Update(seed.Id, delta);
+
+            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
+
+            var queryResult = await _facade.Get(Data.Locations.Test_Updateable.Id);
+
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(queryResult.Dto.Name, Is.EqualTo(Data.Locations.Test_ForUpdate.Name));
+            Assert.That(queryResult.Dto.SortOrder, Is.EqualTo(1));
+        }
+
+        //    Assert.That(queryResult.Dto.Point.X, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.Point.X));
+        //    Assert.That(queryResult.Dto.LocationTypeId, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.LocationTypeId));
+        //    Assert.That(queryResult.Dto.ParentId.Value, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.ParentId.Value));
+        //    Assert.That(queryResult.Dto.ParentId.HasValue && SeedData.Locations.Location_2_1_ToCreateAsChild.ParentId.HasValue, Is.EqualTo(true));
 
         //    Assert.That(queryResult.Dto.InternalName, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.InternalName));
-        //    Assert.That(queryResult.Dto.ParentId.HasValue && SeedData.Locations.Location_2_1_ToCreateAsChild.ParentId.HasValue, Is.EqualTo(true));
-        //    Assert.That(queryResult.Dto.ParentId.Value, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.ParentId.Value));
-        //    Assert.That(queryResult.Dto.LocationTypeId, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.LocationTypeId));
-        //    Assert.That(queryResult.Dto.Point.X, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.Point.X));
+
+        //    var queryResult = await _facade.Get(commandResult.GeneratedId);
+        //    Assert.That(commandResult.GeneratedId, Is.Not.EqualTo(Guid.Empty));
+
+        //    Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
+        //    var commandResult = await _facade.Create(SeedData.Locations.Location_2_1_ToCreateAsChild);
+        //{
+        //public async Task When_Create_ValidAsChild_Should_Succeed()
+
+        //[Test]
         //    Assert.That(queryResult.Dto.Point.Y, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.Point.Y));
         //    Assert.That(queryResult.Dto.Point.SpatialReference.Wkid, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.Point.SpatialReference.Wkid));
         //}
@@ -238,43 +286,5 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //    Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo(ValidationErrorCode.ForeignKeyValueDoesNotExist("ParentId").Code));
         //    Assert.That(commandResult.ErrorCodes[0].Description, Is.EqualTo(ValidationErrorCode.ForeignKeyValueDoesNotExist("ParentId").Description));
         //}
-
-        #endregion
-
-        #region Update Tests
-
-        [Test]
-        public async Task When_Update_With_ValidData()
-        {
-            var seed = Data.Locations.Test_Updateable;
-            var delta = new Delta<LocationCommandDto>();
-            delta.TrySetPropertyValue("Name", Data.Locations.Test_ForUpdate.Name);
-
-            var commandResult = await _facade.Update(seed.Id, delta);
-
-            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
-
-            var queryResult = await _facade.Get(Data.Locations.Test_Updateable.Id);
-
-            Assert.That(queryResult.StatusCode,Is.EqualTo(FacadeStatusCode.Ok));
-            Assert.That(queryResult.Dto.Name, Is.EqualTo(Data.Locations.Test_ForUpdate.Name));
-        }      
-
-        [Test]
-        public async Task When_Update_NoLoggedInUser()
-        {
-            Thread.CurrentPrincipal = null;
-
-            var seed = Data.Locations.Test_Updateable;
-            var delta = new Delta<LocationCommandDto>();
-            delta.TrySetPropertyValue("Name", "New Name");
-
-            var commandResult = await _facade.Update(seed.Id, delta);
-
-            Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
-        }
-        #endregion
-
-
     }
 }
