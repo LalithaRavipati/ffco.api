@@ -184,8 +184,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.Locations.Test_Updateable;
             var delta = new Delta<LocationCommandDto>();
+            var sortOrderUpdateval = Data.Locations.Test_ForUpdate.SortOrder == null
+                ? 1
+                : Data.Locations.Test_ForUpdate.SortOrder++;
             delta.TrySetPropertyValue("Name", Data.Locations.Test_ForUpdate.Name);
-            delta.TrySetPropertyValue("SortOrder", 1);
+            delta.TrySetPropertyValue("SortOrder", sortOrderUpdateval);
 
             var commandResult = await _facade.Update(seed.Id, delta);
 
@@ -195,7 +198,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
             Assert.That(queryResult.Dto.Name, Is.EqualTo(Data.Locations.Test_ForUpdate.Name));
-            Assert.That(queryResult.Dto.SortOrder, Is.EqualTo(1));
+            Assert.That(queryResult.Dto.SortOrder, Is.EqualTo(sortOrderUpdateval));
         }
 
         //    Assert.That(queryResult.Dto.Point.X, Is.EqualTo(SeedData.Locations.Location_2_1_ToCreateAsChild.Point.X));
