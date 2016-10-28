@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Hach.Fusion.FFCO.Dtos;
-using Hach.Fusion.FFCO.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Entities;
+using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Business
 {
