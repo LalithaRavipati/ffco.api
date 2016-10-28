@@ -11,9 +11,9 @@ using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Extensions;
-using Hach.Fusion.FFCO.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Entities;
-using Hach.Fusion.FFCO.Entities.Extensions;
+using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.FFCO.Core.Extensions;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {

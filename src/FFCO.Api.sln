@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Business",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Business.Tests", "Hach.Fusion.FFCO.Business.Tests\Hach.Fusion.FFCO.Business.Tests.csproj", "{5B9DC3C5-A532-4D79-9104-660AA097EAAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Dtos", "Hach.Fusion.FFCO.Dtos\Hach.Fusion.FFCO.Dtos.csproj", "{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientTest|Any CPU = ClientTest|Any CPU
@@ -62,16 +60,6 @@ Global
 		{5B9DC3C5-A532-4D79-9104-660AA097EAAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B9DC3C5-A532-4D79-9104-660AA097EAAA}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{5B9DC3C5-A532-4D79-9104-660AA097EAAA}.Test|Any CPU.Build.0 = Test|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.ClientTest|Any CPU.ActiveCfg = ClientTest|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.ClientTest|Any CPU.Build.0 = ClientTest|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Develop|Any CPU.ActiveCfg = Develop|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Develop|Any CPU.Build.0 = Develop|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

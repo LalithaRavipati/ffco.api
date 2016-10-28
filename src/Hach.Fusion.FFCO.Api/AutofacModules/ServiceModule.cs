@@ -8,9 +8,9 @@ using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Dtos;
-using Hach.Fusion.FFCO.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {

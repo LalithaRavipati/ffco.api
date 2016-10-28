@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using EntityFramework.DynamicFilters;
 using Hach.Fusion.FFCO.Business.Extensions;
-using Hach.Fusion.FFCO.Entities;
-using Hach.Fusion.FFCO.Entities.Hach.Fusion.FFCO.Entities;
+using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.FFCO.Core.Entities.Hach.Fusion.FFCO.Core.Entities;
 
 // ReSharper disable InconsistentNaming
 

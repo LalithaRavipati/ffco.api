@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Entities.Seed;
+using Hach.Fusion.FFCO.Core.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
 {
