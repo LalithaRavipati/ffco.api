@@ -3,6 +3,7 @@ using System.Configuration;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
@@ -25,19 +26,17 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
         /// <param name="builder">Container used to hold dependency injection registration information.</param>
         protected override void Load(ContainerBuilder builder)
         {
+            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
+
             // Contexts
-            builder.Register(
-                c => new DataContext(ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString))
-                .AsSelf()
-                .As<DataContext>()
-                .InstancePerLifetimeScope();
+            builder.Register(c => new DataContext(connectionString)).AsSelf().As<DataContext>().InstancePerLifetimeScope();
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
 
             // Claims Transformation
-            builder.RegisterType<ClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<ClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
+            builder.Register(c => new FusionContextFactory(connectionString)).AsSelf();
+            builder.RegisterType<RoleClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
