@@ -2,8 +2,8 @@
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Dtos;
-using Hach.Fusion.FFCO.Entities;
+using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {

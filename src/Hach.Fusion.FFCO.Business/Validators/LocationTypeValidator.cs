@@ -1,6 +1,6 @@
 ﻿using System;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Dtos;
+using Hach.Fusion.FFCO.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {

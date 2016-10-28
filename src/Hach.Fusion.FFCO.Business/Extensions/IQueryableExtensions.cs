@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Entities;
+using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Extensions
 {

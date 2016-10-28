@@ -15,9 +15,9 @@ using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Entities;
-using Hach.Fusion.FFCO.Entities.Seed;
+using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.FFCO.Core.Seed;
 using Moq;
 using NUnit.Framework;
 

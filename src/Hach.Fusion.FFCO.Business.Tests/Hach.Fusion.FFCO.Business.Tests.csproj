@@ -71,12 +71,12 @@
       <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2016.59.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2016.59.3\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2016.60.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2016.60.1\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Entities, Version=2016.59.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Entities.2016.59.4\lib\net452\Hach.Fusion.FFCO.Entities.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Core, Version=2016.1.60.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2016.1.60.1\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Helios, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -232,10 +232,6 @@
     <ProjectReference Include="..\Hach.Fusion.FFCO.Business\Hach.Fusion.FFCO.Business.csproj">
       <Project>{8C8F97D0-FE18-488C-808D-BB0A1FD6B768}</Project>
       <Name>Hach.Fusion.FFCO.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Hach.Fusion.FFCO.Dtos\Hach.Fusion.FFCO.Dtos.csproj">
-      <Project>{4A5FAB28-3AB2-4F18-8D6E-EEAD32DC1EEF}</Project>
-      <Name>Hach.Fusion.FFCO.Dtos</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
