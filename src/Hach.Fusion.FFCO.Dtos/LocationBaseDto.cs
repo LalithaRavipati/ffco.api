@@ -15,5 +15,7 @@ namespace Hach.Fusion.FFCO.Dtos
     /// </remarks>
     public class LocationBaseDto : FFDto<Guid>
     {
+        public int? SortOrder { get; set; }
+
     }
 }
