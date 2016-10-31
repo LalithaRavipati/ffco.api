@@ -58,7 +58,6 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeDashboardOptions(cfg);
                 InitializeTenants(cfg);
                 InitializeUsers(cfg);
-                InitializeLimitTypes(cfg);
             });
 
             // Make sure the mapping is valid
@@ -67,13 +66,6 @@ namespace Hach.Fusion.FFCO.Business
             AutoMapper = config.CreateMapper();
         }
 
-        /// <summary>
-        /// Configure AutoMapper for converting between the Chemical Form Type entity and DTO.
-        /// </summary>
-        private static void InitializeChemicalFormTypes(IProfileExpression cfg)
-        {
-            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>();
-        }
 
         /// <summary>
         /// Configure AutoMapper for converting between the Location entity and DTOs.
@@ -281,27 +273,12 @@ namespace Hach.Fusion.FFCO.Business
         }
 
         /// <summary>
-        /// Configure AutoMapper for converting between the Limit Type entity and DTOs.
+        /// Configure AutoMapper for converting between the Chemical Form Type entity and DTOs.
         /// </summary>
-        private static void InitializeLimitTypes(IProfileExpression cfg)
+        private static void InitializeChemicalFormTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<LimitType, LimitTypeQueryDto>()
+            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>()
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
-
-            cfg.CreateMap<LimitType, LimitTypeCommandDto>()
-                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
-
-            cfg.CreateMap<LimitTypeCommandDto, LimitType>()
-                .ForMember(x => x.Id, opt => opt.Ignore())
-                .ForMember(x => x.CreatedById, opt => opt.Ignore())
-                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
         }
     }
 }
