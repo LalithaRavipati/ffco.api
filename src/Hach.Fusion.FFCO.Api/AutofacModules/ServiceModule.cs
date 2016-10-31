@@ -11,6 +11,7 @@ using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -63,7 +64,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();
             builder.RegisterType<ParameterFacade>().As<IFacade<ParameterDto, Guid>>();
 
-            builder.RegisterType<ParameterValidRangeFacade>().As<IFacade <ParameterValidRangeQueryDto, Guid >> ();
+            builder.RegisterType<ParameterValidRangeFacade>().As<IFacade<ParameterValidRangeQueryDto, Guid>>();
 
             builder.RegisterType<DashboardFacade>().As<IFacadeWithCruModels<DashboardCommandDto, DashboardCommandDto,
                 DashboardQueryDto, Guid>>();
@@ -76,6 +77,10 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<LimitTypeValidator>().As<IFFValidator<LimitTypeCommandDto>>();
             builder.RegisterType<LimitTypeFacade>().As<IFacadeWithCruModels<LimitTypeCommandDto, LimitTypeCommandDto,
                LimitTypeQueryDto, Guid>>();
+
+            //ChemicalFormsTypes
+            builder.RegisterType<ChemicalFormTypesFacade>().As<IFacadeWithCruModels<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto,
+               ChemicalFormTypeQueryDto, Guid>>();
 
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 
