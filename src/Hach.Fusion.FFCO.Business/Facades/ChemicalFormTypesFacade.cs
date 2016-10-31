@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -76,10 +77,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await Task.Run(() =>
-                _context.ChemicalFormTypes
-                .FirstOrDefault(x => x.Id == id))
-                .ConfigureAwait(false);
+            var result = _context.ChemicalFormTypes
+                .FirstOrDefaultAsync(x => x.Id == id)
+                .Result;
 
             return result == null
                 ? Query.Error(EntityErrorCode.EntityNotFound)
