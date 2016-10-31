@@ -50,7 +50,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers
         /// GET: ~/odata/v16.1/ChemicalFormTypes
         /// </example>
         /// <include file='XmlDocumentation/ChemicalFormTypesController.doc' path='ChemicalFormTypesController/Methods[@name="GetAll"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.ChemicalForms)]
+        [FFSEAuthorize(PermissionAction.Read, PermissionResource.ChemicalFormTypes)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -74,7 +74,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers
         /// GET: ~/odata/v16.1/ChemicalFormTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/ChemicalFormTypesController.doc' path='ChemicalFormTypesController/Methods[@name="GetOne"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.ChemicalForms)]
+        [FFSEAuthorize(PermissionAction.Read, PermissionResource.ChemicalFormTypes)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
