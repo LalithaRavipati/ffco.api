@@ -121,16 +121,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (dto.Id != Guid.Empty)
                 validationResponse.FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(Location.Id)));
 
-            var existingTask = _context.Locations.AnyAsync(l => l.Name == dto.Name);
+            var existing = await _context.Locations.AnyAsync(l => l.Name == dto.Name).ConfigureAwait(false);
 
-            if (existingTask.Result)
+            if (existing)
                 validationResponse.FFErrors.Add(EntityErrorCode.EntityAlreadyExists);
 
             if (dto.ParentId.HasValue)
             {
-                existingTask = _context.Locations.AnyAsync(l => l.Id == dto.ParentId.Value);
+                existing = await _context.Locations.AnyAsync(l => l.Id == dto.ParentId.Value).ConfigureAwait(false);
 
-                if (!existingTask.Result)
+                if (!existing)
                     validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(Location.ParentId)));
             }
 
