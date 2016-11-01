@@ -55,7 +55,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/UnitTypeGroups
         /// </example>
         /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetAll"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
+        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
+        [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -80,7 +81,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetOne"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
+        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
+        [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
