@@ -73,7 +73,7 @@ namespace Hach.Fusion.FFCO.Api
 
             var scope = container.BeginLifetimeScope();
             var service = scope.Resolve<RoleClaimsTransformer>();
-            app.Use(typeof(ClaimsTransformationMiddleware), service);
+            app.Use(typeof(RoleClaimsTransformationMiddleware), service);
         }
     }
 }

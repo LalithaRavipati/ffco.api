@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Security.Claims;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
@@ -37,6 +38,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             // Claims Transformation
             builder.Register(c => new FusionContextFactory(connectionString)).AsSelf();
             builder.RegisterType<RoleClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<RoleClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
