@@ -7,7 +7,6 @@ using System.Web.OData;
 using System.Web.Http.Cors;
 using System.Web.OData.Query;
 using Hach.Fusion.Core.Api.Controllers;
-using Hach.Fusion.Core.Api.Logger;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
@@ -66,25 +65,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [ResponseType(typeof(LocationQueryDto))]
         public async Task<IHttpActionResult> Get(ODataQueryOptions<LocationQueryDto> queryOptions)
         {
-            // temp below
-            FFLogManager.LogClassMethod(new LogClassMethod
-            {
-                ClassName = nameof(LocationsController),
-                MethodName = "Get",
-                Message = "Message #1."
-            });
-            // temp above
-
             var results = await Facade.Get(queryOptions);
-
-            // temp below
-            FFLogManager.LogClassMethod(new LogClassMethod
-            {
-                ClassName = nameof(LocationsController),
-                MethodName = "Get",
-                Message = "Message #1."
-            });
-            // temp above
 
             return Query(results);
         }
