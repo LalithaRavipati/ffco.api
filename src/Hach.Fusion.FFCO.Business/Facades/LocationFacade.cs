@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Query;
 using AutoMapper;
+using Hach.Fusion.Core.Api.Logger;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
@@ -62,7 +63,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
-            
+
             return Query.Result(results);
         }
 
