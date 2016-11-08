@@ -59,6 +59,7 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeTenants(cfg);
                 InitializeUsers(cfg);
                 InitializeLimitTypes(cfg);
+
             });
 
             // Make sure the mapping is valid
@@ -67,13 +68,6 @@ namespace Hach.Fusion.FFCO.Business
             AutoMapper = config.CreateMapper();
         }
 
-        /// <summary>
-        /// Configure AutoMapper for converting between the Chemical Form Type entity and DTO.
-        /// </summary>
-        private static void InitializeChemicalFormTypes(IProfileExpression cfg)
-        {
-            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>();
-        }
 
         /// <summary>
         /// Configure AutoMapper for converting between the Location entity and DTOs.
@@ -302,6 +296,14 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+        }
+        /// <summary>
+        /// Configure AutoMapper for converting between the Chemical Form Type entity and DTOs.
+        /// </summary>
+        private static void InitializeChemicalFormTypes(IProfileExpression cfg)
+        {
+            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>()
+                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
         }
     }
 }

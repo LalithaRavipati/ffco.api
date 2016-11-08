@@ -82,12 +82,12 @@
       <HintPath>..\packages\Flurl.1.1.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2016.60.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2016.60.9\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2016.60.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2016.60.10\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Core, Version=2016.60.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2016.60.6\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Core, Version=2016.60.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2016.60.7\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -335,6 +335,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
+    <Compile Include="Controllers\v16_1\ChemicalFormTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\v16_1\DashboardOptionsController.cs" />
     <Compile Include="Controllers\v16_1\DashboardsController.cs" />
@@ -381,6 +382,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\LimitTypesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParameterValidRangesController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\ChemicalFormTypesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />
