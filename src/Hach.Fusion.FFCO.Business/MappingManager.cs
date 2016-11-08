@@ -85,7 +85,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
-                .ForSourceMember(x => x.Geography, opt => opt.Ignore())
+                //.ForSourceMember(x => x.Geography, opt => opt.Ignore())
                 .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
 
             cfg.CreateMap<Location, LocationParentDto>()
@@ -101,7 +101,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore())
-                .ForMember(x => x.Geography, opt => opt.Ignore())
+                //.ForMember(x => x.Geography, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
         }
 

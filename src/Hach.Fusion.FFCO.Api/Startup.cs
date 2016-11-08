@@ -72,8 +72,8 @@ namespace Hach.Fusion.FFCO.Api
             ClaimsAuthorization.CustomAuthorizationManager = new AuthorizationManager();
 
             var scope = container.BeginLifetimeScope();
-            var service = scope.Resolve<ClaimsTransformer>();
-            app.UseClaimsTransformation(service);
+            var service = scope.Resolve<RoleClaimsTransformer>();
+            app.Use(typeof(RoleClaimsTransformationMiddleware), service);
         }
     }
 }

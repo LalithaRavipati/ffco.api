@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Hach.Fusion.FFCO.Business.Database;
+﻿using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Core.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -32,7 +31,10 @@ namespace Hach.Fusion.FFCO.Business.Tests
         private static void DeleteAllExistingTestData(DataContext context)
         {
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
+            context.Database.ExecuteSqlCommand("DELETE foart.LocationParameterLimits");
+            context.Database.ExecuteSqlCommand("DELETE foart.LocationParameterNotes");
             context.Database.ExecuteSqlCommand("DELETE foart.Measurements");
+            context.Database.ExecuteSqlCommand("DELETE foart.MeasurementTransactions");
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationLogEntries");
             context.Database.ExecuteSqlCommand("DELETE foart.LocationParameters");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");

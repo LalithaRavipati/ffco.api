@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EntityFramework.DynamicFilters;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Entities.Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.FFCO.Core.Entities.Base;
 
 // ReSharper disable InconsistentNaming
 
