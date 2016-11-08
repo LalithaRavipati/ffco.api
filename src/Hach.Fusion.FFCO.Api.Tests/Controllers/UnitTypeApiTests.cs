@@ -84,7 +84,7 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
             _controller.Request.RequestUri = new Uri("http://tempuri.com");
 
             /* 
-             * akrone - Taking on some Techincal Debt doing this, but pulling the Seeder into it's own project would need to 
+             * TODO: akrone - Taking on some Techincal Debt doing this, but pulling the Seeder into it's own project would need to 
              *      be merged into other development work going on for sprint 60
              */
             Seeder.SeedWithTestData(_context);
@@ -103,9 +103,6 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         [Test]
         public async Task When_Get_Succeeds()
         {
-            //var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
-            //Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
             var response = await _controller.Get(_mockDtoOptions.Object).ConfigureAwait(false);
             var result = response.ExecuteAsync(new CancellationToken()).Result;
 

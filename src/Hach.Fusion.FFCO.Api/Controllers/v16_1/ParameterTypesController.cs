@@ -54,7 +54,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/ParameterTypes
         /// </example>
         /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetAll"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.ParameterType)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -80,7 +79,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/ParameterTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetOne"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.ParameterType)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]

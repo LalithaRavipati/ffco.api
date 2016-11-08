@@ -78,12 +78,12 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
             _controller = new DashboardsController(oDataHelper, _facade);
             _controller.Request = new HttpRequestMessage();
             _controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
-            
+
             // Setting the URI of the request here is needed for the API POST method to work
             _controller.Request.RequestUri = new Uri("http://tempuri.com");
 
             /* 
-             * akrone - Taking on some Techincal Debt doing this, but pulling the Seeder into it's own project would need to 
+             * TODO: akrone - Taking on some Techincal Debt doing this, but pulling the Seeder into it's own project would need to 
              *      be merged into other development work going on for sprint 60
              */
             Seeder.SeedWithTestData(_context);
@@ -102,9 +102,6 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         [Test]
         public async Task When_Get_Succeeds()
         {
-            //var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
-            //Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
             var result = await _controller.Get(_mockDtoOptions.Object).ConfigureAwait(false);
 
             Assert.That(result, Is.TypeOf<OkNegotiatedContentResult<IQueryable<DashboardQueryDto>>>());
@@ -122,9 +119,6 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         [Test]
         public async Task When_Post_Succeeds()
         {
-            //var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
-            //Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
             var mapper = MappingManager.AutoMapper;
             var toCreate = mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
@@ -137,6 +131,5 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
-
     }
 }

@@ -55,7 +55,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/UnitTypeGroups
         /// </example>
         /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetAll"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -81,7 +80,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="GetOne"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -94,84 +92,5 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             var results = await Facade.Get(key);
             return Query(results);
         }
-
-        #region Dead Code
-
-        ///// <summary>
-        ///// Creates a Unit Type Group.
-        ///// </summary>
-        ///// <param name="dto">Data Transfer Object (DTO) of the Unit Type Group to be created.</param>
-        ///// <returns>
-        ///// The DTO for the newly created Unit Type Group.
-        ///// </returns>
-        ///// <example>
-        ///// POST: ~/odata/v16.1/UnitTypeGroups
-        ///// </example>
-        ///// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="Post"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationType)]
-        //[SwaggerResponseRemoveDefaults]
-        //[SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<UnitTypeGroupQueryDto, Guid>))]
-        //[SwaggerResponse(HttpStatusCode.BadRequest)]
-        //[SwaggerResponse(HttpStatusCode.InternalServerError)]
-        //[ResponseType(typeof(CommandResult<UnitTypeGroupQueryDto, Guid>))]
-        //public async Task<IHttpActionResult> Post(UnitTypeGroupQueryDto dto)
-        //{
-        //    var result = await Facade.Create(dto);
-        //    return Command(result);
-        //}
-
-        ///// <summary>
-        ///// Replaces the specified properties of the indicated Unit Type Group.
-        ///// </summary>
-        ///// <param name="key">Key that uniquely identifies the Unit Type Group to be edited.</param>
-        ///// <param name="delta">Delta for the updated Unit Type Group properties.</param>
-        ///// <returns>
-        ///// If successful, this method always returns "No Content".
-        ///// </returns>
-        ///// <example>
-        ///// PATCH: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
-        ///// MERGE: ~/odata/v16.1/UnitTypeGroups(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
-        ///// </example>
-        ///// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupssController/Methods[@name="Patch"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
-        //[AcceptVerbs("PATCH", "MERGE")]
-        //[SwaggerResponseRemoveDefaults]
-        //[SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<UnitTypeGroupQueryDto, Guid>))]
-        //[SwaggerResponse(HttpStatusCode.NoContent)]
-        //[SwaggerResponse(HttpStatusCode.BadRequest)]
-        //[SwaggerResponse(HttpStatusCode.NotFound)]
-        //[SwaggerResponse(HttpStatusCode.InternalServerError)]
-        //[ResponseType(typeof(CommandResult<UnitTypeGroupQueryDto, Guid>))]
-        //public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<UnitTypeGroupQueryDto> delta)
-        //{
-        //    var result = await Facade.Update(key, delta);
-        //    return Command(result);
-        //}
-
-        ///// <summary>
-        ///// Deletes the Unit Type Group with the specified ID.
-        ///// </summary>
-        ///// <param name="key">ID of the Unit Type Group to be deleted.</param>
-        ///// <returns>
-        ///// Status code indicating whether the operation was successful or why it failed.
-        ///// </returns>
-        ///// <example>
-        ///// DELETE: ~/odata/v16.1/UnitTypeGroup(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
-        ///// </example>
-        ///// <include file='XmlDocumentation/UnitTypeGroupsController.doc' path='UnitTypeGroupsController/Methods[@name="Delete"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationType)]
-        //[SwaggerResponseRemoveDefaults]
-        //[SwaggerResponse(HttpStatusCode.NoContent)]
-        //[SwaggerResponse(HttpStatusCode.BadRequest)]
-        //[SwaggerResponse(HttpStatusCode.NotFound)]
-        //[SwaggerResponse(HttpStatusCode.InternalServerError)]
-        //[ResponseType(typeof(CommandResult<UnitTypeGroupQueryDto, Guid>))]
-        //public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
-        //{
-        //    var result = await Facade.Delete(key);
-        //    return Command(result);
-        //}
-
-        #endregion Dead Code
     }
 }

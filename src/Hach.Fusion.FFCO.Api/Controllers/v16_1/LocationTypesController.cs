@@ -56,7 +56,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/LocationTypes
         /// </example>
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="GetAll"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -82,7 +81,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="GetOne"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -108,7 +106,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// POST: ~/odata/v16.1/LocationTypes
         /// </example>
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Post"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Create, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Create)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -135,7 +132,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// MERGE: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Patch"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Update, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Update)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
@@ -163,7 +159,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// DELETE: ~/odata/v16.1/LocationTypes(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/LocationTypesController.doc' path='LocationTypesController/Methods[@name="Delete"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Delete, PermissionResource.LocationType)]
         [FFSEAuthorize(PermissionAction.Delete)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]

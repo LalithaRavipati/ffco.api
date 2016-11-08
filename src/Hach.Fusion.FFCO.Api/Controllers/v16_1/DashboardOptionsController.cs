@@ -50,7 +50,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/DashboardOptions
         /// </example>
         /// <include file='XmlDocumentation/DashboardOptionsController.doc' path='DashboardOptionsController/Methods[@name="GetAll"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.DashboardOptions)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -75,7 +74,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/DashboardOptions(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/DashboardOptionsController.doc' path='DashboardOptionsController/Methods[@name="GetOne"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Read, PermissionResource.DashboardOptions)]
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -100,7 +98,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// POST: ~/odata/v16.1/DashboardOptions
         /// </example>
         /// <include file='XmlDocumentation/DashboardOptionsController.doc' path='DashboardOptionsController/Methods[@name="Post"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Create, PermissionResource.DashboardOptions)]
         [FFSEAuthorize(PermissionAction.Create)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -127,7 +124,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// MERGE: ~/odata/v16.1/DashboardOptions(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/DashboardOptionsController.doc' path='DashboardOptionsController/Methods[@name="Patch"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Update, PermissionResource.DashboardOptions)]
         [FFSEAuthorize(PermissionAction.Update)]
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
@@ -155,7 +151,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// DELETE: ~/odata/v16.1/DashboardOptions(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
         /// </example>
         /// <include file='XmlDocumentation/DashboardOptionsController.doc' path='DashboardOptionsController/Methods[@name="Delete"]/*'/>
-        //[FFSEAuthorize(PermissionAction.Delete, PermissionResource.DashboardOptions)]
         [FFSEAuthorize(PermissionAction.Delete)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
