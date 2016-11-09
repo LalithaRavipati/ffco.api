@@ -11,8 +11,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
 
             SeedLocationTypes(context);
             SeedParameterTypes(context);
-            SeedUnitTypes(context);
             SeedUnitTypeGroups(context);
+            SeedUnitTypes(context);
             SeedLimitTypes(context);
 
             SeedLocations(context);
@@ -23,10 +23,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedParameters(context);
             SeedParameterValidRanges(context);
             SeedChemicalTypes(context);
-
         }
-
-      
 
         private static void DeleteAllExistingTestData(DataContext context)
         {
@@ -44,8 +41,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.DashboardOptions");
 
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
-            context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.LimitTypes");
@@ -92,8 +89,6 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Locations.Add(Data.Locations.SamplingSite_Influent_HauledWasted);
             context.Locations.Add(Data.Locations.SamplingSite_Influent_Recycled);
 
-            context.Locations.Add(Data.Locations.Test_SoftDeleted);
-            context.Locations.Add(Data.Locations.Test_SoftDeletable);
             context.Locations.Add(Data.Locations.Test_Updateable);
             
             context.SaveChanges();
@@ -208,7 +203,6 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Dashboards.Add(Data.Dashboards.tnt02user_Dashboard_3);
             context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_4);
             context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_5);
-            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_SoftDeleted);
             context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToDelete);
             context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToUpdate);
 

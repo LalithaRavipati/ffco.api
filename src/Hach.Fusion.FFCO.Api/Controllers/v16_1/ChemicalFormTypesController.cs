@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -17,7 +14,7 @@ using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Swashbuckle.Swagger.Annotations;
 
-namespace Hach.Fusion.FFCO.Api.Controllers
+namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
     /// Web API controller for retriving ChemicalFormTypes.

@@ -167,10 +167,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (cannotDelete)
                 return Command.Error<LocationTypeQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
 
-            _context.LocationTypes.Attach(locationType);
-            locationType.SetAuditFieldsOnUpdate(userId);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-
             _context.LocationTypes.Remove(locationType);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 

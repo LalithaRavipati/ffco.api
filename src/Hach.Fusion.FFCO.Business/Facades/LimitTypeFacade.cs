@@ -161,10 +161,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (entity == null)
                 return Command.Error<LimitTypeQueryDto>(EntityErrorCode.EntityNotFound);
 
-            _context.LimitTypes.Attach(entity);
-            entity.SetAuditFieldsOnUpdate(userId);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-
             _context.LimitTypes.Remove(entity);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
