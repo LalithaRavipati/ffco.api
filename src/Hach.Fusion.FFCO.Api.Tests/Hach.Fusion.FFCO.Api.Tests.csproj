@@ -41,6 +41,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <OutputPath>bin\Test\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'us-hachtest-stage|AnyCPU'">
+    <OutputPath>bin\us-hachtest-stage\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Akka, Version=1.1.2.29, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Akka.1.1.2\lib\net45\Akka.dll</HintPath>

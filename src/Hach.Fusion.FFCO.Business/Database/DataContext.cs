@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EntityFramework.DynamicFilters;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Entities.Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.FFCO.Core.Entities.Base;
 
 // ReSharper disable InconsistentNaming
 
@@ -54,6 +54,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<DashboardOption> DashboardOptions { get; set; }
         public DbSet<Dashboard> Dashboards { get; set; }
         public DbSet<LimitType> LimitTypes { get; set; }
+        public DbSet<ChemicalFormType> ChemicalFormTypes { get; set; }
 
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

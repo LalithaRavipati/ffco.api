@@ -66,6 +66,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         public async Task<IHttpActionResult> Get(ODataQueryOptions<LocationQueryDto> queryOptions)
         {
             var results = await Facade.Get(queryOptions);
+
             return Query(results);
         }
 

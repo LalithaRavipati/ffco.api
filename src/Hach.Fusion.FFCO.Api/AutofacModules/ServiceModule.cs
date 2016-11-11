@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Security.Claims;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
@@ -12,6 +13,7 @@ using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -37,6 +39,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             // Claims Transformation
             builder.Register(c => new FusionContextFactory(connectionString)).AsSelf();
             builder.RegisterType<RoleClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<RoleClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
@@ -75,6 +78,10 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<LimitTypeValidator>().As<IFFValidator<LimitTypeCommandDto>>();
             builder.RegisterType<LimitTypeFacade>().As<IFacadeWithCruModels<LimitTypeCommandDto, LimitTypeCommandDto,
                LimitTypeQueryDto, Guid>>();
+
+            //ChemicalFormsTypes
+            builder.RegisterType<ChemicalFormTypesFacade>().As<IFacadeWithCruModels<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto,
+               ChemicalFormTypeQueryDto, Guid>>();
 
             /*builder.RegisterType<UnitConverter>().AsSelf().InstancePerLifetimeScope();
 

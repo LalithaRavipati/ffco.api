@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Hach.Fusion.FFCO.Business.Database;
+﻿using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Core.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -23,13 +22,19 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedLocationLogEntries(context);
             SeedParameters(context);
             SeedParameterValidRanges(context);
+            SeedChemicalTypes(context);
 
         }
+
+      
 
         private static void DeleteAllExistingTestData(DataContext context)
         {
             context.Database.ExecuteSqlCommand("DELETE dbo.ProductOfferingsTenantsLocations");
+            context.Database.ExecuteSqlCommand("DELETE foart.LocationParameterLimits");
+            context.Database.ExecuteSqlCommand("DELETE foart.LocationParameterNotes");
             context.Database.ExecuteSqlCommand("DELETE foart.Measurements");
+            context.Database.ExecuteSqlCommand("DELETE foart.MeasurementTransactions");
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationLogEntries");
             context.Database.ExecuteSqlCommand("DELETE foart.LocationParameters");
             context.Database.ExecuteSqlCommand("DELETE dbo.Locations");
@@ -44,6 +49,18 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.LimitTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.ChemicalFormTypes");
+
+            context.SaveChanges();
+        }
+
+        private static void SeedChemicalTypes(DataContext context)
+        {
+            context.ChemicalFormTypes.Add(Data.ChemicalFormTypes.Alum);
+            context.ChemicalFormTypes.Add(Data.ChemicalFormTypes.Caffeine);
+            context.ChemicalFormTypes.Add(Data.ChemicalFormTypes.Ethanol);
+            context.ChemicalFormTypes.Add(Data.ChemicalFormTypes.GalliumArsenide);
+            context.ChemicalFormTypes.Add(Data.ChemicalFormTypes.Water);
 
             context.SaveChanges();
         }
