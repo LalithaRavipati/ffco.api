@@ -84,7 +84,6 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
                 //.ForSourceMember(x => x.Geography, opt => opt.Ignore())
                 .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
 
@@ -100,7 +99,6 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore())
                 //.ForMember(x => x.Geography, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
         }
@@ -111,8 +109,7 @@ namespace Hach.Fusion.FFCO.Business
         /// <param name="cfg">Configuration for profile-specific maps.</param>
         private static void InitializeLocationLogEntries(IProfileExpression cfg)
         {
-            cfg.CreateMap<LocationLogEntry, LocationLogEntryQueryDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<LocationLogEntry, LocationLogEntryQueryDto>();
 
             cfg.CreateMap<LocationLogEntryCommandDto, LocationLogEntry>()
                 .ForMember(x => x.Location, opt => opt.Ignore())
@@ -120,16 +117,14 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
 
             cfg.CreateMap<LocationLogEntry, LocationLogEntryCommandDto>()
                 .ForSourceMember(x => x.Location, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
 
         /// <summary>
@@ -144,15 +139,13 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
 
             cfg.CreateMap<LocationType, LocationTypeCommandDto>()
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
 
         /// <summary>
@@ -160,8 +153,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeParameters(IProfileExpression cfg)
         {
-            cfg.CreateMap<Parameter, ParameterDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<Parameter, ParameterDto>();
         }
 
         /// <summary>
@@ -169,8 +161,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeParameterValidRanges(IProfileExpression cfg)
         {
-            cfg.CreateMap<ParameterValidRange, ParameterValidRangeQueryDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<ParameterValidRange, ParameterValidRangeQueryDto>();
         }
 
         /// <summary>
@@ -214,8 +205,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
             cfg.CreateMap<DashboardCommandDto, Dashboard>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -226,8 +216,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
 
         /// <summary>
@@ -242,8 +231,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
             cfg.CreateMap<DashboardOptionCommandDto, DashboardOption>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -251,8 +239,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
 
         /// <summary>
@@ -260,8 +247,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeTenants(IProfileExpression cfg)
         {
-            cfg.CreateMap<Tenant, TenantDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<Tenant, TenantDto>();
         }
 
         /// <summary>
@@ -270,7 +256,6 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeUsers(IProfileExpression cfg)
         {
             cfg.CreateMap<User, UserDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ForSourceMember(x => x.Tenants, opt => opt.Ignore());
         }
 
@@ -279,31 +264,27 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeLimitTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<LimitType, LimitTypeQueryDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<LimitType, LimitTypeQueryDto>();
 
             cfg.CreateMap<LimitType, LimitTypeCommandDto>()
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
             cfg.CreateMap<LimitTypeCommandDto, LimitType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
-                .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                .ForMember(x => x.IsDeleted, opt => opt.Ignore());
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
         /// <summary>
         /// Configure AutoMapper for converting between the Chemical Form Type entity and DTOs.
         /// </summary>
         private static void InitializeChemicalFormTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>()
-                .ForSourceMember(x => x.IsDeleted, opt => opt.Ignore());
+            cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>();
         }
     }
 }
