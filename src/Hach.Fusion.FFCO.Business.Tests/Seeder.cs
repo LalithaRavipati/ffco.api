@@ -90,7 +90,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Locations.Add(Data.Locations.SamplingSite_Influent_Recycled);
 
             context.Locations.Add(Data.Locations.Test_Updateable);
-            
+
             context.SaveChanges();
         }
 

@@ -60,7 +60,7 @@ namespace Hach.Fusion.FFCO.Business.Database
 
             modelBuilder.Entity<ProductOfferingTenantLocation>()
                 .ToTable("ProductOfferingsTenantsLocations")
-                .HasKey(e => new {e.ProductOfferingId, e.TenantId, e.LocationId});
+                .HasKey(e => new { e.ProductOfferingId, e.TenantId, e.LocationId });
 
             modelBuilder.Entity<ProductOfferingTenantLocation>()
                 .HasRequired(e => e.ProductOffering)
@@ -86,7 +86,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         private static void ConfigureSchemas(DbModelBuilder modelBuilder)
         {
             // Set default schema for tables.               
-            modelBuilder.HasDefaultSchema(Schema_dbo);            
+            modelBuilder.HasDefaultSchema(Schema_dbo);
         }
     }
 }

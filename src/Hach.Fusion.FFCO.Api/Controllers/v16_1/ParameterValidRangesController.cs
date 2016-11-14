@@ -54,7 +54,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/ParameterValidRanges
         /// </example>
         /// <include file='XmlDocumentation/ParameterValidRangesController.doc' path='ParameterValidRangesController/Methods[@name="GetAll"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
+        [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -79,7 +79,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// GET: ~/odata/v16.1/ParameterValidRanges(29522337-0153-48C7-9796-E16779199138)
         /// </example>
         /// <include file='XmlDocumentation/ParameterValidRangesController.doc' path='ParameterValidRangesController/Methods[@name="GetOne"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read, PermissionResource.LocationLogEntry)]
+        [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]

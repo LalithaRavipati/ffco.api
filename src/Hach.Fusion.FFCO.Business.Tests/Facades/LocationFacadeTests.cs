@@ -30,7 +30,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
                 Data.Users.Adhach.Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> {claim}));
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
             _context = new DataContext(connectionString);
