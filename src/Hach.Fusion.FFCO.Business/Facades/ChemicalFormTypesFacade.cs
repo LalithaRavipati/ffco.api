@@ -17,7 +17,7 @@ using Hach.Fusion.FFCO.Core.Entities;
 namespace Hach.Fusion.FFCO.Business.Facades
 {
     /// <summary>
-    /// Facade for managing the ChemicalForms repository. 
+    /// Facade for managing the ChemicalFormTypes repository. 
     /// </summary>    
     public class ChemicalFormTypesFacade
         : FacadeWithCruModelsBase<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, Guid>
@@ -26,7 +26,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Constructor for the <see cref="ChemicalFormsFacade"/> class taking a database context
+        /// Constructor for the <see cref="ChemicalFormTypesFacade"/> class taking a database context
         /// and validator argument.
         /// </summary>
         /// <param name="context">Database context containing Chemical Form type entities.</param>
@@ -39,7 +39,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Get Methods
 
         /// <summary>
-        /// Gets a list of chemical types from the data store.
+        /// Gets a list of chemical form types from the data store.
         /// </summary>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
@@ -64,7 +64,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Gets a single chemical form from the data store.
+        /// Gets a single chemical form types from the data store.
         /// </summary>
         /// <param name="id">ID that uniquely identifies the entity to be retrieved.</param>
         /// <returns>
@@ -77,9 +77,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = _context.ChemicalFormTypes
+            var result = await _context.ChemicalFormTypes
                 .FirstOrDefaultAsync(x => x.Id == id)
-                .Result;
+                .ConfigureAwait(false);
 
             return result == null
                 ? Query.Error(EntityErrorCode.EntityNotFound)

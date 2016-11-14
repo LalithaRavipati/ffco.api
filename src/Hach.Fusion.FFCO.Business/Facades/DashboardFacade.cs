@@ -176,10 +176,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (entity.OwnerUserId != userIdGuid)
                 return Command.Error<DashboardQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
 
-            _context.Dashboards.Attach(entity);
-            entity.SetAuditFieldsOnUpdate(userId);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-
             _context.Dashboards.Remove(entity);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 

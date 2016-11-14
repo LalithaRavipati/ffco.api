@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Query;
 using AutoMapper;
-using Hach.Fusion.Core.Api.Logger;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
@@ -182,10 +181,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             if (location.Locations.Count > 0)
                 return Command.Error<LocationQueryDto>(EntityErrorCode.EntityCouldNotBeDeleted);
-
-            _context.Locations.Attach(location);
-            location.SetAuditFieldsOnUpdate(userId);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             _context.Locations.Remove(location);
             await _context.SaveChangesAsync().ConfigureAwait(false);
