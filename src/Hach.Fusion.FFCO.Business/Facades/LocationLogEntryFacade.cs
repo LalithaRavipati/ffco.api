@@ -172,8 +172,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (locationLogEntry == null)
                 return Command.Error<LocationLogEntryQueryDto>(EntityErrorCode.EntityNotFound);
 
-            locationLogEntry.SetAuditFieldsOnUpdate(userId.Value);
-
             _context.LocationLogEntries.Remove(locationLogEntry);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
