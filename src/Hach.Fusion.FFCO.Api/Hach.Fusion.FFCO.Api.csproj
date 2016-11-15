@@ -329,6 +329,7 @@
     <Compile Include="App_Start\CustomPropertyRoutingConvention.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SchemaDefaults.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\v16_1\ChemicalFormTypesController.cs" />

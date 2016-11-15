@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hach.Fusion.Core.Business.Spatial;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
@@ -68,13 +69,13 @@ namespace Hach.Fusion.FFCO.Business
             AutoMapper = config.CreateMapper();
         }
 
-
         /// <summary>
         /// Configure AutoMapper for converting between the Location entity and DTOs.
         /// </summary>
         private static void InitializeLocations(IProfileExpression cfg)
         {
-            cfg.CreateMap<Location, LocationQueryDto>();
+            cfg.CreateMap<Location, LocationQueryDto>()
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
 
             cfg.CreateMap<Location, LocationCommandDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
@@ -84,11 +85,12 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
-                //.ForSourceMember(x => x.Geography, opt => opt.Ignore())
-                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+                .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore())
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
 
             cfg.CreateMap<Location, LocationParentDto>()
-                .ForSourceMember(x => x.Locations, opt => opt.Ignore());
+                .ForSourceMember(x => x.Locations, opt => opt.Ignore())
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
 
             cfg.CreateMap<LocationCommandDto, Location>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -99,8 +101,8 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
-                //.ForMember(x => x.Geography, opt => opt.Ignore())
-                .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore());
+                .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore())
+                .ForMember(x => x.Geography, opt => opt.MapFrom(src => src.Point.ConvertPointToDbGeography()));
         }
 
         /// <summary>
