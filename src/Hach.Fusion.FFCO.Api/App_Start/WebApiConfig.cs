@@ -117,6 +117,7 @@ namespace Hach.Fusion.FFCO.Api
             config
                 .EnableSwagger(c =>
                 {
+                    c.SchemaFilter<SchemaDefaults>();
                     c.SingleApiVersion("v16_1", "FFCO API")
                         .Description($"Version {version}")
                         .Contact(cc => cc

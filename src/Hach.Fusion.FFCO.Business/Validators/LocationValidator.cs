@@ -42,6 +42,9 @@ namespace Hach.Fusion.FFCO.Business.Validators
             Evaluate(l => l.LocationTypeId, dto.LocationTypeId)
                 .Required();
 
+            Evaluate(l => l.Point, dto.Point)
+                .IsPoint();
+
             return new FFValidationResponse
             {
                 FFErrors = FFErrors
