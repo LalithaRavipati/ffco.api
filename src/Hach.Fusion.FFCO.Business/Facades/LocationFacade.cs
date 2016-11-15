@@ -259,7 +259,15 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationCommandDto>(validationResponse);
 
             _context.Locations.Attach(location);
-            _mapper.Map(locationDto, location);
+            //_mapper.Map(locationDto, location);
+            try
+            {
+                _mapper.Map(locationDto, location);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
 
             location.SetAuditFieldsOnUpdate(userId);
 
