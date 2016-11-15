@@ -177,9 +177,20 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeUnitTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<UnitType, UnitTypeDto>();
-
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
+
+            cfg.CreateMap<UnitType, UnitTypeCommandDto>()
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
+
+            cfg.CreateMap<UnitTypeCommandDto, UnitType>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
 
         /// <summary>
