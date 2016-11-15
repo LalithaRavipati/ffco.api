@@ -189,6 +189,7 @@ namespace Hach.Fusion.FFCO.Business
 
             cfg.CreateMap<UnitTypeCommandDto, UnitType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.UnitTypeGroup, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
