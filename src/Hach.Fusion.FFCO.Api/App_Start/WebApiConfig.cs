@@ -8,7 +8,6 @@ using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
@@ -91,7 +90,7 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<DashboardBaseDto>("Dashboards");
             builder.EntitySet<DashboardOptionBaseDto>("DashboardOptions");
 
-            builder.EntitySet<UnitTypeQueryDto>("UnitTypes");
+            builder.EntitySet<UnitTypeBaseDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
             builder.EntitySet<ParameterTypeDto>("ParameterTypes");
             builder.EntitySet<ParameterDto>("Parameters");
@@ -118,6 +117,7 @@ namespace Hach.Fusion.FFCO.Api
             config
                 .EnableSwagger(c =>
                 {
+                    c.SchemaFilter<SchemaDefaults>();
                     c.SingleApiVersion("v16_1", "FFCO API")
                         .Description($"Version {version}")
                         .Contact(cc => cc

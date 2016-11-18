@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Security.Claims;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
@@ -13,7 +12,6 @@ using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -51,7 +49,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<LocationLogEntryFacade>().As<IFacadeWithCruModels<LocationLogEntryCommandDto, LocationLogEntryCommandDto,
                 LocationLogEntryQueryDto, Guid>>();
 
-            builder.RegisterType<UnitTypeFacade>().As<IFacadeWithCruModels<UnitTypeQueryDto, UnitTypeQueryDto,
+            builder.RegisterType<UnitTypeFacade>().As<IFacadeWithCruModels<UnitTypeCommandDto, UnitTypeCommandDto,
                UnitTypeQueryDto, Guid>>();
             builder.RegisterType<UnitTypeGroupFacade>().As<IFacadeWithCruModels<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto,
                UnitTypeGroupQueryDto, Guid>>();
@@ -59,7 +57,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
             builder.RegisterType<LocationLogEntryValidator>().As<IFFValidator<LocationLogEntryCommandDto>>();
             builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeCommandDto>>();
-            builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeQueryDto>>();
+            builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeCommandDto>>();
             builder.RegisterType<UnitTypeGroupValidator>().As<IFFValidator<UnitTypeGroupQueryDto>>();
 
             builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();

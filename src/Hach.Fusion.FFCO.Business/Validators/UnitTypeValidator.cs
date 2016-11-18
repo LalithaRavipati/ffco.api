@@ -12,17 +12,17 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// In addition to the override of the <see cref="Validate"/> method, this class contains a static method
     /// used to test whether updating the parent of a location would result in a circular reference.
     /// </remarks>
-    public class UnitTypeValidator : FFValidator<UnitTypeQueryDto, Guid>
+    public class UnitTypeValidator : FFValidator<UnitTypeCommandDto, Guid>
     {
         private const int NameMaximumLength = 100;
 
         private const int NameMinimumLength = 4;
 
         /// <summary>
-        /// Validates the state of the specified <see cref="LocationQueryDto"/>.
+        /// Validates the state of the specified <see cref="UnitTypeCommandDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(UnitTypeQueryDto dto)
+        public override FFValidationResponse Validate(UnitTypeCommandDto dto)
         {
             IsNull(dto);
 
@@ -41,6 +41,9 @@ namespace Hach.Fusion.FFCO.Business.Validators
                 .Required()
                 .MaxLength(NameMaximumLength)
                 .MinLength(NameMinimumLength);
+
+            Evaluate(x => x.UnitTypeGroupId, dto.UnitTypeGroupId)
+                .Required();
 
             return new FFValidationResponse
             {
