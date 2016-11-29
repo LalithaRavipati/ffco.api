@@ -26,6 +26,8 @@
           </tr>
         </table>
       </p>
+      <h4>Example</h4>
+      <p>GET: ~/odata/v16.1/ParameterTypes</p>
     </remarks>
 
   </Methods>
@@ -60,6 +62,8 @@
           </tr>
         </table>
       </p>
+      <h4>Example</h4>
+      <p>GET: ~/odata/v16.1/ParameterTypes(850D6ED7-4428-4131-BAC0-3E625BDEDDCE)</p>
     </remarks>
 
   </Methods>

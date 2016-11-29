@@ -143,7 +143,7 @@ namespace Hach.Fusion.FFCO.Api
                     u.InjectStylesheet(typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");
                     u.CustomAsset("index", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerDefault");
-                    u.CustomAsset("images/logo_small-png", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.HachLogo.png");
+                    u.CustomAsset("images/logo_small-png", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.HachLogoForSwagger.png");
                     u.CustomAsset("images/HachTabLogo", typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.HachTabLogo.png");
 
                     // Disable swagger validator that shows error when deployed to production
