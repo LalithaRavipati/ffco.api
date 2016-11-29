@@ -180,9 +180,13 @@ namespace Hach.Fusion.FFCO.Business.Tests
         private static void SeedProductOfferingTenantLocations(DataContext context)
         {
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant1);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant2);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant3);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
 
             context.SaveChanges();
