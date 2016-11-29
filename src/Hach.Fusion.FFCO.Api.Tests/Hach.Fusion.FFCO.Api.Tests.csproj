@@ -65,8 +65,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.2016.61.2\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Core, Version=2016.61.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2016.61.1-foart-1148-A\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Core, Version=2016.62.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2016.62.0\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel.Net45, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
