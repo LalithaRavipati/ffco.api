@@ -1,8 +1,5 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Entities;
 
