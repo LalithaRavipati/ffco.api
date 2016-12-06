@@ -70,5 +70,19 @@ namespace Hach.Fusion.FFCO.Business.Extensions
                 where potl.Tenant.Users.Any(x => x.Id == userId)
                 select le;
         }
+
+        /// <summary>
+        /// Return locations the user is associated through its tenant(s)
+        /// </summary>
+        /// <param name="context">Database Context</param>
+        /// <param name="userId">UserId</param>
+        /// <returns></returns>
+        public static IQueryable<Location> GetLocationsForUser(this DataContext context, Guid userId)
+        {
+            return from location in context.Locations
+                   join potl in context.ProductOfferingTenantLocations on location.Id equals potl.LocationId
+                   where potl.Tenant.Users.Any(u => u.Id == userId)
+                   select location; 
+        }
     }
 }
