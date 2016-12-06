@@ -6,7 +6,7 @@ using Hach.Fusion.FFCO.Core.Entities;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="LocationCommandDto"/>s.
+    /// Validates <see cref="UnitTypeGroupQueryDto"/>s.
     /// </summary>
     /// <remarks>
     /// In addition to the override of the <see cref="Validate"/> method, this class contains a static method

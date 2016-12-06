@@ -5,7 +5,7 @@ using Hach.Fusion.FFCO.Core.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="LocationCommandDto"/>s.
+    /// Validates <see cref="LocationTypeCommandDto"/>s.
     /// </summary>
     public class LocationTypeValidator : FFValidator<LocationTypeCommandDto, Guid>
     {
