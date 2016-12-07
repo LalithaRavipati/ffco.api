@@ -69,6 +69,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             return Query(results);
         }
 
+        // TODO - akrone - Change the Get methods to a single Custom Action named "Extensions.GetByUserId()"
+
         /// <summary>
         /// Retrieves the In-Application Message with the specified ID.
         /// </summary>
