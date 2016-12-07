@@ -108,7 +108,7 @@ namespace Hach.Fusion.FFCO.Api
                 .ReturnsCollectionFromEntitySet<InAppMessageQueryDto>("InAppMessages");
 
             inAppMessages.Parameter<Guid>("UserId");
-            inAppMessages.Namespace = "Extensons";
+            inAppMessages.Namespace = "Extensions";
 
             builder.EnableLowerCamelCase();
 

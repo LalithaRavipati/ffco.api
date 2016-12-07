@@ -44,59 +44,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
         #region Get Methods
 
-        /// <summary>
-        /// Gets a list of InAppMessages from the data store.
-        /// </summary>
-        /// <param name="queryOptions">OData query options.</param>
-        /// <returns>
-        /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result contains the list of InAppMessage DTOs retrieved.
-        /// </returns>
-        public override async Task<QueryResult<InAppMessageQueryDto>> Get(ODataQueryOptions<InAppMessageQueryDto> queryOptions)
-        {
-            queryOptions.Validate(ValidationSettings);
-
-            var uid = GetCurrentUser();
-
-            if (!uid.HasValue)
-                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
-
-            var results = await Task.Run(() => _context.GetInAppMessagesForUser(uid.Value)
-                .Select(_mapper.Map<InAppMessage, InAppMessageQueryDto>)
-                .AsQueryable())
-                .ConfigureAwait(false);
-
-            return Query.Result(results);
-        }
-
-        /// <summary>
-        /// Gets a single InAppMessage from the data store.
-        /// </summary>
-        /// <param name="id">ID that uniquely identifies the InAppMessage to be retrieved.</param>
-        /// <returns>
-        /// An asynchronous task result containing information needed to create an API response message.
-        /// If successful, the task result includes the InAppMessage DTO retrieved.
-        /// </returns>
-        public override async Task<QueryResult<InAppMessageQueryDto>> Get(Guid id)
-        {
-            var uid = GetCurrentUser();
-
-            if (!uid.HasValue)
-                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
-
-            var result = await Task.Run(() => _context.GetInAppMessagesForUser(uid.Value)
-                .FirstOrDefault(msg => msg.Id == id))
-                .ConfigureAwait(false);
-
-            if (result == null)
-                return Query.Error(EntityErrorCode.EntityNotFound);
-
-            var dto = _mapper.Map<InAppMessage, InAppMessageQueryDto>(result);
-
-            return Query.Result(dto);
-        }
-
-
         public async Task<QueryResult<InAppMessageQueryDto>> GetByUserId(Guid userId
             , ODataQueryOptions<InAppMessageQueryDto> options)
         {
@@ -109,9 +56,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             // Check if the calling User shares a Tenant with the UserId passed in
             if (!_context.GetTenantsForUser(uid.Value).Any(u => u.Id == userId))
-            {
                 return Query.Error(EntityErrorCode.EntityNotFound);
-            }
 
             var results = 
                 await Task.Run(() => 
@@ -172,6 +117,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         public override Task<CommandResult<InAppMessageQueryDto, Guid>> DeleteReference(Guid id, string navigationProperty, object referenceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<QueryResult<InAppMessageQueryDto>> Get(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<QueryResult<InAppMessageQueryDto>> Get(ODataQueryOptions<InAppMessageQueryDto> queryOptions)
         {
             throw new NotImplementedException();
         }

@@ -49,56 +49,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves a queryable list of In-Application Messages.
-        /// </summary>
-        /// <param name="queryOptions">OData query options that provide for sorting and filtering.</param>
-        /// <returns>
-        /// A list of DTOs for the In-Application Messages that satisfy query option criteria.
-        /// </returns>
-        /// <example>
-        /// GET: ~/odata/v16.1/InAppMessages
-        /// </example>
-        /// <include file='XmlDocumentation/InAppMessagesController.doc' path='InAppMessagesController/Methods[@name="GetAll"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(InAppMessageQueryDto))]
-        public async Task<IHttpActionResult> Get(ODataQueryOptions<InAppMessageQueryDto> queryOptions)
-        {
-            var results = await _facade.Get(queryOptions);
-            return Query(results);
-        }
-
-        /// <summary>
-        /// Retrieves the In-Application Message with the specified ID.
-        /// </summary>
-        /// <param name="key">ID that identifies the In-Application Message to be retrieved.</param>
-        /// <param name="queryOptions">OData query options.</param>
-        /// <returns>
-        /// The DTO for the indicated In-Application Message.
-        /// </returns>
-        /// <example>
-        /// GET: ~/odata/v16.1/InAppMessages(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
-        /// </example>
-        /// <include file='XmlDocumentation/InAppMessagesController.doc' path='InAppMessagesController/Methods[@name="GetOne"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(InAppMessageQueryDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<InAppMessageQueryDto> queryOptions)
-        {
-            var results = await Facade.Get(key);
-            return Query(results);
-        }
-
-        /// <summary>
         /// Retrieves the In-Application Message for the specified User.
         /// </summary>
         /// <param name="userId">UserId that identifies the User's In-Application Messages to be retrieved.</param>
