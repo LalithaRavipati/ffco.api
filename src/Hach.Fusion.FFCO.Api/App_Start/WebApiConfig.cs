@@ -97,6 +97,7 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<ParameterValidRangeQueryDto>("ParameterValidRanges");
             builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
             builder.EntitySet<ChemicalFormTypeQueryDto>("ChemicalFormTypes");
+            builder.EntitySet<InAppMessageQueryDto>("InAppMessages");
 
             builder.EnableLowerCamelCase();
 

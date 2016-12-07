@@ -9,7 +9,7 @@ namespace Hach.Fusion.FFCO.Business.Extensions
     /// Extension methods for <see cref="DataContext"/>.
     /// </summary>
     public static class DataContextExtensions
-    { 
+    {
         /// <summary>
         /// Returns all tenants that the user has access to.
         /// </summary>
@@ -69,6 +69,20 @@ namespace Hach.Fusion.FFCO.Business.Extensions
                 join potl in context.ProductOfferingTenantLocations on le.LocationId equals potl.LocationId
                 where potl.Tenant.Users.Any(x => x.Id == userId)
                 select le;
+        }
+
+        /// <summary>
+        /// Returns the InAppMessages for the user.
+        /// </summary>
+        /// <param name="context">Database Context</param>
+        /// <param name="userId">UserId GUID to get the InAppMessages for</param>
+        /// <returns>Queryable list of InAppMessages </returns>
+        public static IQueryable<InAppMessage> GetInAppMessagesForUser(this DataContext context, Guid userId)
+        {
+            return
+                from msg in context.InAppMessages
+                where msg.UserId == userId
+                select msg;
         }
     }
 }
