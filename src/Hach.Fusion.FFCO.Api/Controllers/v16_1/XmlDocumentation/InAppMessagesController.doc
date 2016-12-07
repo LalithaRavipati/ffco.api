@@ -114,6 +114,64 @@
     </remarks>
   </Methods>
 
+  <Methods name="GetByUserId">
+    <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>User</td >
+            <td>Retrieves the User associated with the In-Application Message.</td >
+          </tr>
+          <tr>
+            <td>MessageType</td >
+            <td>Retrieves the Message Type associated with the In-Application Message.</td >
+          </tr>
+        </table>
+      </p>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-001</td >
+            <td>ODataQueryInvalid</td >
+            <td>The OData query is invalid. Check the OData parameters.</td>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+  </Methods>
 
   <Methods name="Patch">
 

@@ -59,7 +59,7 @@ namespace Hach.Fusion.FFCO.Api
 
             controllerSelector?.RouteVersionSuffixMapping.Add("V161RouteVersioning", "v16_1");
 
-            // Automatically change the Pascal casing standard in C# MVC to Camal Case Standard used in JavaScript
+            // Automatically change the Pascal casing standard in C# MVC to Camel Case Standard used in JavaScript
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
             config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
@@ -99,10 +99,21 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<ChemicalFormTypeQueryDto>("ChemicalFormTypes");
             builder.EntitySet<InAppMessageQueryDto>("InAppMessages");
 
+            // Adding the Extensions Namespace and Custom Function for In-App Messages
+            // See https://github.com/OData/WebApi/issues/766 for an explanation of why
+            // ReturnsCollectionFromEntitySet is required for this function 
+            var inAppMessages = builder.EntityType<InAppMessageQueryDto>()
+                .Collection
+                .Function("GetByUserId")
+                .ReturnsCollectionFromEntitySet<InAppMessageQueryDto>("InAppMessages");
+
+            inAppMessages.Parameter<Guid>("UserId");
+            inAppMessages.Namespace = "Extensons";
+
             builder.EnableLowerCamelCase();
 
             return builder.GetEdmModel();
-        }        
+        }
 
         /// <summary>
         /// Configure Swagger API documentation.

@@ -20,7 +20,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the InAppMessage repository. 
     /// </summary>    
     public class InAppMessageFacade
-        : FacadeWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
+        : FacadeWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>,
+        IInAppMessageFacade
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -95,6 +96,46 @@ namespace Hach.Fusion.FFCO.Business.Facades
             return Query.Result(dto);
         }
 
+
+        public async Task<QueryResult<InAppMessageQueryDto>> GetByUserId(Guid userId
+            , ODataQueryOptions<InAppMessageQueryDto> options)
+        {
+            options.Validate(ValidationSettings);
+
+            var uid = GetCurrentUser();
+
+            if (!uid.HasValue)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            // Check if the calling User shares a Tenant with the UserId passed in
+            if (!_context.GetTenantsForUser(uid.Value).Any(u => u.Id == userId))
+            {
+                return Query.Error(EntityErrorCode.EntityNotFound);
+            }
+
+            var results = 
+                await Task.Run(() => 
+                    _context.GetInAppMessagesForUser(userId)
+                    .Select(_mapper.Map<InAppMessage, InAppMessageQueryDto>)
+                    .AsQueryable())
+                .ConfigureAwait(false);
+
+            return Query.Result(results);
+        }
+
+
+        #endregion Get Methods
+
+        #region Update Methods
+
+        public override Task<CommandResult<InAppMessageCommandDto, Guid>> Update(Guid id, Delta<InAppMessageCommandDto> delta)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Utility Methods
+
         private Guid? GetCurrentUser()
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
@@ -105,14 +146,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Guid.Parse(userId);
         }
 
-        #endregion Get Methods
-
-        #region Update Methods
-
-        public override Task<CommandResult<InAppMessageCommandDto, Guid>> Update(Guid id, Delta<InAppMessageCommandDto> delta)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region Not Implemented Methods

@@ -14,6 +14,7 @@ using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.Core.Business.Results;
+using Hach.Fusion.FFCO.Business.Facades;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -31,18 +32,20 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     public class InAppMessagesController
         : ControllerWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
     {
+        private readonly IInAppMessageFacade _facade;
+
         /// <summary>
         /// Default constructor for the <see cref="InAppMessagesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist In-Application Message data.</param>
-        public InAppMessagesController(IODataHelper oDataHelper, IFacadeWithCruModels<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid> facade) 
+        public InAppMessagesController(IODataHelper oDataHelper, IInAppMessageFacade facade) 
             : base(oDataHelper)
         {
             if (facade == null)
                 throw new ArgumentNullException(nameof(facade));
 
-            Facade = facade;
+            Facade = _facade = facade;
         }
 
         /// <summary>
@@ -65,11 +68,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [ResponseType(typeof(InAppMessageQueryDto))]
         public async Task<IHttpActionResult> Get(ODataQueryOptions<InAppMessageQueryDto> queryOptions)
         {
-            var results = await Facade.Get(queryOptions);
+            var results = await _facade.Get(queryOptions);
             return Query(results);
         }
-
-        // TODO - akrone - Change the Get methods to a single Custom Action named "Extensions.GetByUserId()"
 
         /// <summary>
         /// Retrieves the In-Application Message with the specified ID.
@@ -97,6 +98,32 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             return Query(results);
         }
 
+        /// <summary>
+        /// Retrieves the In-Application Message for the specified User.
+        /// </summary>
+        /// <param name="userId">UserId that identifies the User's In-Application Messages to be retrieved.</param>
+        /// <param name="queryOptions">OData query options.</param>
+        /// <returns>
+        /// The DTO for the indicated User's In-Application Messages.
+        /// </returns>
+        /// <example>
+        /// GET: ~/odata/v16.1/Extensions.GetByUserId(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// </example>
+        /// <include file='XmlDocumentation/InAppMessagesController.doc' path='InAppMessagesController/Methods[@name="GetByUserId"]/*'/>
+        [FFSEAuthorize(PermissionAction.Read)]
+        [EnableQuery]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [SwaggerResponse(HttpStatusCode.InternalServerError)]
+        [ResponseType(typeof(InAppMessageQueryDto))]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetByUserId([FromODataUri] Guid userId, ODataQueryOptions<InAppMessageQueryDto> queryOptions)
+        {
+            var results = await _facade.GetByUserId(userId, queryOptions);
+            return Query(results);
+        }
 
         /// <summary>
         /// Replaces the specified properties of the indicated In-Application Message.
@@ -122,7 +149,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [ResponseType(typeof(CommandResult<InAppMessageCommandDto, Guid>))]
         public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageCommandDto> delta)
         {
-            var result = await Facade.Update(key, delta);
+            var result = await _facade.Update(key, delta);
             return Command(result);
         }
     }
