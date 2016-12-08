@@ -180,12 +180,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<CommandResult<LocationQueryDto, Guid>> Delete(Guid id)
         {
             // Thread.CurrentPrincipal is not available in the constructor.  Do not try and move this
-            var uid = GetCurrentUser();
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
 
-            if (!uid.HasValue)
-                return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
-
-            var location = await _context.GetLocationsForUser(uid.Value)
+            var location = await _context.Locations
               .Include(l => l.Locations)
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
@@ -219,16 +216,17 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
         {
-            var uid = GetCurrentUser();
+            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
 
             // User ID should always be available, but if not ...
-            if (!uid.HasValue)
+            if (userId == null)
                 return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
                 return Command.Error<LocationCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var location = await _context.GetLocationsForUser(uid.Value)
+            var location = await _context.Locations
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
@@ -274,7 +272,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Attach(location);
             _mapper.Map(locationDto, location);
 
-            location.SetAuditFieldsOnUpdate(uid.Value);
+            location.SetAuditFieldsOnUpdate(userId);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 

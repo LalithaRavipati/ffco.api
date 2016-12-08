@@ -79,10 +79,12 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         /// <returns></returns>
         public static IQueryable<Location> GetLocationsForUser(this DataContext context, Guid userId)
         {
-            return from location in context.Locations
-                   join potl in context.ProductOfferingTenantLocations on location.Id equals potl.LocationId
-                   where potl.Tenant.Users.Any(u => u.Id == userId)
-                   select location; 
+            var locations = from location in context.Locations
+                    join potl in context.ProductOfferingTenantLocations on location.Id equals potl.LocationId
+                    where potl.Tenant.Users.Any(u => u.Id == userId)
+                    select location;
+
+            return locations;
         }
     }
 }
