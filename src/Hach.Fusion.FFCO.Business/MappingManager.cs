@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Hach.Fusion.Core.Business.Spatial;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
@@ -46,6 +47,8 @@ namespace Hach.Fusion.FFCO.Business
             // Initialize groups of mapping classes
             var config = new MapperConfiguration(cfg =>
             {
+                InitializeMessageTypes(cfg);
+                InitializeInAppMessages(cfg);
                 InitializeChemicalFormTypes(cfg);
                 InitializeUnitTypeGroups(cfg);
                 InitializeUnitTypes(cfg);
@@ -67,6 +70,48 @@ namespace Hach.Fusion.FFCO.Business
             config.AssertConfigurationIsValid();
 
             AutoMapper = config.CreateMapper();
+        }
+
+        private static void InitializeMessageTypes(IMapperConfigurationExpression cfg)
+        {
+            cfg.CreateMap<MessageType, MessageTypeQueryDto>();
+        }
+
+        private static void InitializeInAppMessages(IMapperConfigurationExpression cfg)
+        {
+            cfg.CreateMap<InAppMessage, InAppMessageQueryDto>();
+
+            cfg.CreateMap<InAppMessage, InAppMessageCommandDto>()
+                .ForSourceMember(x => x.Body, opt => opt.Ignore())
+                .ForSourceMember(x => x.DateRead, opt => opt.Ignore())
+                .ForSourceMember(x => x.DateReceived, opt => opt.Ignore())
+                .ForSourceMember(x => x.DateTimeSent, opt => opt.Ignore())
+                .ForSourceMember(x => x.MessageType, opt => opt.Ignore())
+                .ForSourceMember(x => x.MessageTypeId, opt => opt.Ignore())
+                .ForSourceMember(x => x.SenderId, opt => opt.Ignore())
+                .ForSourceMember(x => x.Subject, opt => opt.Ignore())
+                .ForSourceMember(x => x.User, opt => opt.Ignore())
+                .ForSourceMember(x => x.UserId, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
+
+            cfg.CreateMap<InAppMessageCommandDto, InAppMessage>()
+                .ForMember(x => x.Body, opt => opt.Ignore())
+                .ForMember(x => x.DateRead, opt => opt.Ignore())
+                .ForMember(x => x.DateReceived, opt => opt.Ignore())
+                .ForMember(x => x.DateTimeSent, opt => opt.Ignore())
+                .ForMember(x => x.MessageType, opt => opt.Ignore())
+                .ForMember(x => x.MessageTypeId, opt => opt.Ignore())
+                .ForMember(x => x.SenderId, opt => opt.Ignore())
+                .ForMember(x => x.Subject, opt => opt.Ignore())
+                .ForMember(x => x.User, opt => opt.Ignore())
+                .ForMember(x => x.UserId, opt => opt.Ignore())
+                .ForMember(x => x.CreatedById, opt => opt.Ignore())
+                .ForMember(x => x.CreatedOn, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedById, opt => opt.Ignore())
+                .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
         }
 
         /// <summary>

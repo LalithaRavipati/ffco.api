@@ -12,6 +12,8 @@ using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.FFCO.Core.Extensions;
+
 using System.Threading;
 
 namespace Hach.Fusion.FFCO.Business.Facades
@@ -36,7 +38,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
         {
             _context = context;
 
-            ValidatorCreate = validator;
             ValidatorUpdate = validator;
 
             _mapper = MappingManager.AutoMapper;
@@ -54,8 +55,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!uid.HasValue)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
+
+            var tenants = _context.GetTenantsForUser(uid.Value);
+            var shareTenant = tenants.Any(t => t.Users.Any(u=> u.Id == userId));
+
             // Check if the calling User shares a Tenant with the UserId passed in
-            if (!_context.GetTenantsForUser(uid.Value).Any(u => u.Id == userId))
+            if (!shareTenant)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
             var results = 
@@ -67,15 +72,46 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             return Query.Result(results);
         }
-
-
+        
         #endregion Get Methods
 
         #region Update Methods
 
-        public override Task<CommandResult<InAppMessageCommandDto, Guid>> Update(Guid id, Delta<InAppMessageCommandDto> delta)
+        public override async Task<CommandResult<InAppMessageCommandDto, Guid>> Update(Guid id, Delta<InAppMessageCommandDto> delta)
         {
-            throw new NotImplementedException();
+            // Check user has proper access to update the message
+            var uid = GetCurrentUser();
+
+            if (!uid.HasValue)
+                return Command.Error<InAppMessageCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var entity = _context.InAppMessages.SingleOrDefault(msg => msg.Id == id);
+            if (entity == null)
+                return Command.Error<InAppMessageCommandDto>(EntityErrorCode.EntityNotFound);
+
+            // Check if the calling User shares a Tenant with the UserId passed in
+            var tenants = _context.GetTenantsForUser(uid.Value);
+            var shareTenant = tenants.Any(t => t.Users.Any(u => u.Id == entity.UserId));
+            if (!shareTenant)
+                return Command.Error<InAppMessageCommandDto>(ValidationErrorCode.ForeignKeyValueDoesNotExist("UserId"));
+
+            var dto = _mapper.Map(entity, new InAppMessageCommandDto());
+
+            delta.Patch(dto);
+
+            var validationResponse = ValidatorUpdate.Validate(dto);
+
+            if (validationResponse.IsInvalid)
+                return Command.Error<InAppMessageCommandDto>(validationResponse);
+
+            // Apply the update
+            _context.InAppMessages.Attach(entity);
+            _mapper.Map(dto, entity);
+            entity.SetAuditFieldsOnUpdate(uid.Value);
+
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            return Command.NoContent<InAppMessageCommandDto>();
         }
         #endregion
 
