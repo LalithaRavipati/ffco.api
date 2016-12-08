@@ -17,6 +17,7 @@ using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Seed;
 using Moq;
 using NUnit.Framework;
+using System;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
@@ -138,7 +139,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         #region Update Tests
 
         [Test]
-        public async Task When_Update_InAppMessageReadTnt01User_Succeeds()
+        public async Task When_Update_InAppMessageMarkReadTnt01User_Succeeds()
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
@@ -146,29 +147,86 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             toUpdateDto.TrySetPropertyValue("IsRead", true);
             var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
+
+            DateTime updateDate = DateTime.UtcNow;
             var updateResult = await _facade.Update(Id, toUpdateDto);
 
             Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
             var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
-            // Check that the IsRead flag is true and the DateRead time is within the last 5 seconds.
+            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+
+            Assert.That(result.DateRead, Is.AtLeast(updateDate));
+            Assert.That(result.IsRead, Is.EqualTo(true));
+            Assert.That(result.IsTrash, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation1.IsTrash));
+        }
+
+        public async Task When_Update_InAppMessageMarkReadandTrashTnt01User_Succeeds()
+        {
+            Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
+
+            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+
+            toUpdateDto.TrySetPropertyValue("IsRead", true);
+            toUpdateDto.TrySetPropertyValue("IsTrash", true);
+            var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
+
+            DateTime updateDate = DateTime.UtcNow;
+            var updateResult = await _facade.Update(Id, toUpdateDto);
+
+            Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
+
+            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
+            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+
+            Assert.That(result.DateRead, Is.AtLeast(updateDate));
+            Assert.That(result.IsRead, Is.EqualTo(true));
+            Assert.That(result.IsTrash, Is.EqualTo(true));
         }
 
         [Test]
-        public async Task When_Update_InAppMessageTrashTnt01User_Succeeds()
+        public async Task When_Update_InAppMessageMarkTrashTnt01User_Succeeds()
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
             var toUpdateDto = new Delta<InAppMessageCommandDto>();
 
-            toUpdateDto.TrySetPropertyValue("IsRead", true);
+            toUpdateDto.TrySetPropertyValue("IsTrash", true);
             var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
+
+            DateTime updateDate = DateTime.UtcNow;
             var updateResult = await _facade.Update(Id, toUpdateDto);
 
             Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
             var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
-            // Check that the IsRead flag is true and the DateRead time is within the last 5 seconds.
+            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+
+            Assert.That(result.DateRead, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation1.DateRead));
+            Assert.That(result.IsRead, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation1.IsRead));
+            Assert.That(result.IsTrash, Is.EqualTo(true));
+        }
+
+        public async Task When_Update_InAppMessageMarkUnReadTnt01User_Succeeds()
+        {
+            Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
+
+            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+
+            toUpdateDto.TrySetPropertyValue("IsRead", false);
+            var Id = Data.InAppMessages.tnt01UserMessageLimitViolation2.Id;
+
+            DateTime updateDate = DateTime.UtcNow;
+            var updateResult = await _facade.Update(Id, toUpdateDto);
+
+            Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
+
+            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
+            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+
+            Assert.That(result.DateRead, Is.Null);
+            Assert.That(result.IsRead, Is.EqualTo(false));
+            Assert.That(result.IsTrash, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation2.IsTrash));
         }
 
         #endregion

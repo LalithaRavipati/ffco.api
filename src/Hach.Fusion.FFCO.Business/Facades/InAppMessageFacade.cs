@@ -57,14 +57,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
 
             var tenants = _context.GetTenantsForUser(uid.Value);
-            var shareTenant = tenants.Any(t => t.Users.Any(u=> u.Id == userId));
+            var shareTenant = tenants.Any(t => t.Users.Any(u => u.Id == userId));
 
             // Check if the calling User shares a Tenant with the UserId passed in
             if (!shareTenant)
                 return Query.Error(EntityErrorCode.EntityNotFound);
 
-            var results = 
-                await Task.Run(() => 
+            var results =
+                await Task.Run(() =>
                     _context.GetInAppMessagesForUser(userId)
                     .Select(_mapper.Map<InAppMessage, InAppMessageQueryDto>)
                     .AsQueryable())
@@ -72,7 +72,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             return Query.Result(results);
         }
-        
+
         #endregion Get Methods
 
         #region Update Methods
@@ -106,6 +106,17 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             // Apply the update
             _context.InAppMessages.Attach(entity);
+
+            //if the entity's IsRead flag get set to true from false, then set the DateRead to now
+            if (dto.IsRead == true == !entity.IsRead)
+            {
+                entity.DateRead = DateTime.UtcNow;
+            }
+            else if (dto.IsRead == false == !entity.IsRead)
+            {
+                entity.DateRead = null;
+            }
+
             _mapper.Map(dto, entity);
             entity.SetAuditFieldsOnUpdate(uid.Value);
 
