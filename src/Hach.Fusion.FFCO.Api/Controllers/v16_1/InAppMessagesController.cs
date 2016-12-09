@@ -15,6 +15,8 @@ using Hach.Fusion.FFCO.Core.Dtos;
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.FFCO.Business.Facades;
+using Microsoft.Data.OData;
+using System.Collections.Generic;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -62,11 +64,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/InAppMessagesController.doc' path='InAppMessagesController/Methods[@name="GetByUserId"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.InternalServerError)]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(ICollection<InAppMessageQueryDto>))]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
         [ResponseType(typeof(InAppMessageQueryDto))]
         [HttpGet]
         public async Task<IHttpActionResult> GetByUserId([FromODataUri] Guid userId, ODataQueryOptions<InAppMessageQueryDto> queryOptions)
@@ -90,12 +91,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Update)]
         [AcceptVerbs("PATCH")]
         [SwaggerResponseRemoveDefaults]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<InAppMessageCommandDto, Guid>))]
         public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageCommandDto> delta)
         {
