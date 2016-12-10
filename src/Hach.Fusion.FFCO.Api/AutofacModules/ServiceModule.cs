@@ -82,8 +82,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
                ChemicalFormTypeQueryDto, Guid>>();
 
 
-            builder.RegisterType<InAppMessageFacade>().As<IFacadeWithCruModels<InAppMessageCommandDto, InAppMessageCommandDto,
-                InAppMessageQueryDto, Guid>>();
+            builder.RegisterType<InAppMessageFacade>().As<IInAppMessageFacade>();
 
             builder.RegisterType<InAppMessageValidator>().As<IFFValidator<InAppMessageCommandDto>>();
 
