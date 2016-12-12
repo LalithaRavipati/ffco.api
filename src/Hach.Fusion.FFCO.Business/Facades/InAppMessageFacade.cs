@@ -85,6 +85,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!uid.HasValue)
                 return Command.Error<InAppMessageCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
+            if (delta == null)
+                return Command.Error<InAppMessageCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+
             var entity = _context.InAppMessages.SingleOrDefault(msg => msg.Id == id);
             if (entity == null)
                 return Command.Error<InAppMessageCommandDto>(EntityErrorCode.EntityNotFound);
@@ -100,6 +103,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
+
+            // Including the original Id in the Patch request will not return an error but attempting to change the Id is not allowed.
+            if (dto.Id != id)
+                validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
 
             if (validationResponse.IsInvalid)
                 return Command.Error<InAppMessageCommandDto>(validationResponse);
