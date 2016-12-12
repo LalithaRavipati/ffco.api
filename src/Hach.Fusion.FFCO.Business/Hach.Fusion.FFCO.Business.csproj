@@ -63,8 +63,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.2016.61.3\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Core, Version=2016.62.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2016.62.2\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.63.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2017.63.1\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -182,9 +182,11 @@
     <Compile Include="Facades\ChemicalFormTypesFacade.cs" />
     <Compile Include="Facades\DashboardFacade.cs" />
     <Compile Include="Facades\DashboardOptionFacade.cs" />
+    <Compile Include="Facades\Interfaces\IInAppMessageFacade.cs" />
     <Compile Include="Facades\LimitTypeFacade.cs" />
     <Compile Include="Facades\LocationLogEntryFacade.cs" />
     <Compile Include="Facades\ParameterValidRangeFacade.cs" />
+    <Compile Include="Facades\InAppMessageFacade.cs" />
     <Compile Include="Facades\UnitTypeGroupFacade.cs" />
     <Compile Include="Facades\UnitTypeFacade.cs" />
     <Compile Include="Facades\LocationTypeFacade.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Validators\LimitTypeValidator.cs" />
     <Compile Include="Validators\LocationLogEntryValidator.cs" />
     <Compile Include="Validators\UnitTypeGroupsValidator.cs" />
+    <Compile Include="Validators\InAppMessageValidator.cs" />
     <Compile Include="Validators\UnitTypeValidator.cs" />
     <Compile Include="Validators\LocationTypeValidator.cs" />
     <Compile Include="Validators\LocationValidator.cs" />
