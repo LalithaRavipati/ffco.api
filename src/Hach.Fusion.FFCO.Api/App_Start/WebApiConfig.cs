@@ -97,15 +97,15 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<ParameterValidRangeQueryDto>("ParameterValidRanges");
             builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
             builder.EntitySet<ChemicalFormTypeQueryDto>("ChemicalFormTypes");
-            builder.EntitySet<InAppMessageQueryDto>("InAppMessages");
+            builder.EntitySet<InAppMessageBaseDto>("InAppMessages");
 
             // Adding the Extensions Namespace and Custom Function for In-App Messages
             // See https://github.com/OData/WebApi/issues/766 for an explanation of why
             // ReturnsCollectionFromEntitySet is required for this function 
-            var inAppMessages = builder.EntityType<InAppMessageQueryDto>()
+            var inAppMessages = builder.EntityType<InAppMessageBaseDto>()
                 .Collection
                 .Function("GetByUserId")
-                .ReturnsCollectionFromEntitySet<InAppMessageQueryDto>("InAppMessages");
+                .ReturnsCollectionFromEntitySet<InAppMessageBaseDto>("InAppMessages");
 
             inAppMessages.Parameter<Guid>("userId");
 
