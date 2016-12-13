@@ -50,6 +50,11 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<LimitType> LimitTypes { get; set; }
         public DbSet<ChemicalFormType> ChemicalFormTypes { get; set; }
 
+
+        // Added View based on the following stack overflow post
+        // http://stackoverflow.com/questions/7461265/how-to-use-views-in-code-first-entity-framework
+        public DbSet<LocationTreeNode> LocationTree { get; set; }
+
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -74,6 +79,7 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -84,6 +90,9 @@ namespace Hach.Fusion.FFCO.Business.Database
         {
             // Set default schema for tables.               
             modelBuilder.HasDefaultSchema(Schema_dbo);
+
+            modelBuilder.Configurations.Add(new LocationTreeNodeConfiguration());
+
         }
     }
 }

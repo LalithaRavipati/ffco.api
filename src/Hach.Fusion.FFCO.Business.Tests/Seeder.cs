@@ -185,6 +185,10 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
 
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant02_InfluentCombined);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant02_ProcessInfluent);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant02_ProcessPreliminary);
+
             context.SaveChanges();
         }
 

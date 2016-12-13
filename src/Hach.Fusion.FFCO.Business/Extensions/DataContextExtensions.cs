@@ -80,8 +80,8 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         public static IQueryable<Location> GetLocationsForUser(this DataContext context, Guid userId)
         {
             var locations = from location in context.Locations
-                    join potl in context.ProductOfferingTenantLocations on location.Id equals potl.LocationId
-                    where potl.Tenant.Users.Any(u => u.Id == userId)
+                    join locTree in context.LocationTree on location.Id equals locTree.LocationId
+                    where locTree.Tenant.Users.Any(u => u.Id == userId)
                     select location;
 
             return locations;
