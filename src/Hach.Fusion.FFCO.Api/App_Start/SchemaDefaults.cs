@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Microsoft.OData.Core;
 using Swashbuckle.Swagger;
+using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 
 namespace Hach.Fusion.FFCO.Api
 {
@@ -31,6 +32,9 @@ namespace Hach.Fusion.FFCO.Api
 
             BuildLocationExamples();
             BuildParameterTypeExamples();
+            BuildInAppMessageExamples();
+            BuildDashboardExamples();
+            BuildDashboardOptionExamples();
         }
 
         /// <inheritdoc />
@@ -82,7 +86,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildLocationExamples()
         {
-            Examples[typeof (LocationCommandDto)] = new
+            Examples[typeof(LocationCommandDto)] = new
             {
                 name = "Location Name",
                 locationTypeId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
@@ -116,6 +120,10 @@ namespace Hach.Fusion.FFCO.Api
             };
         }
 
+
+        /// <summary>
+        /// Builds the example data for InAppMessages for Swagger Documentation
+        /// </summary>
         private static void BuildInAppMessageExamples()
         {
             Examples[typeof(InAppMessageQueryDto)] = new
@@ -142,6 +150,35 @@ namespace Hach.Fusion.FFCO.Api
                 id = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E7"),
                 isRead = false,
                 isTrash = false
+            };
+        }
+
+        /// <summary>
+        /// Builds the example data for Dashboards for Swagger Documentation
+        /// </summary>
+        private static void BuildDashboardExamples()
+        {
+            Examples[typeof(DashboardCommandDto)] = new
+            {
+                id = Guid.Empty,
+                dashboardOptionId = Guid.Empty,
+                isPrivate = true,
+                layout = "Layout1",
+                name = "DashboardName",
+                tenantId = Guid.Empty
+            };
+        }
+
+        /// <summary>
+        /// Builds the example data for DashboardOptions for Swagger Documentation
+        /// </summary>
+        private static void BuildDashboardOptionExamples()
+        {
+            Examples[typeof(DashboardOptionCommandDto)] = new
+            {
+                id = Guid.Empty,
+                options = "DashboardOption.1",
+                tenantId = Guid.Empty
             };
         }
     }
