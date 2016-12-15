@@ -158,11 +158,11 @@ namespace Hach.Fusion.FFCO.Api
         {
             Examples[typeof(DashboardCommandDto)] = new
             {
-                dashboardOptionId = Guid.Empty,
+                dashboardOptionId = Guid.Parse("768CC5ED-0BAD-F00D-A9B6-0817C02506E8"),
                 isPrivate = true,
                 layout = "Layout1",
                 name = "DashboardName",
-                tenantId = Guid.Empty
+                tenantId = Guid.Parse("879CC5ED-DEAD-BEEF-A9B6-0817C02506F9")
             };
         }
 
@@ -174,7 +174,7 @@ namespace Hach.Fusion.FFCO.Api
             Examples[typeof(DashboardOptionCommandDto)] = new
             {
                 options = "DashboardOption.1",
-                tenantId = Guid.Empty
+                tenantId = Guid.Parse("879CC5ED-DEAD-BEEF-A9B6-0817C02506F9")
             };
         }
     }
