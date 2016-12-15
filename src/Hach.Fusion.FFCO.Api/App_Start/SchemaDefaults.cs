@@ -128,7 +128,6 @@ namespace Hach.Fusion.FFCO.Api
         {
             Examples[typeof(InAppMessageQueryDto)] = new
             {
-                id = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
                 body = "The is the body of the message",
                 subject = "This is the subject of the message",
                 userId = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
@@ -147,7 +146,6 @@ namespace Hach.Fusion.FFCO.Api
 
             Examples[typeof(InAppMessageCommandDto)] = new
             {
-                id = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E7"),
                 isRead = false,
                 isTrash = false
             };
@@ -160,7 +158,6 @@ namespace Hach.Fusion.FFCO.Api
         {
             Examples[typeof(DashboardCommandDto)] = new
             {
-                id = Guid.Empty,
                 dashboardOptionId = Guid.Empty,
                 isPrivate = true,
                 layout = "Layout1",
@@ -176,7 +173,6 @@ namespace Hach.Fusion.FFCO.Api
         {
             Examples[typeof(DashboardOptionCommandDto)] = new
             {
-                id = Guid.Empty,
                 options = "DashboardOption.1",
                 tenantId = Guid.Empty
             };
