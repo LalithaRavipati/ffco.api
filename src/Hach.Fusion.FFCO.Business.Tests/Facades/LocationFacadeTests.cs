@@ -76,7 +76,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             return builder;
         }
 
-        [Test, Ignore("Ignore this test until the tennant filter change is applied to Create")]
+        [Test, Ignore("Ignore this test until the tenant filter change is applied to Create")]
         public async Task When_Create_WithParent_Should_Succeed()
         {
             var dto = new LocationCommandDto
@@ -147,7 +147,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }
 
-        [Test, Ignore("Ignore this test until the tennant filter change is applied to Updates")]
+        [Test, Ignore("Ignore this test until the tenant filter change is applied to Updates")]
         public async Task When_Update_SetAndRemoveSortOrder()
         {
             var seed = Data.Locations.Test_Updateable;
@@ -170,7 +170,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(queryResult.Dto.SortOrder, Is.Null);
         }
 
-        [Test, Ignore("Ignore this test until the tennant filter change is applied to Updates")]
+        [Test, Ignore("Ignore this test until the tenant filter change is applied to Updates")]
         public async Task When_Update_With_ValidData()
         {
             var seed = Data.Locations.Test_Updateable;
