@@ -49,6 +49,9 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<Dashboard> Dashboards { get; set; }
         public DbSet<LimitType> LimitTypes { get; set; }
         public DbSet<ChemicalFormType> ChemicalFormTypes { get; set; }
+        public DbSet<InAppMessage> InAppMessages { get; set; }
+        public DbSet<MessageType> MessageTypes { get; set; }
+
 
 
         // Added View based on the following stack overflow post

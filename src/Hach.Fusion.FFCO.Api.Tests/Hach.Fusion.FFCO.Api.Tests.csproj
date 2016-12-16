@@ -45,6 +45,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'us-hachtest-stage|AnyCPU'">
     <OutputPath>bin\us-hachtest-stage\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo|AnyCPU'">
+    <OutputPath>bin\Demo\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
@@ -66,8 +71,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.2016.61.3\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.63.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2017.63.3\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.63.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2017.63.6\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel.Net45, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

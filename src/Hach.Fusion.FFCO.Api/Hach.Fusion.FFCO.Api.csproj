@@ -82,8 +82,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.2016.61.3\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.63.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2017.63.3\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.63.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.FFCO.Core.2017.63.6\lib\net452\Hach.Fusion.FFCO.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -334,13 +334,14 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\v16_1\ChemicalFormTypesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\v16_1\HomeController.cs" />
     <Compile Include="Controllers\v16_1\DashboardOptionsController.cs" />
     <Compile Include="Controllers\v16_1\DashboardsController.cs" />
     <Compile Include="Controllers\v16_1\LimitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationLogEntriesController.cs" />
     <Compile Include="Controllers\v16_1\ParameterValidRangesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
+    <Compile Include="Controllers\v16_1\InAppMessagesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationsController.cs" />
@@ -381,7 +382,11 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParameterValidRangesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ChemicalFormTypesController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\InAppMessagesController.doc">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-us-hachtest-demo-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-test.pubxml" />
@@ -424,6 +429,9 @@
     <None Include="Web.ClientTest.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <None Include="Web.Demo.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
     <None Include="Web.Develop.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -462,6 +470,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'us-hachtest-stage|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>bin\Hach.Fusion.FFCO.Api.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

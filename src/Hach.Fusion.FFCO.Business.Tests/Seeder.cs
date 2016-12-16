@@ -1,4 +1,5 @@
-﻿using Hach.Fusion.FFCO.Business.Database;
+﻿using System;
+using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Core.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -23,7 +24,11 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedParameters(context);
             SeedParameterValidRanges(context);
             SeedChemicalTypes(context);
+            SeedMessageTypes(context);
+            SeedInAppMessages(context);
         }
+
+        
 
         private static void DeleteAllExistingTestData(DataContext context)
         {
@@ -47,6 +52,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterValidRanges");
             context.Database.ExecuteSqlCommand("DELETE dbo.LimitTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.ChemicalFormTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.InAppMessages");
+            context.Database.ExecuteSqlCommand("DELETE dbo.MessageTypes");
 
             context.SaveChanges();
         }
@@ -220,6 +227,28 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.LimitTypes.Add(Data.LimitTypes.NearUnder);
             context.LimitTypes.Add(Data.LimitTypes.NearOver);
             context.LimitTypes.Add(Data.LimitTypes.ToDelete);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedMessageTypes(DataContext context)
+        {
+            context.MessageTypes.Add(Data.MessageTypes.LimitViolation);
+            context.MessageTypes.Add(Data.MessageTypes.OnBoarding);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedInAppMessages(DataContext context)
+        {
+            context.InAppMessages.Add(Data.InAppMessages.tnt01UserMessageLimitViolation1);
+            context.InAppMessages.Add(Data.InAppMessages.tnt01UserMessageLimitViolation2);
+            context.InAppMessages.Add(Data.InAppMessages.tnt01UserMessageLimitViolationTrash1);
+            context.InAppMessages.Add(Data.InAppMessages.tnt01UserMessageOnBoarding1);
+            context.InAppMessages.Add(Data.InAppMessages.tnt02UserMessageLimitViolation1);
+            context.InAppMessages.Add(Data.InAppMessages.tnt02UserMessageLimitViolation2);
+            context.InAppMessages.Add(Data.InAppMessages.tnt02UserMessageLimitViolationTrash1);
+            context.InAppMessages.Add(Data.InAppMessages.tnt02UserMessageOnBoarding1);
 
             context.SaveChanges();
         }

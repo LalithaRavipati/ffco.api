@@ -59,7 +59,7 @@ namespace Hach.Fusion.FFCO.Api
 
             controllerSelector?.RouteVersionSuffixMapping.Add("V161RouteVersioning", "v16_1");
 
-            // Automatically change the Pascal casing standard in C# MVC to Camal Case Standard used in JavaScript
+            // Automatically change the Pascal casing standard in C# MVC to Camel Case Standard used in JavaScript
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
             config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
@@ -97,11 +97,24 @@ namespace Hach.Fusion.FFCO.Api
             builder.EntitySet<ParameterValidRangeQueryDto>("ParameterValidRanges");
             builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
             builder.EntitySet<ChemicalFormTypeQueryDto>("ChemicalFormTypes");
+            builder.EntitySet<InAppMessageBaseDto>("InAppMessages");
+
+            // Adding the Extensions Namespace and Custom Function for In-App Messages
+            // See https://github.com/OData/WebApi/issues/766 for an explanation of why
+            // ReturnsCollectionFromEntitySet is required for this function 
+            var inAppMessages = builder.EntityType<InAppMessageBaseDto>()
+                .Collection
+                .Function("GetByUserId")
+                .ReturnsCollectionFromEntitySet<InAppMessageBaseDto>("InAppMessages");
+
+            inAppMessages.Parameter<Guid>("userId");
+
+            inAppMessages.Namespace = "Extensions";
 
             builder.EnableLowerCamelCase();
 
             return builder.GetEdmModel();
-        }        
+        }
 
         /// <summary>
         /// Configure Swagger API documentation.
@@ -138,7 +151,7 @@ namespace Hach.Fusion.FFCO.Api
                         });
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
                 })
-                .EnableSwaggerUi("api/{*assetPath}", u =>
+                .EnableSwaggerUi("docs/{*assetPath}", u =>
                 {
                     u.InjectStylesheet(typeof(WebApiApplication).Assembly, "Hach.Fusion.FFCO.Api.Resources.SwaggerStyle.css");
                     u.EnableOAuth2Support("Swagger.ImplicitFlow", "dummyRealm", "Swagger UI");

@@ -115,5 +115,34 @@ namespace Hach.Fusion.FFCO.Api
                 modifiedOn = "2016-11-07T18:53:48.116Z"
             };
         }
+
+        private static void BuildInAppMessageExamples()
+        {
+            Examples[typeof(InAppMessageQueryDto)] = new
+            {
+                id = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
+                body = "The is the body of the message",
+                subject = "This is the subject of the message",
+                userId = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
+                isRead = false,
+                isTrash = false,
+                messageTypeId = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
+                dateRead = "2016-11-07T18:53:48.116Z",
+                dateReceived = "2016-11-07T18:53:48.116Z",
+                dateTimeSent = "2016-11-07T18:53:48.116Z",
+                senderId = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
+                createdById = Guid.Parse("20A46218-57E4-4A28-BDF5-6B40A7BF6928"),
+                createdOn = "2016-11-07T18:53:48.116Z",
+                modifiedById = Guid.Parse("20A46218-57E4-4A28-BDF5-6B40A7BF6928"),
+                modifiedOn = "2016-11-07T18:53:48.116Z"
+            };
+
+            Examples[typeof(InAppMessageCommandDto)] = new
+            {
+                id = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E7"),
+                isRead = false,
+                isTrash = false
+            };
+        }
     }
 }

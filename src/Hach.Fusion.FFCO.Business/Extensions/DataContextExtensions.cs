@@ -72,6 +72,20 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         }
 
         /// <summary>
+        /// Returns the InAppMessages for the user.
+        /// </summary>
+        /// <param name="context">Database Context</param>
+        /// <param name="userId">UserId GUID to get the InAppMessages for</param>
+        /// <returns>Queryable list of InAppMessages </returns>
+        public static IQueryable<InAppMessage> GetInAppMessagesForUser(this DataContext context, Guid userId)
+        {
+            return
+                from msg in context.InAppMessages
+                where msg.UserId == userId
+                select msg;
+        }
+
+        /// <summary>
         /// Return locations the user is associated through its tenant(s)
         /// </summary>
         /// <param name="context">Database Context</param>
