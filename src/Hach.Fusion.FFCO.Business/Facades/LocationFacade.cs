@@ -124,6 +124,11 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
+            var userIdGuid = Guid.Parse(userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userIdGuid);
+            if (user == null)
+                return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+
             var validationResponse = ValidatorCreate.Validate(dto);
 
             if (dto == null)
@@ -161,6 +166,26 @@ namespace Hach.Fusion.FFCO.Business.Facades
             location.SetAuditFieldsOnCreate(Guid.Parse(userId));
 
             _context.Locations.Add(location);
+
+            // Add the Location to the Product Offering / Tenant / Location List
+            if (user.Tenants != null && user.Tenants.Count > 0)
+            {
+                // Only care about the first tenant in the list. In the future, the list of tenants 
+                // will contain only one element 
+                var tenant = user.Tenants.ElementAt(0);
+
+                foreach (var p in tenant.ProductOfferings)
+                {
+                    var productOfferingTenantLocation = new ProductOfferingTenantLocation
+                    {
+                        ProductOfferingId = p.Id,
+                        TenantId = tenant.Id,
+                        LocationId = location.Id
+                    };
+                    _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
+                }
+            }
+
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             return Command.Created(_mapper.Map(location, new LocationQueryDto()), location.Id);

@@ -1,5 +1,4 @@
-﻿using System;
-using Hach.Fusion.FFCO.Business.Database;
+﻿using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Core.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -27,8 +26,6 @@ namespace Hach.Fusion.FFCO.Business.Tests
             SeedMessageTypes(context);
             SeedInAppMessages(context);
         }
-
-        
 
         private static void DeleteAllExistingTestData(DataContext context)
         {

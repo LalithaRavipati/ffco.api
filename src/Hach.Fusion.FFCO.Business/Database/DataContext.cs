@@ -82,6 +82,15 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
+            modelBuilder.Entity<Tenant>()
+                .HasMany(e => e.ProductOfferings)
+                .WithMany(e => e.Tenants)
+                .Map(e =>
+                {
+                    e.ToTable("TenantProductOfferings");
+                    e.MapLeftKey("TenantId");
+                    e.MapRightKey("ProductOfferingId");
+                });
 
             base.OnModelCreating(modelBuilder);
         }

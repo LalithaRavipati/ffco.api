@@ -76,7 +76,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             return builder;
         }
 
-        [Test, Ignore("Ignore this test until the tenant filter change is applied to Create")]
+        [Test]
         public async Task When_Create_WithParent_Should_Succeed()
         {
             var dto = new LocationCommandDto
