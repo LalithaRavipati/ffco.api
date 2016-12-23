@@ -3,7 +3,8 @@ using System.Configuration;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Blob;
+using Hach.Fusion.Core.Azure.Blob;
+using Hach.Fusion.Core.Azure.Queue;
 using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
@@ -42,6 +43,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<RoleClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<BlobManager>().AsSelf().As<IBlobManager>();
+            builder.RegisterType<QueueManager>().AsSelf().As<IQueueManager>();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
