@@ -3,11 +3,13 @@ using System.Configuration;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Blob;
 using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
@@ -38,6 +40,8 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.Register(c => new FusionContextFactory(connectionString)).AsSelf();
             builder.RegisterType<RoleClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<RoleClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
+
+            builder.RegisterType<BlobManager>().AsSelf().As<IBlobManager>();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
@@ -81,10 +85,10 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<ChemicalFormTypesFacade>().As<IFacadeWithCruModels<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto,
                ChemicalFormTypeQueryDto, Guid>>();
 
-
             builder.RegisterType<InAppMessageFacade>().As<IInAppMessageFacade>();
-
             builder.RegisterType<InAppMessageValidator>().As<IFFValidator<InAppMessageCommandDto>>();
+
+            builder.RegisterType<PlantConfigurationsFacade>().As<IPlantConfigurationsFacade>();
 
             base.Load(builder);
         }
