@@ -10,6 +10,7 @@ using Hach.Fusion.Core.Api.Handlers;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Helpers;
+using Hach.Fusion.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -50,7 +51,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             // Parse Request Content
             var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
             var parts = await Request.Content.ReadAsMultipartAsync(provider).ConfigureAwait(false);
-
+            
             // Get files
             var files = parts.FileData.Select(x => x.LocalFileName);
             var enumeratedFiles = files as IList<string> ?? files.ToList();
@@ -61,7 +62,15 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             if (errors.Any())
                 return Request.CreateApiResponse(NoDtoHelpers.CreateCommandResult(errors));
 
-            var result = await _facade.Upload(enumeratedFiles.First());
+            var fileToUpload = enumeratedFiles.First();
+            var originalFileName = parts.FileData[0].Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
+
+            FileUploadMetadataDto fileUploadMetadata = new FileUploadMetadataDto();
+            fileUploadMetadata.SavedFileName = fileToUpload;
+            fileUploadMetadata.OriginalFileName = originalFileName;
+            fileUploadMetadata.TransactionType = parts.FormData["uploadTransactionType"].Replace("\"", string.Empty);
+
+            var result = await _facade.Upload(fileUploadMetadata);
 
             foreach (var file in enumeratedFiles)
                 File.Delete(file);

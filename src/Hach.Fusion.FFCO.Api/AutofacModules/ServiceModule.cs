@@ -5,6 +5,7 @@ using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Azure.Blob;
 using Hach.Fusion.Core.Azure.Queue;
+using Hach.Fusion.Core.Azure.DocumentDB;
 using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
@@ -31,8 +32,15 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
 
+            var databaseId = ConfigurationManager.AppSettings["DocumentDBDatabase"];
+            var collectionId = ConfigurationManager.AppSettings["DocumentDBCollection"];
+            var endpoint = ConfigurationManager.AppSettings["DocumentDBEndpoint"];
+            var authKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
+
             // Contexts
             builder.Register(c => new DataContext(connectionString)).AsSelf().As<DataContext>().InstancePerLifetimeScope();
+            builder.Register(c => new DocumentDBRepository<UploadTransaction>(endpoint, authKey, databaseId, collectionId))
+                .As<IDocumentDBRepository<UploadTransaction>>().InstancePerLifetimeScope();
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();

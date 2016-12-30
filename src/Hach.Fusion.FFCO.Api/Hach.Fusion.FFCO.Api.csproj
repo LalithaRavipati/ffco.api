@@ -79,7 +79,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.Core, Version=2017.63.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2017.63.2-cef-63-C\lib\net452\Hach.Fusion.Core.dll</HintPath>
+      <HintPath>..\packages\Hach.Fusion.Core.2017.63.2-foart-1338\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.63.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -346,7 +346,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacModules\ServiceModule.cs" />
     <Compile Include="Controllers\v16_1\ChemicalFormTypesController.cs" />
-    <Compile Include="Controllers\v16_1\HomeController.cs" />
     <Compile Include="Controllers\v16_1\DashboardOptionsController.cs" />
     <Compile Include="Controllers\v16_1\DashboardsController.cs" />
     <Compile Include="Controllers\v16_1\LimitTypesController.cs" />

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
+using Hach.Fusion.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
 {
@@ -13,6 +14,6 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// </summary>
         /// <param name="fileName">The full name of the file to upload.</param>
         /// <returns>A task that returns the result of the upload option.</returns>
-        Task<CommandResultNoDto> Upload(string fileName);
+        Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileName);
     }
 }
