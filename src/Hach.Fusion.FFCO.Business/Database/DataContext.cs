@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Entities;
@@ -82,14 +83,15 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
+
             modelBuilder.Entity<Tenant>()
                 .HasMany(e => e.ProductOfferings)
                 .WithMany(e => e.Tenants)
                 .Map(e =>
                 {
-                    e.ToTable("TenantProductOfferings");
-                    e.MapLeftKey("TenantId");
-                    e.MapRightKey("ProductOfferingId");
+                    e.ToTable("TenantProductOfferings")
+                    .MapLeftKey("Tenant_Id")
+                    .MapRightKey("ProductOffering_Id");
                 });
 
             base.OnModelCreating(modelBuilder);

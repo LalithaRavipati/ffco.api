@@ -117,7 +117,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </remarks>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
         {
-            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
+            // Thread.CurrentPrincipal is not available in the constructor.  Do not try to move this.
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
 
             // User ID should always be available, but if not ...
@@ -168,12 +168,13 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Add(location);
 
             // Add the Location to the Product Offering / Tenant / Location List
-            if (user.Tenants != null && user.Tenants.Count > 0)
+            if (user.Tenants.Count > 0)
             {
                 // Only care about the first tenant in the list. In the future, the list of tenants 
-                // will contain only one element 
+                // will contain only one element and may be replaced by a scalar.
                 var tenant = user.Tenants.ElementAt(0);
 
+                // Add a Product Offering / Tenant / Location for each Tenant / PO combination
                 foreach (var p in tenant.ProductOfferings)
                 {
                     var productOfferingTenantLocation = new ProductOfferingTenantLocation
@@ -182,6 +183,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                         TenantId = tenant.Id,
                         LocationId = location.Id
                     };
+
                     _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
                 }
             }

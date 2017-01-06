@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Hach.Fusion.FFCO.Business.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Hach Company")]
 [assembly: AssemblyProduct("Hach.Fusion.FFCO.Business.Tests")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2017 Hach Company")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

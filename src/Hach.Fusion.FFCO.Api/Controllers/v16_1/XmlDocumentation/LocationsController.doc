@@ -115,6 +115,10 @@
   <Methods name="Post">
 
     <remarks>
+      <p>
+        Note that when a Location is created, it is associated with the primary Tenant and that Tenant's
+        Product Offerings.
+      </p>
       <h4>Errors</h4>
       <p>The following error codes are returned:</p>
       <p>

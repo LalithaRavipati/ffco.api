@@ -147,7 +147,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }
 
-        [Test, Ignore("Ignore this test until the tenant filter change is applied to Updates")]
+        [Test]
         public async Task When_Update_SetAndRemoveSortOrder()
         {
             var seed = Data.Locations.Test_Updateable;
@@ -170,7 +170,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(queryResult.Dto.SortOrder, Is.Null);
         }
 
-        [Test, Ignore("Ignore this test until the tenant filter change is applied to Updates")]
+        [Test]
         public async Task When_Update_With_ValidData()
         {
             var seed = Data.Locations.Test_Updateable;
