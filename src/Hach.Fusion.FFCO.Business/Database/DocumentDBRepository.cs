@@ -27,9 +27,6 @@
             _authKey = authkey;
 
             _client = new DocumentClient(new Uri(_endpoint), _authKey);
-
-            //CreateDatabaseIfNotExistsAsync().Wait();
-            //CreateCollectionIfNotExistsAsync().Wait();
         }
 
         public async Task<T> GetItemAsync(string id)
