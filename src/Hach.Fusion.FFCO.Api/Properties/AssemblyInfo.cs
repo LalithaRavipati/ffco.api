@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Hach Company")]
 [assembly: AssemblyProduct("Hach.Fusion.FFCO.Api")]
-[assembly: AssemblyCopyright("Copyright © 2016 Hach Company")]
+[assembly: AssemblyCopyright("Copyright © 2017 Hach Company")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("2017.63.0")]
-[assembly: AssemblyFileVersion("2017.63.0")]
+[assembly: AssemblyVersion("2017.65.0")]
+[assembly: AssemblyFileVersion("2017.65.0")]

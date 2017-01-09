@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Entities;
@@ -53,6 +54,11 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<MessageType> MessageTypes { get; set; }
 
 
+
+        // Added View based on the following stack overflow post
+        // http://stackoverflow.com/questions/7461265/how-to-use-views-in-code-first-entity-framework
+        public DbSet<LocationTreeNode> LocationTree { get; set; }
+
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -77,6 +83,17 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
+
+            modelBuilder.Entity<Tenant>()
+                .HasMany(e => e.ProductOfferings)
+                .WithMany(e => e.Tenants)
+                .Map(e =>
+                {
+                    e.ToTable("TenantProductOfferings")
+                    .MapLeftKey("Tenant_Id")
+                    .MapRightKey("ProductOffering_Id");
+                });
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -87,6 +104,9 @@ namespace Hach.Fusion.FFCO.Business.Database
         {
             // Set default schema for tables.               
             modelBuilder.HasDefaultSchema(Schema_dbo);
+
+            modelBuilder.Configurations.Add(new LocationTreeNodeConfiguration());
+
         }
     }
 }

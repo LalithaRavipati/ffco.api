@@ -9,7 +9,7 @@ namespace Hach.Fusion.FFCO.Business.Extensions
     /// Extension methods for <see cref="DataContext"/>.
     /// </summary>
     public static class DataContextExtensions
-    {
+    { 
         /// <summary>
         /// Returns all tenants that the user has access to.
         /// </summary>
@@ -83,6 +83,22 @@ namespace Hach.Fusion.FFCO.Business.Extensions
                 from msg in context.InAppMessages
                 where msg.UserId == userId
                 select msg;
+        }
+
+        /// <summary>
+        /// Return locations the user is associated through its tenant(s)
+        /// </summary>
+        /// <param name="context">Database Context</param>
+        /// <param name="userId">UserId</param>
+        /// <returns></returns>
+        public static IQueryable<Location> GetLocationsForUser(this DataContext context, Guid userId)
+        {
+            var locations = from location in context.Locations
+                    join locTree in context.LocationTree on location.Id equals locTree.LocationId
+                    where locTree.Tenant.Users.Any(u => u.Id == userId)
+                    select location;
+
+            return locations;
         }
     }
 }
