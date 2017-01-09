@@ -98,6 +98,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             queueMessage.BlobSize = result.BlobSize;
             queueMessage.BlobUrl = result.BlobUrl;
             queueMessage.BlobTransactionType = fileMetadata.TransactionType;
+            queueMessage.UserId = userIdGuid;
 
             // Add message to queue.
             await _queueManager.AddAsync(_blobStorageConnectionString, _queueStorageContainerName, JsonConvert.SerializeObject(queueMessage));
