@@ -1,4 +1,5 @@
-﻿using Hach.Fusion.FFCO.Business.Database;
+﻿using System.Linq;
+using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Core.Seed;
 
 namespace Hach.Fusion.FFCO.Business.Tests
@@ -17,6 +18,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
 
             SeedLocations(context);
             SeedProductOfferingTenantLocations(context);
+            SeedTenantProductOfferings(context);
             SeedDashboardOptions(context);
             SeedDashboards(context);
             SeedLocationLogEntries(context);
@@ -62,12 +64,34 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.SaveChanges();
         }
 
-        private static void SeedLocationTypes(DataContext context)
+        private static void SeedDashboards(DataContext context)
         {
-            context.LocationTypes.Add(Data.LocationTypes.Plant);
-            context.LocationTypes.Add(Data.LocationTypes.Process);
-            context.LocationTypes.Add(Data.LocationTypes.SamplingSite);
-            context.LocationTypes.Add(Data.LocationTypes.Distribution);
+            context.Dashboards.Add(Data.Dashboards.tnt01user_Dashboard_1);
+            context.Dashboards.Add(Data.Dashboards.tnt01user_Dashboard_2);
+            context.Dashboards.Add(Data.Dashboards.tnt02user_Dashboard_3);
+            context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_4);
+            context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_5);
+            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToDelete);
+            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToUpdate);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedDashboardOptions(DataContext context)
+        {
+            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant01_Options);
+            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant02_Options);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedLimitTypes(DataContext context)
+        {
+            context.LimitTypes.Add(Data.LimitTypes.Under);
+            context.LimitTypes.Add(Data.LimitTypes.Over);
+            context.LimitTypes.Add(Data.LimitTypes.NearUnder);
+            context.LimitTypes.Add(Data.LimitTypes.NearOver);
+            context.LimitTypes.Add(Data.LimitTypes.ToDelete);
 
             context.SaveChanges();
         }
@@ -104,19 +128,60 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.SaveChanges();
         }
 
-        private static void SeedUnitTypeGroups(DataContext context)
+        private static void SeedLocationTypes(DataContext context)
         {
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Volume);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.VolumeTime);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.AreaTime);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Length);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Mass);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.MassTime);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Area);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.LengthTime);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Time);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.pH);
-            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Temp);
+            context.LocationTypes.Add(Data.LocationTypes.Plant);
+            context.LocationTypes.Add(Data.LocationTypes.Process);
+            context.LocationTypes.Add(Data.LocationTypes.SamplingSite);
+            context.LocationTypes.Add(Data.LocationTypes.Distribution);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedParameters(DataContext context)
+        {
+            context.Parameters.Add(Data.Parameters.Flow);
+            context.Parameters.Add(Data.Parameters.pH);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedParameterTypes(DataContext context)
+        {
+            context.ParameterTypes.Add(Data.ParameterTypes.Chemical);
+            context.ParameterTypes.Add(Data.ParameterTypes.Sensed);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedParameterValidRanges(DataContext context)
+        {
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.pH);
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMinAndMax);
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMinOnly);
+            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMaxOnly);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedProductOfferingTenantLocations(DataContext context)
+        {
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant1);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant2);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant3);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
+
+            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant01_LocationUpdateable);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedTenantProductOfferings(DataContext context)
+        {
+            var devTenant01 = context.Tenants.First(t => t.Id == Data.Tenants.DevTenant01.Id);
+            var ffProductOffering = context.ProductOfferings.First(p => p.Id == Data.ProductOfferings.FusionFoundation.Id);
+            devTenant01.ProductOfferings.Add(ffProductOffering);
 
             context.SaveChanges();
         }
@@ -151,71 +216,19 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.SaveChanges();
         }
 
-        private static void SeedParameterTypes(DataContext context)
+        private static void SeedUnitTypeGroups(DataContext context)
         {
-            context.ParameterTypes.Add(Data.ParameterTypes.Chemical);
-            context.ParameterTypes.Add(Data.ParameterTypes.Sensed);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedParameters(DataContext context)
-        {
-            context.Parameters.Add(Data.Parameters.Flow);
-            context.Parameters.Add(Data.Parameters.pH);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedParameterValidRanges(DataContext context)
-        {
-            context.ParameterValidRanges.Add(Data.ParameterValidRanges.pH);
-            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMinAndMax);
-            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMinOnly);
-            context.ParameterValidRanges.Add(Data.ParameterValidRanges.FlowMaxOnly);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedProductOfferingTenantLocations(DataContext context)
-        {
-            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant1);
-            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant2);
-            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant3);
-            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
-            context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedDashboardOptions(DataContext context)
-        {
-            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant01_Options);
-            context.DashboardOptions.Add(Data.DashboardOptions.DevTenant02_Options);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedDashboards(DataContext context)
-        {
-            context.Dashboards.Add(Data.Dashboards.tnt01user_Dashboard_1);
-            context.Dashboards.Add(Data.Dashboards.tnt01user_Dashboard_2);
-            context.Dashboards.Add(Data.Dashboards.tnt02user_Dashboard_3);
-            context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_4);
-            context.Dashboards.Add(Data.Dashboards.tnt01and02user_Dashboard_5);
-            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToDelete);
-            context.Dashboards.Add(Data.Dashboards.Test_tnt01user_ToUpdate);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedLimitTypes(DataContext context)
-        {
-            context.LimitTypes.Add(Data.LimitTypes.Under);
-            context.LimitTypes.Add(Data.LimitTypes.Over);
-            context.LimitTypes.Add(Data.LimitTypes.NearUnder);
-            context.LimitTypes.Add(Data.LimitTypes.NearOver);
-            context.LimitTypes.Add(Data.LimitTypes.ToDelete);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Volume);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.VolumeTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.AreaTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Length);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Mass);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.MassTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Area);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.LengthTime);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Time);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.pH);
+            context.UnitTypeGroups.Add(Data.UnitTypeGroups.Temp);
 
             context.SaveChanges();
         }

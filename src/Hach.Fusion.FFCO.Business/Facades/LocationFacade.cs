@@ -11,6 +11,7 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Entities;
@@ -47,7 +48,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         #region Get Methods
 
         /// <summary>
-        /// Gets a list of locations from the data store.
+        /// Gets a list of locations from the data store based on the user.
         /// </summary>
         /// <param name="queryOptions">OData query options.</param>
         /// <returns>
@@ -58,7 +59,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         {
             queryOptions.Validate(ValidationSettings);
 
-            var results = await Task.Run(() => _context.Locations
+            var uid = GetCurrentUser();
+
+            if (!uid.HasValue)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var results = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
                 .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
@@ -76,7 +82,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </returns>
         public override async Task<QueryResult<LocationQueryDto>> Get(Guid id)
         {
-            var result = await Task.Run(() => _context.Locations
+            var uid = GetCurrentUser();
+
+            if (!uid.HasValue)
+                return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var result = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
@@ -106,11 +117,15 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </remarks>
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
         {
-            // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            // Thread.CurrentPrincipal is not available in the constructor.  Do not try to move this.
+            var uid = GetCurrentUser();
 
             // User ID should always be available, but if not ...
-            if (userId == null)
+            if (!uid.HasValue)
+                return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == uid.Value);
+            if (user == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var validationResponse = ValidatorCreate.Validate(dto);
@@ -147,9 +162,31 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper.Map(dto, location);
 
-            location.SetAuditFieldsOnCreate(Guid.Parse(userId));
-            
+            location.SetAuditFieldsOnCreate(uid.Value);
+
             _context.Locations.Add(location);
+
+            // Add the Location to the Product Offering / Tenant / Location List
+            if (user.Tenants.Count > 0)
+            {
+                // Only care about the first tenant in the list. In the future, the list of tenants 
+                // will contain only one element and may be replaced by a scalar.
+                var tenant = user.Tenants.ElementAt(0);
+
+                // Add a Product Offering / Tenant / Location for each Tenant / PO combination
+                foreach (var p in tenant.ProductOfferings)
+                {
+                    var productOfferingTenantLocation = new ProductOfferingTenantLocation
+                    {
+                        ProductOfferingId = p.Id,
+                        TenantId = tenant.Id,
+                        LocationId = location.Id
+                    };
+
+                    _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
+                }
+            }
+
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             return Command.Created(_mapper.Map(location, new LocationQueryDto()), location.Id);
@@ -169,9 +206,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<CommandResult<LocationQueryDto, Guid>> Delete(Guid id)
         {
             // Thread.CurrentPrincipal is not available in the constructor.  Do not try and move this
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            var uid = GetCurrentUser();
 
-            var location = await _context.Locations
+            if (!uid.HasValue)
+                return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var location = await _context.GetLocationsForUser(uid.Value)
               .Include(l => l.Locations)
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
@@ -206,16 +246,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
         {
             // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            var uid = GetCurrentUser();
 
             // User ID should always be available, but if not ...
-            if (userId == null)
+            if (!uid.HasValue)
                 return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
                 return Command.Error<LocationCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var location = await _context.Locations
+            var location = await _context.GetLocationsForUser(uid.Value)
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
@@ -261,7 +301,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Attach(location);
             _mapper.Map(locationDto, location);
 
-            location.SetAuditFieldsOnUpdate(userId);
+            location.SetAuditFieldsOnUpdate(uid.Value);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -288,5 +328,21 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         #endregion Not Implemented Methods
+
+        #region Utility Methods
+
+        /// <summary>
+        /// Gets the GUID User ID for the current user.
+        /// </summary>
+        /// <returns>The nullable GUID for the current user.</returns>
+        private static Guid? GetCurrentUser()
+        {
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+
+            return userId == null ? null : new Guid?(Guid.Parse(userId));
+        }
+
+        #endregion
+
     }
 }
