@@ -71,6 +71,22 @@ namespace Hach.Fusion.FFCO.Business.Extensions
                 select le;
         }
 
+        ///// <summary>
+        ///// Return locations the user is associated through its tenant(s)
+        ///// </summary>
+        ///// <param name="context">Database Context</param>
+        ///// <param name="userId">UserId</param>
+        ///// <returns></returns>
+        //public static IQueryable<Location> GetLocationsForUser(this DataContext context, Guid userId)
+        //{
+        //    var locIds = context.ProductOfferingTenantLocations
+        //        .Where(p => p.Tenant.Users.Any(u => u.Id == userId))
+        //        .Select(p => p.LocationId)
+        //        .Distinct();
+
+        //    return context.Locations.Where(l => locIds.Contains(l.Id));
+        //}
+
         /// <summary>
         /// Return locations the user is associated through its tenant(s)
         /// </summary>
@@ -79,12 +95,12 @@ namespace Hach.Fusion.FFCO.Business.Extensions
         /// <returns></returns>
         public static IQueryable<Location> GetLocationsForUser(this DataContext context, Guid userId)
         {
-            var locIds = context.ProductOfferingTenantLocations
-                .Where(p => p.Tenant.Users.Any(u => u.Id == userId))
-                .Select(p => p.LocationId)
-                .Distinct();
+            var locations = from location in context.Locations
+                            join locTree in context.LocationTree on location.Id equals locTree.LocationId
+                            where locTree.Tenant.Users.Any(u => u.Id == userId)
+                            select location;
 
-            return context.Locations.Where(l => locIds.Contains(l.Id));
+            return locations;
         }
     }
 }
