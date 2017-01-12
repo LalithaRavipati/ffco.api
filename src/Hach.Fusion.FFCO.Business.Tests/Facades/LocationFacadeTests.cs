@@ -127,8 +127,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var results = queryResult.Results;
 
             Assert.That(results.Any(x => x.Id == Data.Locations.Plant_01.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Preliminary.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.Locations.Process_Influent.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Plant_02.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Plant_03.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.Locations.Test_Updateable.Id), Is.True);
         }
 
         [Test]
@@ -257,18 +258,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo(ValidationErrorCode.ForeignKeyValueDoesNotExist("LocationTypeId").Code));
             Assert.That(commandResult.ErrorCodes[0].Description, Is.EqualTo(ValidationErrorCode.ForeignKeyValueDoesNotExist("LocationTypeId").Description));
         }
-
-        //[Test]
-        //public async Task When_Create_InvalidPoint_Should_Fail()
-        //{
-        //    var commandResult = await _facade.Create(SeedData.Locations.Location_ToCreateInvalidPoint);
-
-        //    Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-        //    Assert.That(commandResult.GeneratedId, Is.EqualTo(Guid.Empty));
-        //    Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
-        //    Assert.That(commandResult.ErrorCodes[0].Code, Is.EqualTo(ValidationErrorCode.PropertyIsInvalid("Point").Code));
-        //    Assert.That(commandResult.ErrorCodes[0].Description, Is.EqualTo(ValidationErrorCode.PropertyIsInvalid("Point").Description));
-        //}
 
         [Test]
         public async Task When_Create_ParentIdNoExist_Should_Fail()

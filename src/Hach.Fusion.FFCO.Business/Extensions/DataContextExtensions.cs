@@ -9,7 +9,7 @@ namespace Hach.Fusion.FFCO.Business.Extensions
     /// Extension methods for <see cref="DataContext"/>.
     /// </summary>
     public static class DataContextExtensions
-    { 
+    {
         /// <summary>
         /// Returns all tenants that the user has access to.
         /// </summary>

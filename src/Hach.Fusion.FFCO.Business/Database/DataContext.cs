@@ -59,6 +59,10 @@ namespace Hach.Fusion.FFCO.Business.Database
         // http://stackoverflow.com/questions/7461265/how-to-use-views-in-code-first-entity-framework
         public DbSet<LocationTreeNode> LocationTree { get; set; }
 
+        // Added View based on the following stack overflow post
+        // http://stackoverflow.com/questions/7461265/how-to-use-views-in-code-first-entity-framework
+        public DbSet<LocationTreeNode> LocationTree { get; set; }
+
         /// <inheritdoc />
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
