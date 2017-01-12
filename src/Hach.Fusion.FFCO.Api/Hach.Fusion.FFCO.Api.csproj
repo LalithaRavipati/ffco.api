@@ -381,6 +381,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\LocationLogEntriesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ParameterValidRangesController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\ChemicalFormTypesController.doc" />
+    <None Include="Properties\PublishProfiles\ffco-prod-demo-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-demo-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
