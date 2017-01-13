@@ -1,9 +1,10 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Hach.Fusion.Core.Business.Spatial;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Dtos.LocationType;
+using Hach.Fusion.FFCO.Core.Dtos.LocationTypeGroup;
 using Hach.Fusion.FFCO.Core.Entities;
 
 namespace Hach.Fusion.FFCO.Business
@@ -63,7 +64,7 @@ namespace Hach.Fusion.FFCO.Business
                 InitializeTenants(cfg);
                 InitializeUsers(cfg);
                 InitializeLimitTypes(cfg);
-
+                InitializeLocationTypeGroups(cfg);
             });
 
             // Make sure the mapping is valid
@@ -120,7 +121,9 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations(IProfileExpression cfg)
         {
             cfg.CreateMap<Location, LocationQueryDto>()
-                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()))
+                /*.ForSourceMember(x => x.Locations, opt => opt.Ignore())
+                .ForMember(x => x.Locations, opt => opt.Ignore())*/;
 
             cfg.CreateMap<Location, LocationCommandDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
@@ -179,16 +182,23 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeLocationTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<LocationType, LocationTypeQueryDto>();
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
+                .PreserveReferences();
 
             cfg.CreateMap<LocationTypeCommandDto, LocationType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Parent, opt => opt.Ignore())
+                .ForMember(x => x.LocationTypeGroup, opt => opt.Ignore())
+                .ForMember(x => x.LocationTypes, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
 
             cfg.CreateMap<LocationType, LocationTypeCommandDto>()
+                .ForSourceMember(x => x.Parent, opt => opt.Ignore())
+                .ForSourceMember(x => x.LocationTypeGroup, opt => opt.Ignore())
+                .ForSourceMember(x => x.LocationTypes, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
@@ -344,6 +354,14 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeChemicalFormTypes(IProfileExpression cfg)
         {
             cfg.CreateMap<ChemicalFormType, ChemicalFormTypeQueryDto>();
+        }
+
+        /// <summary>
+        /// Configure AutoMapper for converting between the Location Type Group entity and DTOs.
+        /// </summary>
+        private static void InitializeLocationTypeGroups(IProfileExpression cfg)
+        {
+            cfg.CreateMap<LocationTypeGroup, LocationTypeGroupQueryDto>();
         }
     }
 }

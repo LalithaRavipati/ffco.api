@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Entities;
@@ -35,6 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Database
         }
 
         public DbSet<Location> Locations { get; set; }
+        public DbSet<LocationTypeGroup> LocationTypeGroups { get; set; }
         public DbSet<LocationType> LocationTypes { get; set; }
         public DbSet<LocationLogEntry> LocationLogEntries { get; set; }
         public DbSet<UnitType> UnitTypes { get; set; }
@@ -52,12 +52,6 @@ namespace Hach.Fusion.FFCO.Business.Database
         public DbSet<ChemicalFormType> ChemicalFormTypes { get; set; }
         public DbSet<InAppMessage> InAppMessages { get; set; }
         public DbSet<MessageType> MessageTypes { get; set; }
-
-
-
-        // Added View based on the following stack overflow post
-        // http://stackoverflow.com/questions/7461265/how-to-use-views-in-code-first-entity-framework
-        public DbSet<LocationTreeNode> LocationTree { get; set; }
 
         // Added View based on the following stack overflow post
         // http://stackoverflow.com/questions/7461265/how-to-use-views-in-code-first-entity-framework
@@ -87,7 +81,6 @@ namespace Hach.Fusion.FFCO.Business.Database
                 .WithMany(e => e.ProductOfferingTenantLocations)
                 .HasForeignKey(e => e.LocationId);
 
-
             modelBuilder.Entity<Tenant>()
                 .HasMany(e => e.ProductOfferings)
                 .WithMany(e => e.Tenants)
@@ -110,7 +103,6 @@ namespace Hach.Fusion.FFCO.Business.Database
             modelBuilder.HasDefaultSchema(Schema_dbo);
 
             modelBuilder.Configurations.Add(new LocationTreeNodeConfiguration());
-
         }
     }
 }

@@ -18,7 +18,7 @@ using Hach.Fusion.FFCO.Business;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Tests;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.FFCO.Core.Dtos.LocationType;
 using NUnit.Framework;
 using Hach.Fusion.FFCO.Core.Seed;
 using Moq;

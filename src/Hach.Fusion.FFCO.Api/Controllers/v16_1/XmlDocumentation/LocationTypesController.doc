@@ -4,6 +4,34 @@
 
 	  <remarks>
       <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>LocationTypes</td >
+            <td>Retrieves a list of child LocationTypes for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>LocationTypeGroup</td >
+            <td>Retrieves the LocationTypeGroup Type for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>Parent</td >
+            <td>
+              Retrieves the Parent of each LocationType retrieved, which is also a LocationType.
+            </td >
+          </tr>
+        </table>
+      </p>
+      <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
         <br/>
@@ -27,6 +55,34 @@
   <Methods name="GetOne">
 
     <remarks>
+      <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>LocationTypes</td >
+            <td>Retrieves a list of child LocationTypes for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>LocationTypeGroup</td >
+            <td>Retrieves the LocationTypeGroup Type for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>Parent</td >
+            <td>
+              Retrieves the Parent of each LocationType retrieved, which is also a LocationType.
+            </td >
+          </tr>
+        </table>
+      </p>
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>

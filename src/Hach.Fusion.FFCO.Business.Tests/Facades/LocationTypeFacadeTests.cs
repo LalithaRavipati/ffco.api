@@ -15,6 +15,7 @@ using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.FFCO.Core.Dtos.LocationType;
 using Hach.Fusion.FFCO.Core.Seed;
 using Moq;
 using NUnit.Framework;
@@ -87,6 +88,20 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(results.Any(x => x.Id == Data.LocationTypes.Plant.Id), Is.True);
             Assert.That(results.Any(x => x.Id == Data.LocationTypes.Process.Id), Is.True);
             Assert.That(results.Any(x => x.Id == Data.LocationTypes.SamplingSite.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == Data.LocationTypes.Distribution.Id), Is.True);
+
+            var loc = results.FirstOrDefault(x => x.Id == Data.LocationTypes.FortCollinsPlant.Id);
+            Assert.That(loc, Is.Not.Null);
+            Assert.That(loc.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsSystemA.Id), Is.True);
+            Assert.That(loc.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsSystemB.Id), Is.True);
+
+            var sys = loc.LocationTypes.First(x => x.Id == Data.LocationTypes.FortCollinsSystemA.Id);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorA1.Id), Is.True);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorA2.Id), Is.True);
+
+            sys = loc.LocationTypes.First(x => x.Id == Data.LocationTypes.FortCollinsSystemB.Id);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorB1.Id), Is.True);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorB2.Id), Is.True);
         }
 
         #endregion Get Tests
