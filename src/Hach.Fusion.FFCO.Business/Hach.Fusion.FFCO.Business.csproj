@@ -11,6 +11,8 @@
     <AssemblyName>Hach.Fusion.FFCO.Business</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,6 +93,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Azure.Documents.Client, Version=1.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.DocumentDB.1.11.1\lib\net45\Microsoft.Azure.Documents.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
@@ -105,6 +111,10 @@
     </Reference>
     <Reference Include="Microsoft.Data.Services.Client, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Protocol.Extensions, Version=1.0.3.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocol.Extensions.1.0.3.308261200\lib\net45\Microsoft.IdentityModel.Protocol.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.OData.Core, Version=6.15.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -157,6 +167,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Services" />
@@ -204,6 +215,8 @@
   <ItemGroup>
     <Compile Include="App_Packages\IdentityServer3.AspNetIdentity\IdentityServer3.AspNetIdentity.cs" />
     <Compile Include="Database\DataContext.cs" />
+    <Compile Include="Database\DocumentDBRepository.cs" />
+    <Compile Include="Database\IDocumentDBRepository.cs" />
     <Compile Include="Database\LocationTreeNodeConfiguration.cs" />
     <Compile Include="Extensions\DataContextExtensions.cs" />
     <Compile Include="Extensions\DateTimeKindAttribute.cs" />
@@ -213,11 +226,13 @@
     <Compile Include="Facades\DashboardOptionFacade.cs" />
     <Compile Include="Facades\INotificationsFacade.cs" />
     <Compile Include="Facades\Interfaces\IInAppMessageFacade.cs" />
+    <Compile Include="Facades\Interfaces\IPlantConfigurationsFacade.cs" />
     <Compile Include="Facades\LimitTypeFacade.cs" />
     <Compile Include="Facades\LocationLogEntryFacade.cs" />
     <Compile Include="Facades\NotificationsFacade.cs" />
     <Compile Include="Facades\ParameterValidRangeFacade.cs" />
     <Compile Include="Facades\InAppMessageFacade.cs" />
+    <Compile Include="Facades\PlantConfigurationsFacade.cs" />
     <Compile Include="Facades\UnitTypeGroupFacade.cs" />
     <Compile Include="Facades\UnitTypeFacade.cs" />
     <Compile Include="Facades\LocationTypeFacade.cs" />
@@ -225,6 +240,7 @@
     <Compile Include="Facades\ParameterFacade.cs" />
     <Compile Include="Facades\ParameterTypeFacade.cs" />
     <Compile Include="ForeignKeyNamingConvention.cs" />
+    <Compile Include="Helpers\NoDtoHelpers.cs" />
     <Compile Include="MappingManager.cs" />
     <Compile Include="Notifications\INotificationSender.cs" />
     <Compile Include="Notifications\NotificationSender.cs" />
@@ -246,6 +262,13 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Azure.DocumentDB.1.11.1\build\Microsoft.Azure.DocumentDB.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.1.11.1\build\Microsoft.Azure.DocumentDB.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.DocumentDB.1.11.1\build\Microsoft.Azure.DocumentDB.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.DocumentDB.1.11.1\build\Microsoft.Azure.DocumentDB.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

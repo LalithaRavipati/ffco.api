@@ -41,6 +41,8 @@ namespace Hach.Fusion.FFCO.Api
             // Enable Cross-origin Resource Sharing (CORS)
             config.EnableCors();
 
+            RegisterApiControllers(config);
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -173,6 +175,23 @@ namespace Hach.Fusion.FFCO.Api
         private static string GetXmlDocumentationFilename()
         {
             return $@"{AppDomain.CurrentDomain.BaseDirectory}bin\Hach.Fusion.FFCO.Api.XML";
+        }
+
+        /// <summary>
+        /// Registers API controllers.
+        /// </summary>
+        /// <param name="config">Server configuration settings for managing requests and responses.</param>
+        private static void RegisterApiControllers(HttpConfiguration config)
+        {
+            // Default controller selector replaced with a controller selector that handles URI API controller versioning
+            config.Services.Replace(typeof(IHttpControllerSelector), new ApiNamespaceVersionControllerSelector(config));
+
+            // {namespace} refers to the API version
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                //routeTemplate: "api/{namespace}/{controller}/{id}",
+                routeTemplate: "api/v16.1/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional });
         }
     }
 }
