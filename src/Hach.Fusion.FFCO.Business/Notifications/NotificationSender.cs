@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client;
 
 namespace Hach.Fusion.FFCO.Business.Notifications
 {

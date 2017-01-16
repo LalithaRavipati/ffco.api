@@ -18,13 +18,20 @@ namespace Hach.Fusion.FFCO.Business.Validators
         {
             IsNull(dto);
 
-            IsType(dto, typeof(InAppMessageCommandDto));
+            IsType(dto, typeof(NotificationDto));
 
             if (FFErrors.Count > 0)
                 return new FFValidationResponse
                 {
                     FFErrors = FFErrors
                 };
+
+            Evaluate(x => x.Message, dto.Message)
+                .Required();
+
+            if (!dto.BroadcastAll)
+                Evaluate(x => x.GroupName, dto.GroupName)
+                    .Required();
 
             return new FFValidationResponse
             {
