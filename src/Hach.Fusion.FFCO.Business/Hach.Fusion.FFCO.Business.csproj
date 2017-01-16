@@ -228,9 +228,9 @@
     <Compile Include="Facades\ChemicalFormTypesFacade.cs" />
     <Compile Include="Facades\DashboardFacade.cs" />
     <Compile Include="Facades\DashboardOptionFacade.cs" />
-    <Compile Include="Facades\INotificationsFacade.cs" />
+    <Compile Include="Facades\Interfaces\INotificationsFacade.cs" />
     <Compile Include="Facades\Interfaces\IInAppMessageFacade.cs" />
-    <Compile Include="Facades\Interfaces\INotificationSender.cs" />
+    <Compile Include="Notifications\INotificationSender.cs" />
     <Compile Include="Facades\Interfaces\IPlantConfigurationsFacade.cs" />
     <Compile Include="Facades\LimitTypeFacade.cs" />
     <Compile Include="Facades\LocationLogEntryFacade.cs" />

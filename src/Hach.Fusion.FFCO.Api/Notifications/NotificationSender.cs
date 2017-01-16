@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
+using Hach.Fusion.FFCO.Business.Notifications;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 

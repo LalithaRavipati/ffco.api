@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.FFCO.Core.Dtos;
 
-namespace Hach.Fusion.FFCO.Business.Facades
+namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
 {
     public interface INotificationsFacade
     {

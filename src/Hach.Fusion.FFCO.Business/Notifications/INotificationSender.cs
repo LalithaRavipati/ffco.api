@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
+namespace Hach.Fusion.FFCO.Business.Notifications
 {
     /// <summary>
     /// Interface to be implemented by classes that send notifications.
