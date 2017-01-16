@@ -11,6 +11,8 @@ using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Helpers;
 using Hach.Fusion.Core.Dtos;
+using Swashbuckle.Swagger.Annotations;
+using System.Net;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -40,10 +42,18 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Accepts a single slx file that contains configuration plant data.
+        /// Accepts a single xls file that contains configuration plant data.
         /// </summary>
         /// <returns></returns>
+        /// /// <example>
+        /// POST: ~/odata/v16.1/PlantConfigurationsController/Upload
+        /// </example>
+        /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Upload"]/*'/>
         [HttpPost]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public async Task<IHttpActionResult> Upload()
         {
             var errors = new List<FFErrorCode>();
