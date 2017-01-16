@@ -9,6 +9,7 @@ using Hach.Fusion.Core.Azure.DocumentDB;
 using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.FFCO.Api.Notifications;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
@@ -53,6 +54,8 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
 
             builder.RegisterType<BlobManager>().AsSelf().As<IBlobManager>();
             builder.RegisterType<QueueManager>().AsSelf().As<IQueueManager>();
+
+            builder.RegisterType<NotificationSender>().AsSelf().As<INotificationSender>();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,

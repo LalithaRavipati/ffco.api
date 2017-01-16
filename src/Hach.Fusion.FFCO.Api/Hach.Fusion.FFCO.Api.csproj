@@ -376,6 +376,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Notifications\NotificationSender.cs" />
     <Compile Include="Notifications\NotificationsHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -413,6 +414,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Controllers\v16_1\XmlDocumentation\PlantConfigurationsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\NotificationsController.doc" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-demo-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />

@@ -1,15 +1,61 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Client;
+using Hach.Fusion.FFCO.Business.Facades.Interfaces;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 
-namespace Hach.Fusion.FFCO.Business.Notifications
+namespace Hach.Fusion.FFCO.Api.Notifications
 {
     /// <summary>
     /// Class that handles sending signalr messages.
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        private const string DefaultSignalRBaseUrl = "http://localhost/signalr";
+        public NotificationSender()
+        {
+        }
+
+        /// <summary>
+        /// Sends a signalr message.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="group"></param>
+        /// <returns>A task representing an asynchronous operation.</returns>
+        private static Task SendMessage(string message, string group = "")
+        {
+            var hub = GlobalHost.ConnectionManager.GetHubContext<NotificationsHub>();
+
+            return string.IsNullOrEmpty(group)
+                ? hub.Clients.All.message(message)
+                : hub.Clients.Group(group.ToUpper()).message(message);
+        }
+
+        /// <summary>
+        /// Sends a notification to all users (broadcast message).
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <returns>A task representing an asynchronous operation.</returns>
+        public Task SendAll(string message)
+        {
+            return SendMessage(message);
+        }
+
+        /// <summary>
+        /// Sends a notification to users in a specified group.
+        /// </summary>
+        /// <param name="group">The name of the group.</param>
+        /// <param name="message">The message to send.</param>
+        /// <returns>A task representing an asynchronous operation.</returns>
+        public Task SendGroup(string group, string message)
+        {
+            if (string.IsNullOrEmpty(group))
+                throw new ArgumentNullException(nameof(group));
+
+            return SendMessage(message, group.ToUpper());
+        }
+
+
+        /*private const string DefaultSignalRBaseUrl = "http://localhost"; // "http://localhost/signalr";
         private const string DefaultSignalRHubName = "notifications";
         private const string DefaultSendBroadcastMessageMethodName = "sendBroadcastMessage";
         private const string DefaultSendGroupMessageMethodName = "sendGroupMessage";
@@ -49,7 +95,18 @@ namespace Hach.Fusion.FFCO.Business.Notifications
             // Make a connection to the signalR "inAppNotificationsHub" in the "Hach.Fusion.FFNE.Api" project.
             var connection = new HubConnection($"{_signalrBaseUrl}");
             var hubProxy = connection.CreateHubProxy(_signalRHubName);
-            connection.Start().Wait();
+            //connection.Start().Wait();
+
+
+            try
+            {
+                connection.Start().Wait();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
 
             return string.IsNullOrEmpty(group)
                 ? hubProxy.Invoke(_sendBroadcastMessageMethodName, message)
@@ -78,6 +135,6 @@ namespace Hach.Fusion.FFCO.Business.Notifications
                 throw new ArgumentNullException(nameof(group));
 
             return SendMessage(message, group.ToUpper());
-        }
+        }*/
     }
 }
