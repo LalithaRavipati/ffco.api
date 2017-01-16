@@ -385,6 +385,9 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\InAppMessagesController.doc">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-feature.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-integration.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-demo-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-dev.pubxml" />
