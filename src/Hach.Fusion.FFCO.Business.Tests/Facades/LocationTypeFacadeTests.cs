@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
@@ -51,14 +50,14 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             builder.EntitySet<LocationTypeQueryDto>("LocationTypes");
             builder.EntityType<LocationTypeQueryDto>().HasKey(x => x.Id);
 
-
             return builder;
         }
 
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "5170AE58-21B4-40F5-A025-E886489E9B82");
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", 
+                Data.Users.tnt01and02user.Id.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
@@ -102,6 +101,34 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             sys = loc.LocationTypes.First(x => x.Id == Data.LocationTypes.FortCollinsSystemB.Id);
             Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorB1.Id), Is.True);
             Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorB2.Id), Is.True);
+        }
+
+        [Test]
+        public async Task When_Get_LocationTypes_UnauthenticatedUser_Fails()
+        {
+            Thread.CurrentPrincipal = null;
+
+            var queryResult = await _facade.Get(_mockDtoOptions.Object);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
+        }
+
+        [Test]
+        public async Task When_Get_LocationType_Succeeds()
+        {
+            var dto = Data.LocationTypes.Process;
+            var queryResult = await _facade.Get(dto.Id);
+
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(queryResult.Dto.Id == dto.Id);
+        }
+
+        [Test]
+        public async Task When_Get_LocationType_UnauthenticatedUser_Fails()
+        {
+            Thread.CurrentPrincipal = null;
+
+            var queryResult = await _facade.Get(Data.LocationTypes.Process.Id);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }
 
         #endregion Get Tests
