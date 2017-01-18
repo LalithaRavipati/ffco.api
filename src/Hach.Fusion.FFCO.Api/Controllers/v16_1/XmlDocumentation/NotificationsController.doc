@@ -1,0 +1,31 @@
+﻿<NotificationsController>
+
+  <Methods name="SendNotification">
+    <remarks>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <br/>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-303</td >
+            <td>FormDataFilesMissing</td >
+            <td>The request contains no files</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+  </Methods>
+  
+</NotificationsController>

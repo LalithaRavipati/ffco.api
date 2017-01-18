@@ -12,7 +12,9 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.FFCO.Api.AutofacModules;
 using Hach.Fusion.FFCO.Business;
 using IdentityServer3.AccessTokenValidation;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
+using Microsoft.Owin.Cors;
 using Owin;
 using Thinktecture.IdentityModel;
 
@@ -38,6 +40,20 @@ namespace Hach.Fusion.FFCO.Api
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            app.UseCors(CorsOptions.AllowAll);
+
+            var sbConnectionString = ConfigurationManager.AppSettings["ServiceBusConnectionString"];
+            GlobalHost.DependencyResolver.UseServiceBus(sbConnectionString, "ffcoapisignalr");
+
+            var hubConfig = new HubConfiguration
+            {
+                EnableDetailedErrors = true,
+                EnableJavaScriptProxies = true,
+                EnableJSONP = true
+            };
+
+            app.MapSignalR("/signalr", hubConfig);
 
             var controllerSelector = new ODataVersionControllerSelector(GlobalConfiguration.Configuration);
             GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerSelector), controllerSelector);

@@ -3,11 +3,17 @@ using System.Configuration;
 using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Azure.Blob;
+using Hach.Fusion.Core.Azure.Queue;
+using Hach.Fusion.Core.Azure.DocumentDB;
 using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.FFCO.Api.Notifications;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Facades.Interfaces;
+using Hach.Fusion.FFCO.Business.Notifications;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
@@ -29,8 +35,15 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
 
+            var databaseId = ConfigurationManager.AppSettings["DocumentDBDatabase"];
+            var collectionId = ConfigurationManager.AppSettings["DocumentDBCollection"];
+            var endpoint = ConfigurationManager.AppSettings["DocumentDBEndpoint"];
+            var authKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
+
             // Contexts
             builder.Register(c => new DataContext(connectionString)).AsSelf().As<DataContext>().InstancePerLifetimeScope();
+            builder.Register(c => new DocumentDBRepository<UploadTransaction>(endpoint, authKey, databaseId, collectionId))
+                .As<IDocumentDBRepository<UploadTransaction>>().InstancePerLifetimeScope();
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
@@ -39,6 +52,11 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.Register(c => new FusionContextFactory(connectionString)).AsSelf();
             builder.RegisterType<RoleClaimsTransformer>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<RoleClaimsTransformationMiddleware>().AsSelf().InstancePerLifetimeScope();
+
+            builder.RegisterType<BlobManager>().AsSelf().As<IBlobManager>();
+            builder.RegisterType<QueueManager>().AsSelf().As<IQueueManager>();
+
+            builder.RegisterType<NotificationSender>().AsSelf().As<INotificationSender>();
 
             // LocationParameters
             builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
@@ -82,10 +100,13 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<ChemicalFormTypesFacade>().As<IFacadeWithCruModels<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto,
                ChemicalFormTypeQueryDto, Guid>>();
 
-
             builder.RegisterType<InAppMessageFacade>().As<IInAppMessageFacade>();
-
             builder.RegisterType<InAppMessageValidator>().As<IFFValidator<InAppMessageCommandDto>>();
+
+            builder.RegisterType<PlantConfigurationsFacade>().As<IPlantConfigurationsFacade>();
+
+            builder.RegisterType<NotificationsFacade>().As<INotificationsFacade>();
+            builder.RegisterType<NotificationValidator>().As<IFFValidator<NotificationDto>>();
 
             base.Load(builder);
         }

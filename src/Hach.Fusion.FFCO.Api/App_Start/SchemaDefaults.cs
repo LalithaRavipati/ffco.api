@@ -35,6 +35,7 @@ namespace Hach.Fusion.FFCO.Api
             BuildInAppMessageExamples();
             BuildDashboardExamples();
             BuildDashboardOptionExamples();
+            BuildNotificationExamples();
         }
 
         /// <inheritdoc />
@@ -175,6 +176,19 @@ namespace Hach.Fusion.FFCO.Api
             {
                 options = "DashboardOption.1",
                 tenantId = Guid.Parse("879CC5ED-DEAD-BEEF-A9B6-0817C02506F9")
+            };
+        }
+
+        /// <summary>
+        /// Builds the example data for Notifications for Swagger Documentation
+        /// </summary>
+        private static void BuildNotificationExamples()
+        {
+            Examples[typeof(NotificationDto)] = new
+            {
+                broadcastAll = false,
+                groupName = "GroupName",
+                message = "Message"
             };
         }
     }
