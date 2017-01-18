@@ -12,6 +12,7 @@ using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Dtos.LocationType;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {

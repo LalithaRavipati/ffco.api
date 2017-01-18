@@ -11,6 +11,7 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Business.Validators;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Dtos;
@@ -118,14 +119,13 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
         {
             // Thread.CurrentPrincipal is not available in the constructor.  Do not try to move this.
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            var uid = GetCurrentUser();
 
             // User ID should always be available, but if not ...
-            if (userId == null)
+            if (!uid.HasValue)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var userIdGuid = Guid.Parse(userId);
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userIdGuid);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == uid.Value);
             if (user == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
@@ -163,7 +163,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper.Map(dto, location);
 
-            location.SetAuditFieldsOnCreate(Guid.Parse(userId));
+            location.SetAuditFieldsOnCreate(uid.Value);
 
             _context.Locations.Add(location);
 
@@ -207,9 +207,12 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<CommandResult<LocationQueryDto, Guid>> Delete(Guid id)
         {
             // Thread.CurrentPrincipal is not available in the constructor.  Do not try and move this
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            var uid = GetCurrentUser();
 
-            var location = await _context.Locations
+            if (!uid.HasValue)
+                return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            var location = await _context.GetLocationsForUser(uid.Value)
               .Include(l => l.Locations)
               .SingleOrDefaultAsync(l => l.Id == id)
               .ConfigureAwait(false);
@@ -244,16 +247,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
         {
             // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
-            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            var uid = GetCurrentUser();
 
             // User ID should always be available, but if not ...
-            if (userId == null)
+            if (!uid.HasValue)
                 return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
                 return Command.Error<LocationCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
 
-            var location = await _context.Locations
+            var location = await _context.GetLocationsForUser(uid.Value)
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
@@ -299,7 +302,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.Locations.Attach(location);
             _mapper.Map(locationDto, location);
 
-            location.SetAuditFieldsOnUpdate(userId);
+            location.SetAuditFieldsOnUpdate(uid.Value);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 

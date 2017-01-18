@@ -4,6 +4,34 @@
 
 	  <remarks>
       <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>LocationTypes</td >
+            <td>Retrieves a list of child LocationTypes for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>LocationTypeGroup</td >
+            <td>Retrieves the LocationTypeGroup Type for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>Parent</td >
+            <td>
+              Retrieves the Parent of each LocationType retrieved, which is also a LocationType.
+            </td >
+          </tr>
+        </table>
+      </p>
+      <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
         <br/>
@@ -28,6 +56,34 @@
 
     <remarks>
       <p>
+        The following table lists valid navigation properties that may be used with the
+        OData $expand parameter.
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Valid $expand Fields</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>LocationTypes</td >
+            <td>Retrieves a list of child LocationTypes for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>LocationTypeGroup</td >
+            <td>Retrieves the LocationTypeGroup Type for each LocationType retrieved.</td >
+          </tr>
+          <tr>
+            <td>Parent</td >
+            <td>
+              Retrieves the Parent of each LocationType retrieved, which is also a LocationType.
+            </td >
+          </tr>
+        </table>
+      </p>
+      <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
         <table class="gridtable" >
@@ -52,128 +108,6 @@
             <td>EntityNotFound</td >
             <td>The specified entity was not found.</td>
           </tr>
-        </table>
-      </p>
-    </remarks>
-
-  </Methods>
-
-  <Methods name="Post">
-
-    <remarks>
-      <h4>Errors</h4>
-      <p>The following error codes are returned:</p>
-      <p>
-        <table class="gridtable" >
-          <tr>
-            <th>
-              <b>Code</b>
-            </th>
-            <th>
-              <b>Name</b>
-            </th>
-            <th>
-              <b>Description</b>
-            </th>
-          </tr>
-          <tr>
-            <td>FFERR-101</td >
-            <td>EntityAlreadyExists</td >
-            <td>The entity already exists and can't be created.</td>
-          </tr>
-          <tr>
-            <td>FFERR-211</td >
-            <td>PropertyIsInvalid</td >
-            <td>A property is invalid (applies to the ID field).</td>
-          </tr>
-          <tr>
-            <td>FFERR-304</td >
-            <td>TokenInvalid</td >
-            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
-          </tr>
-        </table>
-      </p>
-    </remarks>    
-    
-  </Methods>
-
-  <Methods name="Patch">
-
-    <remarks>
-      <h4>Errors</h4>
-      <p>The following error codes are returned:</p>
-      <p>
-        <table class="gridtable" >
-          <tr>
-            <th>
-              <b>Code</b>
-            </th>
-            <th>
-              <b>Name</b>
-            </th>
-            <th>
-              <b>Description</b>
-            </th>
-          </tr>
-          <tr>
-            <td>FFERR-100</td >
-            <td>EntityNotFound</td >
-            <td>The specified entity was not found.</td>
-          </tr>
-          <tr>
-            <td>FFERR-102</td >
-            <td>EntityFormatIsInvalid</td >
-            <td>The entity format is not valid or is null.</td>
-          </tr>
-          <tr>
-            <td>FFERR-203</td >
-            <td>EntityIDUpdateNotAllowed</td >
-            <td>Updating the ID field is not allowed.</td>
-          </tr>
-          <tr>
-            <td>FFERR-204</td >
-            <td>EntityPropertyDuplicateNotAllowed</td >
-            <td>A duplicate of the indicated property is not allowed (applies to the I18NKeyName field).</td>
-          </tr>
-          <tr>
-            <td>FFERR-304</td >
-            <td>TokenInvalid</td >
-            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
-          </tr>
-        </table>
-      </p>
-    </remarks>
-
-  </Methods>
-
-  <Methods name="Delete">
-
-    <remarks>
-      <p>
-        <h4>Errors</h4>
-        <p>The following error codes are returned:</p>
-        <table class="gridtable" >
-          <tr>
-            <th>
-              <b>Code</b>
-            </th>
-            <th>
-              <b>Name</b>
-            </th>
-            <th>
-              <b>Description</b>
-            </th>
-          </tr>
-          <tr>
-            <td>FFERR-100</td >
-            <td>EntityNotFound</td >
-            <td>The specified entity was not found.</td>
-          </tr>
-          <tr>
-            <td>FFERR-106</td >
-            <td>EntityCouldNotBeDeleted</td >
-            <td>The specified Location Type could not be deleted because one or more Locations refer to it.</td>
-          </tr>          
         </table>
       </p>
     </remarks>

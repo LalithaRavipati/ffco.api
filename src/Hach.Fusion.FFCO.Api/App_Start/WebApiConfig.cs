@@ -11,6 +11,7 @@ using Hach.Fusion.Core.Api.Handlers;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
 using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Core.Dtos.LocationType;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
@@ -86,7 +87,7 @@ namespace Hach.Fusion.FFCO.Api
 
             builder.EntitySet<LocationBaseDto>("Locations");
             builder.EntitySet<LocationLogEntryBaseDto>("LocationLogEntries");
-            builder.EntitySet<LocationTypeCommandDto>("LocationTypes");
+            builder.EntitySet<LocationTypeBaseDto>("LocationTypes");
             builder.EntitySet<DashboardBaseDto>("Dashboards");
             builder.EntitySet<DashboardOptionBaseDto>("DashboardOptions");
 

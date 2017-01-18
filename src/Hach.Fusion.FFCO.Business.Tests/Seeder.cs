@@ -10,6 +10,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
         {
             DeleteAllExistingTestData(context);
 
+            SeedLocationTypeGroups(context);
             SeedLocationTypes(context);
             SeedParameterTypes(context);
             SeedUnitTypeGroups(context);
@@ -45,6 +46,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.Database.ExecuteSqlCommand("DELETE dbo.DashboardOptions");
 
             context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypes");
+            context.Database.ExecuteSqlCommand("DELETE dbo.LocationTypeGroups");
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypes");
             context.Database.ExecuteSqlCommand("DELETE dbo.UnitTypeGroups");
             context.Database.ExecuteSqlCommand("DELETE dbo.ParameterTypes");
@@ -146,12 +148,29 @@ namespace Hach.Fusion.FFCO.Business.Tests
             context.SaveChanges();
         }
 
+        private static void SeedLocationTypeGroups(DataContext context)
+        {
+            context.LocationTypeGroups.Add(Data.LocationTypeGroups.Operation);
+            context.LocationTypeGroups.Add(Data.LocationTypeGroups.System);
+            context.LocationTypeGroups.Add(Data.LocationTypeGroups.Collector);
+
+            context.SaveChanges();
+        }
+
         private static void SeedLocationTypes(DataContext context)
         {
             context.LocationTypes.Add(Data.LocationTypes.Plant);
             context.LocationTypes.Add(Data.LocationTypes.Process);
             context.LocationTypes.Add(Data.LocationTypes.SamplingSite);
             context.LocationTypes.Add(Data.LocationTypes.Distribution);
+
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsPlant);
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsSystemA);
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsSystemB);
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsCollectorA1);
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsCollectorA2);
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsCollectorB1);
+            context.LocationTypes.Add(Data.LocationTypes.FortCollinsCollectorB2);
 
             context.SaveChanges();
         }
