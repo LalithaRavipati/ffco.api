@@ -1,5 +1,6 @@
 ﻿using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Core.Dtos;
+using System;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {
@@ -8,7 +9,7 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// </summary>
     /// <remarks>
     /// </remarks>
-    public class NotificationValidator : FFValidator<NotificationDto>
+    public class NotificationValidator : FFValidator<NotificationDto, Guid>
     {
         /// <summary>
         /// Validates the state of the specified <see cref="NotificationDto"/>.
