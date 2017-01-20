@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
-using System.Web.Http.Cors;
 using System.Web.OData.Query;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.OData;
@@ -29,7 +28,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// see the XML comments in this class, the "return" fields below indicate the information returned to the
     /// client applications.
     /// </remarks>
-    [EnableCors("*", "*", "*")]
     public class InAppMessagesController
         : ControllerWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
     {

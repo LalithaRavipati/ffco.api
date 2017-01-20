@@ -418,6 +418,8 @@
     <None Include="Properties\PublishProfiles\ffco-prod-demo-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-feature.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-integration.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-sandbox - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-sandbox - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-sandbox.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
