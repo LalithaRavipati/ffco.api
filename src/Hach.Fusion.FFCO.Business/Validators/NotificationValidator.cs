@@ -9,7 +9,7 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// </summary>
     /// <remarks>
     /// </remarks>
-    public class NotificationValidator : FFValidator<NotificationDto, Guid>
+    public class NotificationValidator : FFValidator<NotificationDto>
     {
         /// <summary>
         /// Validates the state of the specified <see cref="NotificationDto"/>.
