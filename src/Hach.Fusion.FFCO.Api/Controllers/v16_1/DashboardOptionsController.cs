@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -20,7 +19,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// <summary>
     /// Web API controller for managing DashboardOptions.
     /// </summary>
-    [EnableCors("*", "*", "*")]
     public class DashboardOptionsController
         : ControllerWithCruModelsBase<DashboardOptionCommandDto, DashboardOptionCommandDto, DashboardOptionQueryDto, Guid>
     {

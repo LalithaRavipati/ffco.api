@@ -2,9 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Helpers;
 using Hach.Fusion.FFCO.Core.Dtos;
@@ -17,7 +15,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// </summary>
     [Authorize]
     [FFExceptionHandling]
-    [EnableCors("*", "*", "*")]
     public class NotificationsController : ApiController
     {
         private readonly INotificationsFacade _facade;

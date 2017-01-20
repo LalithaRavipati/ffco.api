@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using Hach.Fusion.Core.Api.Handlers;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
@@ -24,7 +23,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// </summary>
     [Authorize]
     [FFExceptionHandling]
-    [EnableCors("*", "*", "*")]
     public class PlantConfigurationsController : ApiController
     {
         private readonly IPlantConfigurationsFacade _facade;

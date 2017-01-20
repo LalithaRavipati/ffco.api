@@ -4,13 +4,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
-using System.Web.Http.Cors;
 using System.Web.OData.Query;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
-using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Core.Dtos.LocationType;
 using Swashbuckle.Swagger.Annotations;
@@ -27,7 +25,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// see the XML comments in this class, the "return" fields below indicate the information returned to the
     /// client applications.
     /// </remarks>
-    [EnableCors("*", "*", "*")]
     public class LocationTypesController
         : ControllerWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
     {
