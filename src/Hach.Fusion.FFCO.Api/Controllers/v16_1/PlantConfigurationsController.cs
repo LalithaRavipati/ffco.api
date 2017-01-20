@@ -46,7 +46,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </summary>
         /// <returns></returns>
         /// /// <example>
-        /// POST: ~/odata/v16.1/PlantConfigurations
+        /// POST: ~/api/v16.1/PlantConfigurationsController
         /// </example>
         /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Post"]/*'/>
         [HttpPost]
