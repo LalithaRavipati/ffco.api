@@ -19,9 +19,14 @@
             </th>
           </tr>
           <tr>
-            <td>FFERR-303</td >
-            <td>FormDataFilesMissing</td >
-            <td>The request contains no files</td>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>A required property was not provided.</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing.</td>
           </tr>
         </table>
       </p>
