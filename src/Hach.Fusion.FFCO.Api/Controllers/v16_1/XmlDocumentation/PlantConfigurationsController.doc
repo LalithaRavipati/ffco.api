@@ -1,7 +1,17 @@
 ﻿<PlantConfigurationsController>
 
-  <Methods name="Upload">
+  <Methods name="Post">
     <remarks>
+      <p>The following uploadTransactionTypes are valid:
+      <ul>
+        <li>ConfigurePlant</li>
+        <li>ImportBaseUnits</li>
+        <li>ImportUnitTypes</li>
+        <li>ImportParameters</li>
+        <li>ImportChemicalForms</li>
+      </ul>
+      
+      </p>
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
