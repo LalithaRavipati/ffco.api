@@ -1,4 +1,4 @@
-﻿<PlantConfigurationsController>
+﻿﻿<PlantConfigurationsController>
 
   <Methods name="Post">
     <remarks>
@@ -11,6 +11,16 @@
         <li>ImportChemicalForms</li>
       </ul>
       
+      </p>
+      <p>
+        The following uploadTransactionTypes are valid:
+        <ul>
+          <li>ConfigurePlant</li>
+          <li>ImportBaseUnits</li>
+          <li>ImportUnitTypes</li>
+          <li>ImportParameters</li>
+          <li>ImportFeatures</li>
+        </ul>
       </p>
       <p>
         <h4>Errors</h4>
@@ -37,5 +47,5 @@
       </p>
     </remarks>
   </Methods>
-  
+
 </PlantConfigurationsController>
