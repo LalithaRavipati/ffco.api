@@ -35,6 +35,11 @@
             <td>FormDataFilesMissing</td >
             <td>The request contains no files</td>
           </tr>
+          <tr>
+            <td>FFERR-301</td >
+            <td>FormDataFieldMissing</td >
+            <td>The request contains missing form data fields. The key 'uploadTransactionType' is expected in this request.</td>
+          </tr>
         </table>
       </p>
     </remarks>
