@@ -1,7 +1,19 @@
 ﻿<PlantConfigurationsController>
 
-  <Methods name="Upload">
+  <Methods name="Post">
     <remarks>
+      <p>
+        The following uploadTransactionTypes are valid:
+        <ul>
+          <li>ConfigurePlant</li>
+          <li>ImportBaseUnits</li>
+          <li>ImportUnitTypes</li>
+          <li>ImportParameters</li>
+          <li>ImportFeatures</li>
+          <li>ImportChemicalFormTypes</li>
+        </ul>
+
+      </p>
       <p>
         <h4>Errors</h4>
         <p>The following error codes are returned:</p>
@@ -23,9 +35,14 @@
             <td>FormDataFilesMissing</td >
             <td>The request contains no files</td>
           </tr>
+          <tr>
+            <td>FFERR-301</td >
+            <td>FormDataFieldMissing</td >
+            <td>The request contains missing form data fields. The key 'uploadTransactionType' is expected in this request.</td>
+          </tr>
         </table>
       </p>
     </remarks>
   </Methods>
-  
+
 </PlantConfigurationsController>

@@ -44,9 +44,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </summary>
         /// <returns></returns>
         /// /// <example>
-        /// POST: ~/odata/v16.1/PlantConfigurationsController/Upload
+        /// POST: ~/api/v16.1/PlantConfigurationsController
         /// </example>
-        /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Upload"]/*'/>
+        /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Post"]/*'/>
         [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -59,7 +59,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             // Parse Request Content
             var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
             var parts = await Request.Content.ReadAsMultipartAsync(provider).ConfigureAwait(false);
-            
+
+            if (string.IsNullOrEmpty(parts.FormData["uploadTransactionType"]))
+                errors.Add(GeneralErrorCodes.FormDataFieldMissing("uploadTransactionType"));
+
             // Get files
             var files = parts.FileData.Select(x => x.LocalFileName);
             var enumeratedFiles = files as IList<string> ?? files.ToList();
