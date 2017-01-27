@@ -11,6 +11,7 @@
           <li>ImportParameters</li>
           <li>ImportFeatures</li>
           <li>ImportChemicalFormTypes</li>
+          <li>ImportRoles</li>
         </ul>
 
       </p>
