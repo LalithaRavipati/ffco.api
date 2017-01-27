@@ -22,10 +22,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// </summary>
     public class PlantConfigurationsFacade : IPlantConfigurationsFacade
     {
-        private readonly DataContext _context;
         private readonly IBlobManager _blobManager;
         private readonly IQueueManager _queueManager;
-        private readonly IDocumentDBRepository<UploadTransaction> _documentDB;
+        private readonly IDocumentDBRepository<UploadTransaction> _documentDb;
 
         private readonly string _blobStorageConnectionString;
         private readonly string _blobStorageContainerName;
@@ -37,8 +36,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="context">Database context containing dashboard type entities.</param>
         /// <param name="blobManager">Manager for Azure Blob Storage.</param>
         /// <param name="queueManager">Manager for Azure Queue Storage.</param>
-        /// <param name="documentDB">Azure DocumentDB repository</param>
-        public PlantConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, IDocumentDBRepository<UploadTransaction> documentDb)
+        /// <param name="documentDb">Azure DocumentDB repository</param>
+        public PlantConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, 
+            IDocumentDBRepository<UploadTransaction> documentDb)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -53,18 +53,18 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _blobStorageContainerName = ConfigurationManager.AppSettings["BlobProcessorBlobStorageContainerName"];
             _queueStorageContainerName = ConfigurationManager.AppSettings["BlobProcessorQueueStorageContainerName"];
 
-            _context = context;
             _blobManager = blobManager;
             _queueManager = queueManager;
-            _documentDB = documentDb;
+            _documentDb = documentDb;
         }
 
         /// <summary>
         /// Accepts a single xls file that contains plant configuration.
         /// </summary>
-        /// <param name="fileName">The full name of the file to upload.</param>
+        /// <param name="fileMetadata">Metadata associated with the file upload request.</param>
+        /// <param name="authenticationHeader">Authentication header for the request.</param>
         /// <returns>A task that returns the result of the upload option.</returns>
-        public async Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileMetadata)
+        public async Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileMetadata, string authenticationHeader)
         {
             var errors = new List<FFErrorCode>();
 
@@ -72,18 +72,20 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
 
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
             var userIdGuid = Guid.Parse(userId);
 
-            Fusion.Core.Api.OData.ODataHelper odataHelper = new Fusion.Core.Api.OData.ODataHelper();
+            var odataHelper = new Fusion.Core.Api.OData.ODataHelper();
             var tenants = odataHelper.GetTenantIds(Thread.CurrentPrincipal) as List<Guid>;
 
             // Store file in blob storage.
             var result = await _blobManager.StoreAsync(_blobStorageConnectionString, _blobStorageContainerName, fileMetadata.SavedFileName);
 
-
             // An Id property is created by documentDB and in populated in the result object
-            var docDbresult = await _documentDB.CreateItemAsync(
-                new UploadTransaction()
+            var docDbresult = await _documentDb.CreateItemAsync(
+                new UploadTransaction
                 {
                     OriginalFileName = fileMetadata.OriginalFileName,
                     TenantIds = tenants,
@@ -92,13 +94,15 @@ namespace Hach.Fusion.FFCO.Business.Facades
                     UtcTimestamp = DateTime.UtcNow
                 });
 
-            BlobQueueMessage queueMessage = new BlobQueueMessage();
-
-            queueMessage.BlobName = result.BlobName;
-            queueMessage.BlobSize = result.BlobSize;
-            queueMessage.BlobUrl = result.BlobUrl;
-            queueMessage.BlobTransactionType = fileMetadata.TransactionType;
-            queueMessage.UserId = userIdGuid;
+            var queueMessage = new BlobQueueMessage
+            {
+                BlobName = result.BlobName,
+                BlobSize = result.BlobSize,
+                BlobUrl = result.BlobUrl,
+                BlobTransactionType = fileMetadata.TransactionType,
+                UserId = userIdGuid,
+                AuthenticationHeader = authenticationHeader
+            };
 
             // Add message to queue.
             await _queueManager.AddAsync(_blobStorageConnectionString, _queueStorageContainerName, JsonConvert.SerializeObject(queueMessage));
