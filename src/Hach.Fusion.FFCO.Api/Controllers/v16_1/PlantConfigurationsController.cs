@@ -76,12 +76,15 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             var fileToUpload = enumeratedFiles.First();
             var originalFileName = parts.FileData[0].Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
 
-            FileUploadMetadataDto fileUploadMetadata = new FileUploadMetadataDto();
-            fileUploadMetadata.SavedFileName = fileToUpload;
-            fileUploadMetadata.OriginalFileName = originalFileName;
-            fileUploadMetadata.TransactionType = parts.FormData["uploadTransactionType"].Replace("\"", string.Empty);
+            var fileUploadMetadata = new FileUploadMetadataDto
+            {
+                SavedFileName = fileToUpload,
+                OriginalFileName = originalFileName,
+                TransactionType = parts.FormData["uploadTransactionType"].Replace("\"", string.Empty)
+            };
 
-            var result = await _facade.Upload(fileUploadMetadata);
+            var authHeader = Request.Headers.Authorization.ToString();
+            var result = await _facade.Upload(fileUploadMetadata, authHeader);
 
             foreach (var file in enumeratedFiles)
                 File.Delete(file);
