@@ -13,7 +13,8 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// Accepts a single xls file that contains plant configuration.
         /// </summary>
         /// <param name="fileName">The full name of the file to upload.</param>
+        /// <param name="authenticationHeader">Authentication header for the request.</param>
         /// <returns>A task that returns the result of the upload option.</returns>
-        Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileName);
+        Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileName, string authenticationHeader);
     }
 }
