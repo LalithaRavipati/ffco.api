@@ -13,7 +13,6 @@ using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Business.Extensions;
 using Hach.Fusion.FFCO.Core.Dtos;
 using Hach.Fusion.FFCO.Core.Entities;
 using Hach.Fusion.FFCO.Core.Extensions;
@@ -163,7 +162,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             _mapper.Map(dto, location);
 
-            location.SetAuditFieldsOnCreate(uid.Value);
+            location.CreatedById = uid.Value;
+            location.CreatedOn = DateTime.UtcNow;
+            location.SetAuditFieldsOnUpdate(uid.Value);
 
             _context.Locations.Add(location);
 
