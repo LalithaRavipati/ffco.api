@@ -55,7 +55,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </example>
         /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(ICollection<ParameterTypeDto>))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
@@ -80,7 +80,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </example>
         /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(ParameterTypeDto))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]

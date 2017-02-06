@@ -53,7 +53,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </example>
         /// <include file='XmlDocumentation/ParametersController.doc' path='ParametersController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -78,7 +78,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </example>
         /// <include file='XmlDocumentation/ParametersController.doc' path='ParametersController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
