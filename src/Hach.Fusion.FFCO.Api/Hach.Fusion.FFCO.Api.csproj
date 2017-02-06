@@ -78,8 +78,8 @@
       <HintPath>..\packages\Flurl.1.1.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2017.67.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2017.67.2\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2017.67.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2017.67.3\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.67.0.0, Culture=neutral, processorArchitecture=MSIL">
