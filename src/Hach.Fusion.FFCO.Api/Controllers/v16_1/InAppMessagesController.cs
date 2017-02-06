@@ -60,7 +60,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </example>
         /// <include file='XmlDocumentation/InAppMessagesController.doc' path='InAppMessagesController/Methods[@name="GetByUserId"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
         [SwaggerResponse(HttpStatusCode.OK, null, typeof(ICollection<InAppMessageQueryDto>))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
