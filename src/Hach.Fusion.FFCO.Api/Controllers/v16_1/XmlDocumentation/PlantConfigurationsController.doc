@@ -46,4 +46,37 @@
     </remarks>
   </Methods>
 
+  <Methods name="Get">
+    <remarks>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <br/>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyValueDoesNotExist</td >
+            <td>The foreign key value does not exist (applies to the tenantId and plantId parameters).</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+  </Methods>
+
 </PlantConfigurationsController>
