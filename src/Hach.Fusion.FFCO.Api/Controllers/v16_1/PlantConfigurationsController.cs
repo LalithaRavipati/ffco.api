@@ -109,10 +109,21 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> Download([FromUri] Guid tenantId, [FromUri] Guid plantId)
+        public async Task<IHttpActionResult> Download([FromUri] Guid? tenantId, [FromUri] Guid? plantId)
         {
+            var errors = new List<FFErrorCode>();
+
+            if (!tenantId.HasValue)
+                errors.Add(ValidationErrorCode.PropertyRequired(nameof(tenantId)));
+
+            if (!plantId.HasValue)
+                errors.Add(ValidationErrorCode.PropertyRequired(nameof(plantId)));
+
+            if (errors.Any())
+                return Request.CreateApiResponse(NoDtoHelpers.CreateCommandResult(errors));
+
             var authHeader = Request.Headers.Authorization.ToString();
-            var result = await _facade.Download(tenantId, plantId, authHeader);
+            var result = await _facade.Download((Guid)tenantId, (Guid)plantId, authHeader);
 
             return Request.CreateApiResponse(result);
         }
