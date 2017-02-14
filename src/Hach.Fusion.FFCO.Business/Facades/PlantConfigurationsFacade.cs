@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Azure.Blob;
 using Hach.Fusion.Core.Azure.Queue;
@@ -25,6 +27,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         private readonly IBlobManager _blobManager;
         private readonly IQueueManager _queueManager;
         private readonly IDocumentDBRepository<UploadTransaction> _documentDb;
+        private readonly DataContext _context;
 
         private readonly string _blobStorageConnectionString;
         private readonly string _blobStorageContainerName;
@@ -53,6 +56,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _blobStorageContainerName = ConfigurationManager.AppSettings["BlobProcessorBlobStorageContainerName"];
             _queueStorageContainerName = ConfigurationManager.AppSettings["BlobProcessorQueueStorageContainerName"];
 
+            _context = context;
             _blobManager = blobManager;
             _queueManager = queueManager;
             _documentDb = documentDb;
@@ -101,6 +105,59 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 BlobUrl = result.BlobUrl,
                 BlobTransactionType = fileMetadata.TransactionType,
                 UserId = userIdGuid,
+                AuthenticationHeader = authenticationHeader
+            };
+
+            // Add message to queue.
+            await _queueManager.AddAsync(_blobStorageConnectionString, _queueStorageContainerName, JsonConvert.SerializeObject(queueMessage));
+
+            return NoDtoHelpers.CreateCommandResult(errors);
+        }
+
+        /// <summary>
+        /// Creates an xlxs file that contains configuration plant data and save it to blob storage. When
+        /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
+        /// requst.
+        /// </summary>
+        /// <param name="tenantId">Identifies the tenant that the plant belongs to.</param>
+        /// <param name="plantId">Identifies the plant to download the configuration for.</param>
+        /// <param name="authenticationHeader">Authentication header for the request.</param>
+        /// <returns>A task that returns the result of the request.</returns>
+        public async Task<CommandResultNoDto> Download(Guid tenantId, Guid plantId, string authenticationHeader)
+        {
+            const string transactionType = "PlantConfigExport";
+            var errors = new List<FFErrorCode>();
+
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            if (userId == null)
+                errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
+            var userIdGuid = Guid.Parse(userId);
+
+            var plant = await _context.Locations.FirstOrDefaultAsync(x => x.Id == plantId).ConfigureAwait(false);
+            if (plant == null)
+            {
+                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("plantId"));
+            }
+            else
+            {
+                var validTenant = plant.ProductOfferingTenantLocations.Any(x => x.TenantId == tenantId);
+                if (!validTenant)
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
+            }
+
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
+            var queueMessage = new BlobQueueMessage
+            {
+                BlobTransactionType = transactionType,
+                UserId = userIdGuid,
+                TenantId = tenantId,
+                OperationId = plantId,
                 AuthenticationHeader = authenticationHeader
             };
 
