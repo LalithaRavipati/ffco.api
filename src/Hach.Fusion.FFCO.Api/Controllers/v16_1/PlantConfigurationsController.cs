@@ -91,5 +91,41 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 
             return Request.CreateApiResponse(result);
         }
+
+        /// <summary>
+        /// Creates an xlxs file that contains configuration plant data and save it to blob storage. When
+        /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
+        /// requst.
+        /// </summary>
+        /// <param name="tenantId">Identifies the tenant that the plant belongs to.</param>
+        /// <param name="plantId">Identifies the plant to download the configuration for.</param>
+        /// <returns>Task that returns the request result.</returns>
+        /// /// <example>
+        /// GET: ~/api/v16.1/PlantConfigurationsController
+        /// </example>
+        /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Get"]/*'/>
+        [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.InternalServerError)]
+        public async Task<IHttpActionResult> Download([FromUri] Guid? tenantId, [FromUri] Guid? plantId)
+        {
+            var errors = new List<FFErrorCode>();
+
+            if (!tenantId.HasValue)
+                errors.Add(ValidationErrorCode.PropertyRequired(nameof(tenantId)));
+
+            if (!plantId.HasValue)
+                errors.Add(ValidationErrorCode.PropertyRequired(nameof(plantId)));
+
+            if (errors.Any())
+                return Request.CreateApiResponse(NoDtoHelpers.CreateCommandResult(errors));
+
+            var authHeader = Request.Headers.Authorization.ToString();
+            var result = await _facade.Download((Guid)tenantId, (Guid)plantId, authHeader);
+
+            return Request.CreateApiResponse(result);
+        }
     }
 }
