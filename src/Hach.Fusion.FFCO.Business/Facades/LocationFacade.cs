@@ -38,7 +38,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public LocationFacade(DataContext context, IFFValidator<LocationCommandDto> validator)
         {
             _context = context;
-
+            _context.Configuration.LazyLoadingEnabled = false;
             ValidatorCreate = validator;
             ValidatorUpdate = validator;
 
@@ -65,6 +65,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var results = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
+                .Include(x => x.LocationType)
+                .Include(x => x.Parent)
+                .Include(x => x.Locations)
+                .Include(x => x.ProductOfferingTenantLocations)
                 .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
@@ -88,6 +92,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var result = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
+                .Include(x => x.LocationType)
+                .Include(x => x.Parent)
+                .Include(x => x.Locations)
+                .Include(x => x.ProductOfferingTenantLocations)
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
