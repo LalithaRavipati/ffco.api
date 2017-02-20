@@ -19,7 +19,6 @@ namespace Hach.Fusion.FFCO.Business.Tests
 
             SeedLocations(context);
             SeedProductOfferingTenantLocations(context);
-            SeedTenantProductOfferings(context);
             SeedDashboardOptions(context);
             SeedDashboards(context);
             SeedLocationLogEntries(context);
@@ -212,16 +211,25 @@ namespace Hach.Fusion.FFCO.Business.Tests
         private static void SeedProductOfferingTenantLocations(DataContext context)
         {
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant1);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant2);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_Plant3);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentCombined);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_HachFusion_InfluentRecycled);
+            context.SaveChanges();
 
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant02_InfluentCombined);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant02_ProcessInfluent);
+            context.SaveChanges();
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant02_ProcessPreliminary);
+            context.SaveChanges();
 
             context.ProductOfferingTenantLocations.Add(Data.ProductOfferingTenantLocations.FusionFoundation_DevTenant01_LocationUpdateable);
+            context.SaveChanges();
 
             context.SaveChanges();
         }
