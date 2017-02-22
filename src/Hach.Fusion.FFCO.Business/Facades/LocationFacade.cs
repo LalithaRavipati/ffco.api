@@ -132,7 +132,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!uid.HasValue)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == uid.Value);
+            var user = await _context.Users
+                .Include(x => x.Tenants)
+                .FirstOrDefaultAsync(u => u.Id == uid.Value);
+
             if (user == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
