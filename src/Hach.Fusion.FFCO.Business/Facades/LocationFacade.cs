@@ -133,7 +133,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var user = await _context.Users
-                .Include(x => x.Tenants)
+                .Include(x => x.Tenants.Select(y => y.ProductOfferings))
                 .FirstOrDefaultAsync(u => u.Id == uid.Value);
 
             if (user == null)
@@ -186,18 +186,18 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 // will contain only one element and may be replaced by a scalar.
                 var tenant = user.Tenants.ElementAt(0);
 
-                // Add a Product Offering / Tenant / Location for each Tenant / PO combination
-                foreach (var p in tenant.ProductOfferings)
-                {
-                    var productOfferingTenantLocation = new ProductOfferingTenantLocation
-                    {
-                        ProductOfferingId = p.Id,
-                        TenantId = tenant.Id,
-                        LocationId = location.Id
-                    };
+                // Add a Product Offering / Tenant / Location for the Collect PO
+                // TODO: This is going to break if we change the name of the productOffering
+                var productOffering = tenant.ProductOfferings.First(x => x.Name == "Collect");
 
-                    _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
-                }
+                var productOfferingTenantLocation = new ProductOfferingTenantLocation
+                {
+                    ProductOfferingId = productOffering.Id,
+                    TenantId = tenant.Id,
+                    LocationId = location.Id
+                };
+
+                _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
             }
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
