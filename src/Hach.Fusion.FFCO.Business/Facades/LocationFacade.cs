@@ -135,7 +135,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             var user = await _context.Users
                 .Include(x => x.Tenants.Select(y => y.ProductOfferings))
                 .FirstOrDefaultAsync(u => u.Id == uid.Value);
-
+            
             if (user == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
@@ -189,6 +189,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 // Add a Product Offering / Tenant / Location for the Collect PO
                 // TODO: This is going to break if we change the name of the productOffering
                 var productOffering = tenant.ProductOfferings.First(x => x.Name == "Collect");
+
+                if (productOffering == null)
+                    return Command.Error<LocationQueryDto>(EntityErrorCode.ReferencedEntityNotFound);
 
                 var productOfferingTenantLocation = new ProductOfferingTenantLocation
                 {
