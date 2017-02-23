@@ -188,7 +188,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
                 // Add a Product Offering / Tenant / Location for the Collect PO
                 // TODO: This is going to break if we change the name of the productOffering
-                var productOffering = tenant.ProductOfferings.First(x => x.Name == "Collect");
+                var productOffering = tenant.ProductOfferings.FirstOrDefault(x => x.Name == "Collect");
 
                 if (productOffering == null)
                     return Command.Error<LocationQueryDto>(EntityErrorCode.ReferencedEntityNotFound);
