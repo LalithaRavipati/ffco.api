@@ -67,7 +67,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             var results = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
                 .Include(x => x.LocationType)
                 .Include(x => x.Parent)
-                .Include(x => x.Locations)
+                .Include(x => x.Locations.Select(y => y.Locations))
                 .Include(x => x.ProductOfferingTenantLocations)
                 .Select(_mapper.Map<Location, LocationQueryDto>)
                 .AsQueryable())
@@ -94,7 +94,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             var result = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
                 .Include(x => x.LocationType)
                 .Include(x => x.Parent)
-                .Include(x => x.Locations)
+                .Include(x => x.Locations.Select(y => y.Locations))
                 .Include(x => x.ProductOfferingTenantLocations)
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
@@ -132,7 +132,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!uid.HasValue)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == uid.Value);
+            var user = await _context.Users
+                .Include(x => x.Tenants.Select(y => y.ProductOfferings))
+                .FirstOrDefaultAsync(u => u.Id == uid.Value);
+            
             if (user == null)
                 return Command.Error<LocationQueryDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
@@ -183,18 +186,21 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 // will contain only one element and may be replaced by a scalar.
                 var tenant = user.Tenants.ElementAt(0);
 
-                // Add a Product Offering / Tenant / Location for each Tenant / PO combination
-                foreach (var p in tenant.ProductOfferings)
-                {
-                    var productOfferingTenantLocation = new ProductOfferingTenantLocation
-                    {
-                        ProductOfferingId = p.Id,
-                        TenantId = tenant.Id,
-                        LocationId = location.Id
-                    };
+                // Add a Product Offering / Tenant / Location for the Collect PO
+                // TODO: This is going to break if we change the name of the productOffering
+                var productOffering = tenant.ProductOfferings.FirstOrDefault(x => x.Name == "Collect");
 
-                    _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
-                }
+                if (productOffering == null)
+                    return Command.Error<LocationQueryDto>(EntityErrorCode.ReferencedEntityNotFound);
+
+                var productOfferingTenantLocation = new ProductOfferingTenantLocation
+                {
+                    ProductOfferingId = productOffering.Id,
+                    TenantId = tenant.Id,
+                    LocationId = location.Id
+                };
+
+                _context.ProductOfferingTenantLocations.Add(productOfferingTenantLocation);
             }
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
