@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.OData;
@@ -30,6 +31,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public ParameterValidRangeFacade(DataContext context)
         {
             _context = context;
+            _context.Configuration.LazyLoadingEnabled = false;
             _mapper = MappingManager.AutoMapper;
         }
 
@@ -48,9 +50,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
             queryOptions.Validate(ValidationSettings);
 
             var results = await Task.Run(() => _context.ParameterValidRanges
-              .Select(_mapper.Map<ParameterValidRange, ParameterValidRangeQueryDto>)
-              .AsQueryable())
-              .ConfigureAwait(false);
+                .Include(x => x.Parameter)
+                .Select(_mapper.Map<ParameterValidRange, ParameterValidRangeQueryDto>)
+                .AsQueryable())
+                .ConfigureAwait(false);
 
             return Query.Result(results);
         }
@@ -66,6 +69,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public override async Task<QueryResult<ParameterValidRangeQueryDto>> Get(Guid id)
         {
             var result = await Task.Run(() => _context.ParameterValidRanges
+                .Include(x => x.Parameter)
                 .FirstOrDefault(r => r.Id == id))
                 .ConfigureAwait(false);
 

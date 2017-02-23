@@ -78,8 +78,8 @@
       <HintPath>..\packages\Flurl.1.1.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2017.67.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2017.67.7\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2017.68.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2017.68.0\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.68.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -415,14 +415,13 @@
     </Content>
     <Content Include="Controllers\v16_1\XmlDocumentation\PlantConfigurationsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\NotificationsController.doc" />
+    <None Include="Properties\PublishProfiles\ffco-prod-beta-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-prod-demo-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-feature.pubxml" />
+    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-hardening.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-integration.pubxml" />
-    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-sandbox - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-sandbox - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-sandbox.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest.pubxml" />
-    <None Include="Properties\PublishProfiles\ffco-us-hachtest-client-test.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-demo-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-us-hachtest-stage.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />

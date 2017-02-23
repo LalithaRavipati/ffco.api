@@ -13,7 +13,6 @@ using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Core.Dtos.LocationType;
 using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Extensions;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -35,7 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         public LocationTypeFacade(DataContext context, IFFValidator<LocationTypeCommandDto> validator)
         {
             _context = context;
-
+            _context.Configuration.LazyLoadingEnabled = false;
             ValidatorCreate = validator;
             ValidatorUpdate = validator;
 
@@ -63,6 +62,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             queryOptions.Validate(ValidationSettings);
 
             var results = await Task.Run(() => _context.LocationTypes
+                .Include(x => x.LocationTypeGroup)
+                .Include(x => x.LocationTypes)
+                .Include(x => x.Parent)
                 .Select(_mapper.Map<LocationType, LocationTypeQueryDto>)
                 .AsQueryable())
                 .ConfigureAwait(false);
@@ -87,6 +89,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var result = await Task.Run(() => _context.LocationTypes
+                .Include(x => x.LocationTypeGroup)
+                .Include(x => x.LocationTypes)
+                .Include(x => x.Parent)
                 .FirstOrDefault(l => l.Id == id))
                 .ConfigureAwait(false);
 
