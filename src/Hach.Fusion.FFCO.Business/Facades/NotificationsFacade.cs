@@ -5,7 +5,7 @@ using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Notifications;
-using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {

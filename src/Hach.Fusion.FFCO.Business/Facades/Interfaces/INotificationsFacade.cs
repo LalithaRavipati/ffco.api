@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
-using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
 {

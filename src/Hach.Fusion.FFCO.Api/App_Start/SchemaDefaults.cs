@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Hach.Fusion.FFCO.Core.Dtos;
 using Microsoft.OData.Core;
 using Swashbuckle.Swagger;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Dtos.Dashboards;
 
 namespace Hach.Fusion.FFCO.Api
 {

@@ -15,12 +15,12 @@ using System.Web.OData.Routing;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Business;
-using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.Data.Database;
 using Hach.Fusion.FFCO.Business.Tests;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using NUnit.Framework;
-using Hach.Fusion.FFCO.Core.Seed;
+
 using Moq;
 using UnitTypeGroupFacade = Hach.Fusion.FFCO.Business.Facades.UnitTypeGroupFacade;
 

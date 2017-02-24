@@ -1,4 +1,12 @@
-﻿using System;
+﻿using AutoMapper;
+using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Validators;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -10,16 +18,6 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using AutoMapper;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
-using NUnit.Framework;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {

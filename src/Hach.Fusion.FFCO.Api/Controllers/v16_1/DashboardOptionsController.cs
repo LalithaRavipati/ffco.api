@@ -11,8 +11,9 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos.Dashboards;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {

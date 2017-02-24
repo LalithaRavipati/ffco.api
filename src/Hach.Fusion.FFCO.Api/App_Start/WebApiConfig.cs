@@ -1,4 +1,16 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Api.Controllers;
+using Hach.Fusion.Core.Api.Handlers;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos.LocationType;
+using Microsoft.OData.Edm;
+using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Swashbuckle.Application;
+using Swashbuckle.OData;
+using System;
 using System.Configuration;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
@@ -6,18 +18,6 @@ using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
 using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
-using Hach.Fusion.Core.Api.Controllers;
-using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Core.Dtos.LocationType;
-using Microsoft.OData.Edm;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.Application;
-using Swashbuckle.OData;
 
 namespace Hach.Fusion.FFCO.Api
 {

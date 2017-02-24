@@ -10,10 +10,10 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Extensions;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Extensions;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {

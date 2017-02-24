@@ -1,6 +1,6 @@
 ﻿using System;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos.LimitTypes;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {

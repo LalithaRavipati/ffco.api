@@ -9,12 +9,13 @@ using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.FFCO.Business.Facades;
 using Microsoft.Data.OData;
 using System.Collections.Generic;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Api.Handlers;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.FFCO.Business.Facades.Interfaces;
+using Hach.Fusion.FFCO.Business.Helpers;
+using Swashbuckle.Swagger.Annotations;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.FFCO.Business.Facades.Interfaces;
-using Hach.Fusion.FFCO.Business.Helpers;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Swashbuckle.Swagger.Annotations;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {

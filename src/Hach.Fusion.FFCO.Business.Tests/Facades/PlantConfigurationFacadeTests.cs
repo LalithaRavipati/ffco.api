@@ -5,15 +5,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Hach.Fusion.Core.Azure.Blob;
-using Hach.Fusion.Core.Azure.DocumentDB;
-using Hach.Fusion.Core.Azure.Queue;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.Data.Database;
 using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Core.Seed;
 using Moq;
 using NUnit.Framework;
+using Hach.Fusion.Data.Azure.Queue;
+using Hach.Fusion.Data.Azure.Blob;
+using Hach.Fusion.Data.Azure.DocumentDB;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {

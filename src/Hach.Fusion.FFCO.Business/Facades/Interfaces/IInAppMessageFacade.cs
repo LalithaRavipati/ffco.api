@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Facades;
-using Hach.Fusion.FFCO.Core.Dtos;
 using System.Web.OData.Query;
 using Hach.Fusion.Core.Business.Results;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {

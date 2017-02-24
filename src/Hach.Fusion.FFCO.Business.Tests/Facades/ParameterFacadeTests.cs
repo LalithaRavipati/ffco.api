@@ -11,10 +11,10 @@ using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
+using Hach.Fusion.Data.Database;
 using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Seed;
+
+
 using Moq;
 using NUnit.Framework;
 

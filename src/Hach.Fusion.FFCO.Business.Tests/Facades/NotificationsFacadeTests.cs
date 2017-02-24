@@ -6,7 +6,7 @@ using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Notifications;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Moq;
 using NUnit.Framework;
 

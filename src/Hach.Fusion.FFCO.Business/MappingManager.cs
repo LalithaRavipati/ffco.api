@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Hach.Fusion.Core.Business.Spatial;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Core.Dtos.LocationType;
-using Hach.Fusion.FFCO.Core.Dtos.LocationTypeGroup;
-using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos.LocationType;
+using Hach.Fusion.Data.Dtos.LocationTypeGroup;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Spatial;
 
 namespace Hach.Fusion.FFCO.Business
 {

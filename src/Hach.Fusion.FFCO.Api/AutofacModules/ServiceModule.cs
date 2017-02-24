@@ -1,25 +1,25 @@
-﻿using System;
-using System.Configuration;
-using System.Security.Claims;
-using Autofac;
+﻿using Autofac;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Azure.Blob;
-using Hach.Fusion.Core.Azure.Queue;
-using Hach.Fusion.Core.Azure.DocumentDB;
 using Hach.Fusion.Core.Business.Database;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.Data.Azure.Blob;
+using Hach.Fusion.Data.Azure.DocumentDB;
+using Hach.Fusion.Data.Azure.Queue;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos.LocationType;
 using Hach.Fusion.FFCO.Api.Notifications;
-using Hach.Fusion.FFCO.Business.Database;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Notifications;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Hach.Fusion.FFCO.Core.Dtos.LocationType;
+using System;
+using System.Configuration;
+using System.Security.Claims;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
