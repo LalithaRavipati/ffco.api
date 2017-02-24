@@ -121,8 +121,6 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations(IProfileExpression cfg)
         {
             cfg.CreateMap<Location, LocationQueryDto>()
-                .ForMember(x => x.LocationHName, opt => opt.Ignore())
-                .ForSourceMember(x => x.LocationHName, opt => opt.Ignore())
                 .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
 
             cfg.CreateMap<Location, LocationCommandDto>()
@@ -134,12 +132,10 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore())
-                .ForSourceMember(x => x.LocationHName, opt => opt.Ignore())
                 .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
 
             cfg.CreateMap<Location, LocationParentDto>()
                 .ForSourceMember(x => x.Locations, opt => opt.Ignore())
-                .ForSourceMember(x => x.LocationHName, opt => opt.Ignore())
                 .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
 
             cfg.CreateMap<LocationCommandDto, Location>()
@@ -152,7 +148,6 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore())
-                .ForMember(x => x.LocationHName, opt => opt.Ignore())
                 .ForMember(x => x.Geography, opt => opt.MapFrom(src => src.Point.ConvertPointToDbGeography()));
         }
 
