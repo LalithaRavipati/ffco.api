@@ -1,4 +1,13 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Api.OData;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.FFCO.Api.Controllers.v16_1;
+using Hach.Fusion.FFCO.Business;
+using Hach.Fusion.FFCO.Business.Tests;
+using Hach.Fusion.FFCO.Business.Validators;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
@@ -12,16 +21,6 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Api.OData;
-using Hach.Fusion.FFCO.Api.Controllers.v16_1;
-using Hach.Fusion.FFCO.Business;
-using Hach.Fusion.Data.Database;
-using Hach.Fusion.FFCO.Business.Tests;
-using Hach.Fusion.FFCO.Business.Validators;
-
-using NUnit.Framework;
-
-using Moq;
 using UnitTypeGroupFacade = Hach.Fusion.FFCO.Business.Facades.UnitTypeGroupFacade;
 
 namespace Hach.Fusion.FFCO.Api.Tests.Controllers
