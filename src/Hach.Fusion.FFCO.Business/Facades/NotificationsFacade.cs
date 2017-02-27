@@ -21,7 +21,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// Constructor for <see cref="NotificationsFacade"/>.
         /// </summary>
         /// <param name="notificationSender">Object responsible for sending notifications.</param>
-        /// <param name="validator">Validates <see cref="NotificationDto"/>.</param>
+        /// <param name="validator">Validates <see cref="NotificationQueryDto"/>.</param>
         public NotificationsFacade(INotificationSender notificationSender, IFFValidator<NotificationQueryDto> validator)
         {
             if (notificationSender == null)

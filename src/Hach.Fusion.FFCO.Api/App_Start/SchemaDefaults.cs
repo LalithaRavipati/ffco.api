@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.OData.Core;
 using Swashbuckle.Swagger;
 using Hach.Fusion.Data.Dtos;
-using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api
 {
@@ -87,7 +86,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildLocationExamples()
         {
-            Examples[typeof(LocationCommandDto)] = new
+            Examples[typeof(LocationQueryDto)] = new
             {
                 name = "Location Name",
                 locationTypeId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
@@ -110,7 +109,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildParameterTypeExamples()
         {
-            Examples[typeof(ParameterTypeDto)] = new
+            Examples[typeof(ParameterTypeQueryDto)] = new
             {
                 id = Guid.Parse("768CC5ED-E6D6-4394-A9B6-0817C02506E8"),
                 i18NKeyName = "ParameterType_Chemical",
@@ -145,7 +144,7 @@ namespace Hach.Fusion.FFCO.Api
                 modifiedOn = "2016-11-07T18:53:48.116Z"
             };
 
-            Examples[typeof(InAppMessageCommandDto)] = new
+            Examples[typeof(InAppMessageQueryDto)] = new
             {
                 isRead = false,
                 isTrash = false
@@ -157,7 +156,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildDashboardExamples()
         {
-            Examples[typeof(DashboardCommandDto)] = new
+            Examples[typeof(DashboardQueryDto)] = new
             {
                 dashboardOptionId = Guid.Parse("768CC5ED-0BAD-F00D-A9B6-0817C02506E8"),
                 isPrivate = true,
@@ -172,7 +171,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildDashboardOptionExamples()
         {
-            Examples[typeof(DashboardOptionCommandDto)] = new
+            Examples[typeof(DashboardOptionQueryDto)] = new
             {
                 options = "DashboardOption.1",
                 tenantId = Guid.Parse("879CC5ED-DEAD-BEEF-A9B6-0817C02506F9")
@@ -184,7 +183,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildNotificationExamples()
         {
-            Examples[typeof(NotificationDto)] = new
+            Examples[typeof(NotificationQueryDto)] = new
             {
                 broadcastAll = false,
                 groupName = "GroupName",

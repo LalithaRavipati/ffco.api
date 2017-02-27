@@ -5,15 +5,15 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates the <see cref="LocationLogEntryCommandDto"/>s.
+    /// Validates the <see cref="LocationLogEntryBaseDto"/>s.
     /// </summary>
-    public class LocationLogEntryValidator : FFValidator<LocationLogEntryCommandDto, Guid>
+    public class LocationLogEntryValidator : FFValidator<LocationLogEntryBaseDto, Guid>
     {
         /// <summary>
-        /// Validates the state of the specified <see cref="LocationLogEntryCommandDto"/>.
+        /// Validates the state of the specified <see cref="LocationLogEntryBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(LocationLogEntryCommandDto dto)
+        public override FFValidationResponse Validate(LocationLogEntryBaseDto dto)
         {
             IsNull(dto);
 

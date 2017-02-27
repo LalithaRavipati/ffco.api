@@ -59,8 +59,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -232,22 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Packages\IdentityServer3.AspNetIdentity\IdentityServer3.AspNetIdentity.cs" />
-    <Compile Include="Facades\ChemicalFormTypesFacadeTests.cs" />
-    <Compile Include="Facades\DashboardFacadeTests.cs" />
-    <Compile Include="Facades\DashboardOptionFacadeTests.cs" />
-    <Compile Include="Facades\LimitTypeFacadeTests.cs" />
-    <Compile Include="Facades\LocationLogEntryFacadeTests.cs" />
-    <Compile Include="Facades\NotificationsFacadeTests.cs" />
-    <Compile Include="Facades\ParameterValidRangeFacadeTests.cs" />
-    <Compile Include="Facades\InAppMessagesFacadeTests.cs" />
-    <Compile Include="Facades\PlantConfigurationFacadeTests.cs" />
-    <Compile Include="Facades\UnitTypeFacadeTests.cs" />
-    <Compile Include="Facades\LocationTypeFacadeTests.cs" />
-    <Compile Include="Facades\LocationFacadeTests.cs" />
-    <Compile Include="Facades\ParameterFacadeTests.cs" />
-    <Compile Include="Facades\ParameterTypeFacadeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Seeder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

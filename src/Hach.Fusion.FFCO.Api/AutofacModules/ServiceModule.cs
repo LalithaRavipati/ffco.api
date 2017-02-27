@@ -56,54 +56,54 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<NotificationSender>().AsSelf().As<INotificationSender>();
 
             // LocationParameters
-            builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
+            builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationBaseDto, LocationBaseDto,
                 LocationQueryDto, Guid>>();
 
-            builder.RegisterType<LocationTypeFacade>().As<IFacadeWithCruModels<LocationTypeCommandDto, LocationTypeCommandDto,
+            builder.RegisterType<LocationTypeFacade>().As<IFacadeWithCruModels<LocationTypeBaseDto, LocationTypeBaseDto,
                 LocationTypeQueryDto, Guid>>();
 
-            builder.RegisterType<LocationLogEntryFacade>().As<IFacadeWithCruModels<LocationLogEntryCommandDto, LocationLogEntryCommandDto,
+            builder.RegisterType<LocationLogEntryFacade>().As<IFacadeWithCruModels<LocationLogEntryBaseDto, LocationLogEntryBaseDto,
                 LocationLogEntryQueryDto, Guid>>();
 
-            builder.RegisterType<UnitTypeFacade>().As<IFacadeWithCruModels<UnitTypeCommandDto, UnitTypeCommandDto,
+            builder.RegisterType<UnitTypeFacade>().As<IFacadeWithCruModels<UnitTypeBaseDto, UnitTypeBaseDto,
                UnitTypeQueryDto, Guid>>();
-            builder.RegisterType<UnitTypeGroupFacade>().As<IFacadeWithCruModels<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto,
+            builder.RegisterType<UnitTypeGroupFacade>().As<IFacadeWithCruModels<UnitTypeGroupBaseDto, UnitTypeGroupBaseDto,
                UnitTypeGroupQueryDto, Guid>>();
 
-            builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
-            builder.RegisterType<LocationLogEntryValidator>().As<IFFValidator<LocationLogEntryCommandDto>>();
-            builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeCommandDto>>();
-            builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeCommandDto>>();
-            builder.RegisterType<UnitTypeGroupValidator>().As<IFFValidator<UnitTypeGroupQueryDto>>();
+            builder.RegisterType<LocationValidator>().As<IFFValidator<LocationBaseDto>>();
+            builder.RegisterType<LocationLogEntryValidator>().As<IFFValidator<LocationLogEntryBaseDto>>();
+            builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeBaseDto>>();
+            builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeBaseDto>>();
+            builder.RegisterType<UnitTypeGroupValidator>().As<IFFValidator<UnitTypeGroupBaseDto>>();
 
-            builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeDto, Guid>>();
-            builder.RegisterType<ParameterFacade>().As<IFacade<ParameterDto, Guid>>();
+            builder.RegisterType<ParameterTypeFacade>().As<IFacade<ParameterTypeQueryDto, Guid>>();
+            builder.RegisterType<ParameterFacade>().As<IFacade<ParameterQueryDto, Guid>>();
 
             builder.RegisterType<ParameterValidRangeFacade>().As<IFacade<ParameterValidRangeQueryDto, Guid>>();
 
-            builder.RegisterType<DashboardFacade>().As<IFacadeWithCruModels<DashboardCommandDto, DashboardCommandDto,
+            builder.RegisterType<DashboardFacade>().As<IFacadeWithCruModels<DashboardBaseDto, DashboardBaseDto,
                 DashboardQueryDto, Guid>>();
-            builder.RegisterType<DashboardValidator>().As<IFFValidator<DashboardCommandDto>>();
+            builder.RegisterType<DashboardValidator>().As<IFFValidator<DashboardBaseDto>>();
 
-            builder.RegisterType<DashboardOptionFacade>().As<IFacadeWithCruModels<DashboardOptionCommandDto, DashboardOptionCommandDto,
+            builder.RegisterType<DashboardOptionFacade>().As<IFacadeWithCruModels<DashboardOptionBaseDto, DashboardOptionBaseDto,
                 DashboardOptionQueryDto, Guid>>();
-            builder.RegisterType<DashboardOptionValidator>().As<IFFValidator<DashboardOptionCommandDto>>();
+            builder.RegisterType<DashboardOptionValidator>().As<IFFValidator<DashboardOptionBaseDto>>();
 
-            builder.RegisterType<LimitTypeValidator>().As<IFFValidator<LimitTypeCommandDto>>();
-            builder.RegisterType<LimitTypeFacade>().As<IFacadeWithCruModels<LimitTypeCommandDto, LimitTypeCommandDto,
+            builder.RegisterType<LimitTypeValidator>().As<IFFValidator<LimitTypeBaseDto>>();
+            builder.RegisterType<LimitTypeFacade>().As<IFacadeWithCruModels<LimitTypeBaseDto, LimitTypeBaseDto,
                LimitTypeQueryDto, Guid>>();
 
             //ChemicalFormsTypes
-            builder.RegisterType<ChemicalFormTypesFacade>().As<IFacadeWithCruModels<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto,
+            builder.RegisterType<ChemicalFormTypesFacade>().As<IFacadeWithCruModels<ChemicalFormTypeBaseDto, ChemicalFormTypeBaseDto,
                ChemicalFormTypeQueryDto, Guid>>();
 
             builder.RegisterType<InAppMessageFacade>().As<IInAppMessageFacade>();
-            builder.RegisterType<InAppMessageValidator>().As<IFFValidator<InAppMessageCommandDto>>();
+            builder.RegisterType<InAppMessageValidator>().As<IFFValidator<InAppMessageBaseDto>>();
 
             builder.RegisterType<PlantConfigurationsFacade>().As<IPlantConfigurationsFacade>();
 
             builder.RegisterType<NotificationsFacade>().As<INotificationsFacade>();
-            builder.RegisterType<NotificationValidator>().As<IFFValidator<NotificationDto>>();
+            builder.RegisterType<NotificationValidator>().As<IFFValidator<NotificationBaseDto>>();
 
             base.Load(builder);
         }

@@ -78,7 +78,7 @@ namespace Hach.Fusion.FFCO.Business
         {
             cfg.CreateMap<InAppMessage, InAppMessageQueryDto>();
 
-            cfg.CreateMap<InAppMessage, InAppMessageCommandDto>()
+            cfg.CreateMap<InAppMessage, InAppMessageQueryDto>()
                 .ForSourceMember(x => x.Body, opt => opt.Ignore())
                 .ForSourceMember(x => x.DateRead, opt => opt.Ignore())
                 .ForSourceMember(x => x.DateReceived, opt => opt.Ignore())
@@ -94,7 +94,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<InAppMessageCommandDto, InAppMessage>()
+            cfg.CreateMap<InAppMessageQueryDto, InAppMessage>()
                 .ForMember(x => x.Body, opt => opt.Ignore())
                 .ForMember(x => x.DateRead, opt => opt.Ignore())
                 .ForMember(x => x.DateReceived, opt => opt.Ignore())
@@ -117,11 +117,9 @@ namespace Hach.Fusion.FFCO.Business
         private static void InitializeLocations(IProfileExpression cfg)
         {
             cfg.CreateMap<Location, LocationQueryDto>()
-                .ForMember(x => x.LocationHName, opt => opt.Ignore())
-                .ForSourceMember(x => x.LocationHName, opt => opt.Ignore())
-                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint())).PreserveReferences();
 
-            cfg.CreateMap<Location, LocationCommandDto>()
+            cfg.CreateMap<Location, LocationQueryDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
                 .ForSourceMember(x => x.Locations, opt => opt.Ignore())
                 .ForSourceMember(x => x.LocationType, opt => opt.Ignore())
@@ -130,15 +128,13 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore())
-                .ForSourceMember(x => x.LocationHName, opt => opt.Ignore())
-                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint())).PreserveReferences();
 
             cfg.CreateMap<Location, LocationParentDto>()
                 .ForSourceMember(x => x.Locations, opt => opt.Ignore())
-                .ForSourceMember(x => x.LocationHName, opt => opt.Ignore())
-                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint()));
+                .ForMember(x => x.Point, opt => opt.MapFrom(src => src.Geography.ConvertDbGeographyToPoint())).PreserveReferences();
 
-            cfg.CreateMap<LocationCommandDto, Location>()
+            cfg.CreateMap<LocationQueryDto, Location>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.Parent, opt => opt.Ignore())
                 .ForMember(x => x.Locations, opt => opt.Ignore())
@@ -148,8 +144,10 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore())
                 .ForMember(x => x.ProductOfferingTenantLocations, opt => opt.Ignore())
-                .ForMember(x => x.LocationHName, opt => opt.Ignore())
                 .ForMember(x => x.Geography, opt => opt.MapFrom(src => src.Point.ConvertPointToDbGeography()));
+
+            cfg.CreateMap<LocationQueryDto, LocationParentDto>().PreserveReferences()
+                .ForSourceMember(x => x.Locations, opt => opt.Ignore());
         }
 
         /// <summary>
@@ -160,7 +158,7 @@ namespace Hach.Fusion.FFCO.Business
         {
             cfg.CreateMap<LocationLogEntry, LocationLogEntryQueryDto>();
 
-            cfg.CreateMap<LocationLogEntryCommandDto, LocationLogEntry>()
+            cfg.CreateMap<LocationLogEntryQueryDto, LocationLogEntry>()
                 .ForMember(x => x.Location, opt => opt.Ignore())
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
@@ -168,7 +166,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<LocationLogEntry, LocationLogEntryCommandDto>()
+            cfg.CreateMap<LocationLogEntry, LocationLogEntryQueryDto>()
                 .ForSourceMember(x => x.Location, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
@@ -184,7 +182,7 @@ namespace Hach.Fusion.FFCO.Business
             cfg.CreateMap<LocationType, LocationTypeQueryDto>()
                 .PreserveReferences();
 
-            cfg.CreateMap<LocationTypeCommandDto, LocationType>()
+            cfg.CreateMap<LocationTypeQueryDto, LocationType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.Parent, opt => opt.Ignore())
                 .ForMember(x => x.LocationTypeGroup, opt => opt.Ignore())
@@ -194,7 +192,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<LocationType, LocationTypeCommandDto>()
+            cfg.CreateMap<LocationType, LocationTypeQueryDto>()
                 .ForSourceMember(x => x.Parent, opt => opt.Ignore())
                 .ForSourceMember(x => x.LocationTypeGroup, opt => opt.Ignore())
                 .ForSourceMember(x => x.LocationTypes, opt => opt.Ignore())
@@ -209,7 +207,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeParameters(IProfileExpression cfg)
         {
-            cfg.CreateMap<Parameter, ParameterDto>();
+            cfg.CreateMap<Parameter, ParameterQueryDto>();
         }
 
         /// <summary>
@@ -235,13 +233,13 @@ namespace Hach.Fusion.FFCO.Business
         {
             cfg.CreateMap<UnitType, UnitTypeQueryDto>();
 
-            cfg.CreateMap<UnitType, UnitTypeCommandDto>()
+            cfg.CreateMap<UnitType, UnitTypeQueryDto>()
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<UnitTypeCommandDto, UnitType>()
+            cfg.CreateMap<UnitTypeQueryDto, UnitType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.UnitTypeGroup, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
@@ -255,7 +253,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeParameterTypes(IProfileExpression cfg)
         {
-            cfg.CreateMap<ParameterType, ParameterTypeDto>();
+            cfg.CreateMap<ParameterType, ParameterTypeQueryDto>();
         }
 
         /// <summary>
@@ -265,7 +263,7 @@ namespace Hach.Fusion.FFCO.Business
         {
             cfg.CreateMap<Dashboard, DashboardQueryDto>();
 
-            cfg.CreateMap<Dashboard, DashboardCommandDto>()
+            cfg.CreateMap<Dashboard, DashboardQueryDto>()
                 .ForSourceMember(x => x.OwnerUserId, opt => opt.Ignore())
                 .ForSourceMember(x => x.OwnerUser, opt => opt.Ignore())
                 .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
@@ -275,7 +273,7 @@ namespace Hach.Fusion.FFCO.Business
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<DashboardCommandDto, Dashboard>()
+            cfg.CreateMap<DashboardQueryDto, Dashboard>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.OwnerUserId, opt => opt.Ignore())
                 .ForMember(x => x.OwnerUser, opt => opt.Ignore())
@@ -294,14 +292,14 @@ namespace Hach.Fusion.FFCO.Business
         {
             cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>();
 
-            cfg.CreateMap<DashboardOption, DashboardOptionCommandDto>()
+            cfg.CreateMap<DashboardOption, DashboardOptionQueryDto>()
                 .ForSourceMember(x => x.Tenant, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<DashboardOptionCommandDto, DashboardOption>()
+            cfg.CreateMap<DashboardOptionQueryDto, DashboardOption>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.Tenant, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
@@ -315,7 +313,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeTenants(IProfileExpression cfg)
         {
-            cfg.CreateMap<Tenant, TenantDto>();
+            cfg.CreateMap<Tenant, TenantQueryDto>();
         }
 
         /// <summary>
@@ -323,7 +321,7 @@ namespace Hach.Fusion.FFCO.Business
         /// </summary>
         private static void InitializeUsers(IProfileExpression cfg)
         {
-            cfg.CreateMap<User, UserDto>()
+            cfg.CreateMap<User, UserQueryDto>()
                 .ForSourceMember(x => x.Tenants, opt => opt.Ignore());
         }
 
@@ -334,13 +332,13 @@ namespace Hach.Fusion.FFCO.Business
         {
             cfg.CreateMap<LimitType, LimitTypeQueryDto>();
 
-            cfg.CreateMap<LimitType, LimitTypeCommandDto>()
+            cfg.CreateMap<LimitType, LimitTypeQueryDto>()
                 .ForSourceMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.CreatedOn, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedById, opt => opt.Ignore())
                 .ForSourceMember(x => x.ModifiedOn, opt => opt.Ignore());
 
-            cfg.CreateMap<LimitTypeCommandDto, LimitType>()
+            cfg.CreateMap<LimitTypeQueryDto, LimitType>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.CreatedById, opt => opt.Ignore())
                 .ForMember(x => x.CreatedOn, opt => opt.Ignore())

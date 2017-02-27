@@ -5,21 +5,21 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="InAppMessageCommandDto"/>s.
+    /// Validates <see cref="InAppMessageBaseDto"/>s.
     /// </summary>
     /// <remarks>
     /// </remarks>
-    public class InAppMessageValidator : FFValidator<InAppMessageCommandDto, Guid>
+    public class InAppMessageValidator : FFValidator<InAppMessageBaseDto, Guid>
     {
         /// <summary>
-        /// Validates the state of the specified <see cref="InAppMessageCommandDto"/>.
+        /// Validates the state of the specified <see cref="InAppMessageBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(InAppMessageCommandDto dto)
+        public override FFValidationResponse Validate(InAppMessageBaseDto dto)
         {
             IsNull(dto);
 
-            IsType(dto, typeof(InAppMessageCommandDto));
+            IsType(dto, typeof(InAppMessageQueryDto));
 
             if (FFErrors.Count > 0)
                 return new FFValidationResponse

@@ -4,17 +4,17 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="NotificationDto"/>s.
+    /// Validates <see cref="NotificationBaseDto"/>s.
     /// </summary>
     /// <remarks>
     /// </remarks>
-    public class NotificationValidator : FFValidator<NotificationQueryDto>
+    public class NotificationValidator : FFValidator<NotificationBaseDto>
     {
         /// <summary>
-        /// Validates the state of the specified <see cref="NotificationDto"/>.
+        /// Validates the state of the specified <see cref="NotificationBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(NotificationQueryDto dto)
+        public override FFValidationResponse Validate(NotificationBaseDto dto)
         {
             IsNull(dto);
 

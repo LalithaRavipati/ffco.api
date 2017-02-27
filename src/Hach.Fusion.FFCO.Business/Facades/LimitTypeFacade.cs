@@ -21,7 +21,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the LimitType repository. 
     /// </summary>    
     public class LimitTypeFacade
-        : FacadeWithCruModelsBase<LimitTypeCommandDto, LimitTypeCommandDto, LimitTypeQueryDto, Guid>
+        : FacadeWithCruModelsBase<LimitTypeBaseDto, LimitTypeBaseDto, LimitTypeQueryDto, Guid>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +32,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing dashboard option entities.</param>
         /// <param name="validator">Validator for DTOs.</param>
-        public LimitTypeFacade(DataContext context, IFFValidator<LimitTypeCommandDto> validator)
+        public LimitTypeFacade(DataContext context, IFFValidator<LimitTypeBaseDto> validator)
         {
             _context = context;
             _mapper = MappingManager.AutoMapper;
@@ -104,7 +104,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the DTO associated with the entity created.
         /// </returns>
-        public override async Task<CommandResult<LimitTypeQueryDto, Guid>> Create(LimitTypeCommandDto dto)
+        public override async Task<CommandResult<LimitTypeQueryDto, Guid>> Create(LimitTypeBaseDto dto)
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
@@ -182,23 +182,23 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<LimitTypeCommandDto, Guid>> Update(Guid id, Delta<LimitTypeCommandDto> delta)
+        public override async Task<CommandResult<LimitTypeBaseDto, Guid>> Update(Guid id, Delta<LimitTypeBaseDto> delta)
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
-                return Command.Error<LimitTypeCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<LimitTypeBaseDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
-                return Command.Error<LimitTypeCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<LimitTypeBaseDto>(EntityErrorCode.EntityFormatIsInvalid);
 
             var entity = await _context.LimitTypes
                 .SingleOrDefaultAsync(x => x.Id == id)
                 .ConfigureAwait(false);
 
             if (entity == null)
-                return Command.Error<LimitTypeCommandDto>(EntityErrorCode.EntityNotFound);
+                return Command.Error<LimitTypeBaseDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map(entity, new LimitTypeCommandDto());
+            var dto = _mapper.Map(entity, new LimitTypeQueryDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
@@ -211,7 +211,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<LimitTypeCommandDto>(validationResponse);
+                return Command.Error<LimitTypeBaseDto>(validationResponse);
 
             _context.LimitTypes.Attach(entity);
             _mapper.Map(dto, entity);
@@ -219,7 +219,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LimitTypeCommandDto>();
+            return Command.NoContent<LimitTypeBaseDto>();
         }
 
         #endregion Update Method

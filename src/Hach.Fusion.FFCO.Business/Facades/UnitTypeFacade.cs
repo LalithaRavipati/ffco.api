@@ -17,7 +17,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the Unit Type repository. 
     /// </summary>    
     public class UnitTypeFacade
-        : FacadeWithCruModelsBase<UnitTypeCommandDto, UnitTypeCommandDto, UnitTypeQueryDto, Guid>
+        : FacadeWithCruModelsBase<UnitTypeBaseDto, UnitTypeBaseDto, UnitTypeQueryDto, Guid>,
+        IFacadeWithCruModels<UnitTypeBaseDto, UnitTypeBaseDto, UnitTypeQueryDto, Guid>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -28,7 +29,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing Unit type entities.</param>
         /// <param name="validator">Validator for Unit Type DTOs.</param>
-        public UnitTypeFacade(DataContext context, IFFValidator<UnitTypeCommandDto> validator)
+        public UnitTypeFacade(DataContext context, IFFValidator<UnitTypeBaseDto> validator)
         {
             _context = context;
 
@@ -91,7 +92,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             throw new NotImplementedException();
         }
 
-        public override Task<CommandResult<UnitTypeQueryDto, Guid>> Create(UnitTypeCommandDto dto)
+        public override Task<CommandResult<UnitTypeQueryDto, Guid>> Create(UnitTypeBaseDto dto)
         {
             throw new NotImplementedException();
         }
@@ -101,7 +102,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             throw new NotImplementedException();
         }
 
-        public override Task<CommandResult<UnitTypeCommandDto, Guid>> Update(Guid id, Delta<UnitTypeCommandDto> delta)
+        public override Task<CommandResult<UnitTypeBaseDto, Guid>> Update(Guid id, Delta<UnitTypeBaseDto> delta)
         {
             throw new NotImplementedException();
         }

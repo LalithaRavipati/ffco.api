@@ -209,7 +209,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Thread.CurrentPrincipal = _adHachClaims;
             var user = Data.Users.Adhach;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.Empty;
             var callTime = DateTime.UtcNow;
 
@@ -235,7 +235,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.Adhach.Id.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.DevTenant02_Options);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.DevTenant02_Options);
             toCreate.Id = Guid.Empty;
             toCreate.Options = "New Options";
 
@@ -272,7 +272,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.NewGuid();
             toCreate.Options = "New Options";
 
@@ -288,7 +288,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.Empty;
             toCreate.Options = "New Options";
@@ -305,7 +305,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionCommandDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.NewGuid();
             toCreate.Options = "New Options";
@@ -365,7 +365,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.DashboardOptions.DevTenant01_Options;
             const string newOptions = "NewOptions";
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("Options", newOptions);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -386,7 +386,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var seed = Data.DashboardOptions.DevTenant01_Options;
             const string newOptions = "NewOptions";
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("Options", newOptions);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -397,7 +397,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_ChangeId_Fails()
         {
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
             var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, delta);
@@ -420,7 +420,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadId_Fails()
         {
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("Options", "New Options");
 
             var commandResult = await _facade.Update(Guid.Empty, delta);
@@ -433,7 +433,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_OtherTenant_Fails()
         {
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("Options", "New Options");
 
             var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant02_Options.Id, delta);
@@ -446,7 +446,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_EmptyTenantId_Fails()
         {
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("TenantId", Guid.Empty);
 
             var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, delta);
@@ -459,7 +459,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadTenantId_Fails()
         {
-            var delta = new Delta<DashboardOptionCommandDto>();
+            var delta = new Delta<DashboardOptionQueryDto>();
             delta.TrySetPropertyValue("TenantId", Guid.NewGuid());
 
             var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, delta);

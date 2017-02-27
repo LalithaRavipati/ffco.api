@@ -76,7 +76,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_WithParent_Should_Succeed()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationQueryDto
             {
                 Name = "New Location",
                 LocationTypeId = Data.LocationTypes.SamplingSite.Id,
@@ -137,7 +137,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Thread.CurrentPrincipal = null;
 
             var seed = Data.Locations.Test_Updateable;
-            var delta = new Delta<LocationCommandDto>();
+            var delta = new Delta<LocationQueryDto>();
             delta.TrySetPropertyValue("Name", "New Name");
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -149,7 +149,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Update_SetAndRemoveSortOrder()
         {
             var seed = Data.Locations.Test_Updateable;
-            var delta = new Delta<LocationCommandDto>();
+            var delta = new Delta<LocationQueryDto>();
             delta.TrySetPropertyValue("SortOrder", 1);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -172,7 +172,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Update_With_ValidData()
         {
             var seed = Data.Locations.Test_Updateable;
-            var delta = new Delta<LocationCommandDto>();
+            var delta = new Delta<LocationQueryDto>();
             var sortOrderUpdateval = Data.Locations.Test_ForUpdate.SortOrder == null
                 ? 1
                 : Data.Locations.Test_ForUpdate.SortOrder++;
@@ -195,7 +195,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var dto = new LocationCommandDto
+            var dto = new LocationQueryDto
             {
                 Name = "New Location",
                 LocationTypeId = Data.LocationTypes.Distribution.Id
@@ -208,7 +208,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_AlreadyExists_Should_Fail()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationQueryDto
             {
                 Name = Data.Locations.Plant_01.Name,
                 LocationTypeId = Data.Locations.Plant_01.LocationTypeId
@@ -226,7 +226,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_NoLocationTypeId_Should_Fail()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationQueryDto
             {
                 Name = "New Location"
             };
@@ -243,7 +243,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_LocationTypeIdNoExist_Should_Fail()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationQueryDto
             {
                 Name = "New Location",
                 LocationTypeId = Guid.NewGuid()
@@ -261,7 +261,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_ParentIdNoExist_Should_Fail()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationQueryDto
             {
                 Name = "New Location",
                 LocationTypeId = Data.LocationTypes.Distribution.Id,

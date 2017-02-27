@@ -225,7 +225,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_Succeeds()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
@@ -253,7 +253,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_OtherTenant_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt02user_Dashboard_3);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt02user_Dashboard_3);
             toCreate.Id = Guid.Empty;
             toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
@@ -289,7 +289,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_IdNotEmpty_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.NewGuid();
             toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";
@@ -304,7 +304,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadName_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.Name = "123";
             toCreate.Layout = "New Dashboard";
@@ -319,7 +319,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_EmptyTenantId_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.Empty;
             toCreate.Name = "New Dashboard";
@@ -335,7 +335,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadTenantId_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.NewGuid();
             toCreate.Name = "New Dashboard";
@@ -351,7 +351,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_EmptyDashboardOptionId_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.DashboardOptionId = Guid.Empty;
             toCreate.Name = "New Dashboard";
@@ -367,7 +367,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadDashboardOptionId_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.DashboardOptionId = Guid.NewGuid();
             toCreate.Name = "New Dashboard";
@@ -383,7 +383,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_Duplicate_Fails()
         {
-            var toCreate = _mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = _mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
 
             var commandResult = await _facade.Create(toCreate);
@@ -454,7 +454,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.Dashboards.Test_tnt01user_ToUpdate;
             const string newLayout = "NewLayout";
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("Layout", newLayout);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -476,7 +476,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var seed = Data.Dashboards.Test_tnt01user_ToUpdate;
             const string newLayout = "NewLayout";
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("Layout", newLayout);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -487,7 +487,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_ChangeId_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
             var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);
@@ -510,7 +510,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadId_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("Layout", "New Layout");
 
             var commandResult = await _facade.Update(Guid.Empty, delta);
@@ -523,7 +523,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_OtherTenant_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("Layout", "New Layout");
 
             var commandResult = await _facade.Update(Data.Dashboards.tnt02user_Dashboard_3.Id, delta);
@@ -536,7 +536,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_EmptyTenantId_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("TenantId", Guid.Empty);
 
             var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);
@@ -549,7 +549,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadTenantId_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("TenantId", Guid.NewGuid());
 
             var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);
@@ -562,7 +562,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_EmptyDashboardOptionId_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("DashboardOptionId", Guid.Empty);
 
             var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);
@@ -575,7 +575,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadDashboardOptionId_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("DashboardOptionId", Guid.NewGuid());
 
             var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);
@@ -588,7 +588,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_Duplicate_Fails()
         {
-            var delta = new Delta<DashboardCommandDto>();
+            var delta = new Delta<DashboardQueryDto>();
             delta.TrySetPropertyValue("Name", Data.Dashboards.Test_tnt01user_ToDelete.Name);
 
             var commandResult = await _facade.Update(Data.Dashboards.Test_tnt01user_ToUpdate.Id, delta);

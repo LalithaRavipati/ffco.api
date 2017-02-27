@@ -29,7 +29,7 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
     {
 
         private ParametersController _controller;
-        private readonly Mock<ODataQueryOptions<ParameterDto>> _mockDtoOptions;
+        private readonly Mock<ODataQueryOptions<ParameterQueryDto>> _mockDtoOptions;
         private DataContext _context;
         private ParameterFacade _facade;
         private Guid _userId = Data.Users.tnt01user.Id;
@@ -42,8 +42,8 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri("http://tempuri.com");
 
-            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterDto), new ODataPath()),
+            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterQueryDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterQueryDto), new ODataPath()),
                 request);
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
@@ -53,8 +53,8 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         {
             var builder = new ODataModelBuilder();
 
-            builder.EntitySet<ParameterDto>("Parameters");
-            builder.EntityType<ParameterDto>().HasKey(x => x.Id);
+            builder.EntitySet<ParameterQueryDto>("Parameters");
+            builder.EntityType<ParameterQueryDto>().HasKey(x => x.Id);
 
             return builder;
         }

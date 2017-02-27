@@ -118,7 +118,7 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         public async Task When_Post_Succeeds()
         {
             var mapper = MappingManager.AutoMapper;
-            var toCreate = mapper.Map<Dashboard, DashboardCommandDto>(Data.Dashboards.tnt01user_Dashboard_1);
+            var toCreate = mapper.Map<Dashboard, DashboardQueryDto>(Data.Dashboards.tnt01user_Dashboard_1);
             toCreate.Id = Guid.Empty;
             toCreate.Name = "New Dashboard";
             toCreate.Layout = "New Dashboard";

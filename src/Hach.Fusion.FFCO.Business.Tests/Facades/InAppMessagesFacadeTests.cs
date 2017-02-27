@@ -142,7 +142,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageQueryDto>();
 
             toUpdateDto.TrySetPropertyValue("IsRead", true);
             var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
@@ -164,7 +164,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageQueryDto>();
 
             toUpdateDto.TrySetPropertyValue("IsRead", true);
             toUpdateDto.TrySetPropertyValue("IsTrash", true);
@@ -188,7 +188,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageQueryDto>();
 
             toUpdateDto.TrySetPropertyValue("IsTrash", true);
             var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
@@ -210,7 +210,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageQueryDto>();
 
             toUpdateDto.TrySetPropertyValue("IsRead", false);
             var Id = Data.InAppMessages.tnt01UserMessageLimitViolation2.Id;

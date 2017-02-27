@@ -5,19 +5,19 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="LocationTypeCommandDto"/>s.
+    /// Validates <see cref="LocationTypeBaseDto"/>s.
     /// </summary>
-    public class LocationTypeValidator : FFValidator<LocationTypeCommandDto, Guid>
+    public class LocationTypeValidator : FFValidator<LocationTypeBaseDto, Guid>
     {
         private const int NameMaximumLength = 100;
 
         private const int NameMinimumLength = 4;
 
         /// <summary>
-        /// Validates the state of the specified <see cref="LocationTypeCommandDto"/>.
+        /// Validates the state of the specified <see cref="LocationTypeBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(LocationTypeCommandDto dto)
+        public override FFValidationResponse Validate(LocationTypeBaseDto dto)
         {
             IsNull(dto);
 

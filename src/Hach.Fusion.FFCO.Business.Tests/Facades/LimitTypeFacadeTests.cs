@@ -139,7 +139,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_Succeeds()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeCommandDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
             toCreate.Id = Guid.Empty;
             toCreate.I18NKeyName = "New LimitType";
             var callTime = DateTime.UtcNow;
@@ -184,7 +184,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_IdNotEmpty_Fails()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeCommandDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
             toCreate.Id = Guid.NewGuid();
             toCreate.I18NKeyName = "New LimitType";
 
@@ -198,7 +198,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_EmptyKeyName_Fails()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeCommandDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
             toCreate.Id = Guid.Empty;
             toCreate.I18NKeyName = "";
 
@@ -213,7 +213,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadKeyName_Fails()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeCommandDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
             toCreate.Id = Guid.Empty;
             toCreate.I18NKeyName = "123";
 
@@ -264,7 +264,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.LimitTypes.Under;
             const int newSeverity = 3;
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("Severity", newSeverity);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -285,7 +285,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var seed = Data.LimitTypes.Under;
             const int newSeverity = 3;
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("Severity", newSeverity);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -296,7 +296,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_ChangeId_Fails()
         {
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
             var commandResult = await _facade.Update(Data.LimitTypes.Under.Id, delta);
@@ -319,7 +319,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadId_Fails()
         {
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("Severity", 3);
 
             var commandResult = await _facade.Update(Guid.Empty, delta);
@@ -334,7 +334,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.LimitTypes.Under;
 
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("I18NKeyName", "");
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -350,7 +350,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.LimitTypes.Under;
 
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("I18NKeyName", "123");
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -365,7 +365,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = Data.LimitTypes.Under;
 
-            var delta = new Delta<LimitTypeCommandDto>();
+            var delta = new Delta<LimitTypeQueryDto>();
             delta.TrySetPropertyValue("I18NKeyName", Data.LimitTypes.Over.I18NKeyName);
 
             var commandResult = await _facade.Update(seed.Id, delta);

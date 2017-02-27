@@ -7,7 +7,7 @@ using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
-    public interface IInAppMessageFacade : IFacadeWithCruModels<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
+    public interface IInAppMessageFacade : IFacadeWithCruModels<InAppMessageBaseDto, InAppMessageBaseDto, InAppMessageQueryDto, Guid>
     {
         /// <summary>
         /// Retrieves InAppMessages for the specified User

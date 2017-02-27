@@ -158,7 +158,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Create_Succeeds()
         //{
-        //    var locationLogEntryDto = new LocationLogEntryCommandDto()
+        //    var locationLogEntryDto = new LocationLogEntryQueryDto()
         //    {
         //        LocationId = Data.Locations.Plant_01.Id,
         //        LogEntry = "Create Log Entry",
@@ -179,7 +179,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Create_BadLocation()
         //{
-        //    var locationLogEntryDto = new LocationLogEntryCommandDto()
+        //    var locationLogEntryDto = new LocationLogEntryQueryDto()
         //    {
         //        LocationId = Guid.NewGuid(),
         //        LogEntry = "Create Log Entry",
@@ -196,7 +196,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Create_BadId()
         //{
-        //    var locationLogEntryDto = new LocationLogEntryCommandDto()
+        //    var locationLogEntryDto = new LocationLogEntryQueryDto()
         //    {
         //        Id = Guid.NewGuid(),
         //        LocationId = Data.Locations.Plant_01.Id,
@@ -214,7 +214,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Create_BadLogEntry()
         //{
-        //    var locationLogEntryDto = new LocationLogEntryCommandDto()
+        //    var locationLogEntryDto = new LocationLogEntryQueryDto()
         //    {
         //        LocationId = Data.Locations.Plant_01.Id,
         //        LogEntry = null,
@@ -233,7 +233,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //{
         //    Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()));
 
-        //    var locationLogEntryDto = new LocationLogEntryCommandDto()
+        //    var locationLogEntryDto = new LocationLogEntryQueryDto()
         //    {
         //        LocationId = Data.Locations.Plant_01.Id,
         //        LogEntry = "Create Log Entry"
@@ -249,7 +249,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Create_MissingTimestamp()
         //{
-        //    var locationLogEntryDto = new LocationLogEntryCommandDto()
+        //    var locationLogEntryDto = new LocationLogEntryQueryDto()
         //    {
         //        LocationId = Data.Locations.Plant_01.Id,
         //        LogEntry = "Create Log Entry"
@@ -298,7 +298,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Update_Succeeds()
         //{
-        //    var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+        //    var delta = new Delta<LocationLogEntryQueryDto>(typeof(LocationLogEntryQueryDto));
         //    delta.TrySetPropertyValue("LogEntry", "Update Log Entry");
 
         //    var commandResult = await _facade.Update(
@@ -317,7 +317,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Update_NotFound()
         //{
-        //    var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+        //    var delta = new Delta<LocationLogEntryQueryDto>(typeof(LocationLogEntryQueryDto));
         //    delta.TrySetPropertyValue("LogEntry", "Update Log Entry");
 
         //    var commandResult = await _facade.Update(
@@ -343,7 +343,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Update_CantUpdateId()
         //{
-        //    var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+        //    var delta = new Delta<LocationLogEntryQueryDto>(typeof(LocationLogEntryQueryDto));
         //    delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
         //    var commandResult = await _facade.Update(
@@ -357,7 +357,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Update_BadLocationId()
         //{
-        //    var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+        //    var delta = new Delta<LocationLogEntryQueryDto>(typeof(LocationLogEntryQueryDto));
         //    delta.TrySetPropertyValue("LocationId", Guid.NewGuid());
 
         //    var commandResult = await _facade.Update(
@@ -371,7 +371,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //[Test]
         //public async Task When_Update_NullTimestamp()
         //{
-        //    var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+        //    var delta = new Delta<LocationLogEntryQueryDto>(typeof(LocationLogEntryQueryDto));
         //    delta.TrySetPropertyValue("TimeStamp", null);
 
         //    var commandResult = await _facade.Update(
@@ -387,7 +387,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         //{
         //    Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()));
 
-        //    var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+        //    var delta = new Delta<LocationLogEntryQueryDto>(typeof(LocationLogEntryQueryDto));
         //    delta.TrySetPropertyValue("LogEntry", "Update Log Entry");
 
         //    var commandResult = await _facade.Update(

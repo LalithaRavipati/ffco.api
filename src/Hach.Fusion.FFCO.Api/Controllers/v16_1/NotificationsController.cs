@@ -45,7 +45,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> SendNotification([FromBody] NotificationDto dto)
+        public async Task<IHttpActionResult> SendNotification([FromBody] NotificationQueryDto dto)
         {
             var result = await _facade.SendNotification(dto);
 

@@ -5,15 +5,15 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="DashboardOptionCommandDto"/>s.
+    /// Validates <see cref="DashboardOptionBaseDto"/>s.
     /// </summary>
-    public class DashboardOptionValidator : FFValidator<DashboardOptionCommandDto, Guid>
+    public class DashboardOptionValidator : FFValidator<DashboardOptionBaseDto, Guid>
     {
         /// <summary>
-        /// Validates the state of the specified <see cref="DashboardOptionCommandDto"/>.
+        /// Validates the state of the specified <see cref="DashboardOptionBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(DashboardOptionCommandDto dto)
+        public override FFValidationResponse Validate(DashboardOptionBaseDto dto)
         {
             IsNull(dto);
 

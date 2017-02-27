@@ -5,18 +5,18 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="LimitTypeCommandDto"/>s.
+    /// Validates <see cref="LimitTypeBaseDto"/>s.
     /// </summary>
-    public class LimitTypeValidator : FFValidator<LimitTypeCommandDto, Guid>
+    public class LimitTypeValidator : FFValidator<LimitTypeBaseDto, Guid>
     {
         private const int NameMaximumLength = 100;
         private const int NameMinimumLength = 4;
 
         /// <summary>
-        /// Validates the state of the specified <see cref="LimitTypeCommandDto"/>.
+        /// Validates the state of the specified <see cref="LimitTypeBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(LimitTypeCommandDto dto)
+        public override FFValidationResponse Validate(LimitTypeBaseDto dto)
         {
             IsNull(dto);
 

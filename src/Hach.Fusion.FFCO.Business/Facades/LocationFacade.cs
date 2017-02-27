@@ -22,7 +22,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the location repository. 
     /// </summary>    
     public class LocationFacade
-        : FacadeWithCruModelsBase<LocationCommandDto, LocationCommandDto, LocationQueryDto, Guid>
+        : FacadeWithCruModelsBase<LocationBaseDto, LocationBaseDto, LocationQueryDto, Guid>
+        , IFacadeWithCruModels<LocationBaseDto, LocationBaseDto, LocationQueryDto, Guid>
     {
         private readonly DataContext _context;
 
@@ -34,7 +35,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing location type entities.</param>
         /// <param name="validator">Validator for location DTOs.</param>
-        public LocationFacade(DataContext context, IFFValidator<LocationCommandDto> validator)
+        public LocationFacade(DataContext context, IFFValidator<LocationBaseDto> validator)
         {
             _context = context;
             _context.Configuration.LazyLoadingEnabled = false;
@@ -122,7 +123,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// Note that there is no checking for a circular reference for creating a location. This is
         /// because the created item does not have children. So, there cannot be a circular reference.
         /// </remarks>
-        public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationCommandDto dto)
+        public override async Task<CommandResult<LocationQueryDto, Guid>> Create(LocationBaseDto dto)
         {
             // Thread.CurrentPrincipal is not available in the constructor.  Do not try to move this.
             var uid = GetCurrentUser();
@@ -252,26 +253,26 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<LocationCommandDto, Guid>> Update(Guid id, Delta<LocationCommandDto> delta)
+        public override async Task<CommandResult<LocationBaseDto, Guid>> Update(Guid id, Delta<LocationBaseDto> delta)
         {
             // Thread.CurrentPrincipal is not available in the constrtor.  Do not try and move this
             var uid = GetCurrentUser();
 
             // User ID should always be available, but if not ...
             if (!uid.HasValue)
-                return Command.Error<LocationCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<LocationBaseDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
-                return Command.Error<LocationCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<LocationBaseDto>(EntityErrorCode.EntityFormatIsInvalid);
 
             var location = await _context.GetLocationsForUser(uid.Value)
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
             if (location == null)
-                return Command.Error<LocationCommandDto>(EntityErrorCode.EntityNotFound);
+                return Command.Error<LocationBaseDto>(EntityErrorCode.EntityNotFound);
 
-            var locationDto = _mapper.Map(location, new LocationCommandDto());
+            var locationDto = _mapper.Map(location, new LocationBaseDto());
             delta.Patch(locationDto);
 
             var validationResponse = ValidatorUpdate.Validate(locationDto);
@@ -305,7 +306,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityPropertyDuplicateNotAllowed(nameof(Location.Name)));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<LocationCommandDto>(validationResponse);
+                return Command.Error<LocationBaseDto>(validationResponse);
 
             _context.Locations.Attach(location);
             _mapper.Map(locationDto, location);
@@ -314,7 +315,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LocationCommandDto>();
+            return Command.NoContent<LocationBaseDto>();
         }
 
         #endregion Update Method

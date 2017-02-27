@@ -26,14 +26,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class UnitTypesController
-        : ControllerWithCruModelsBase<UnitTypeCommandDto, UnitTypeCommandDto, UnitTypeQueryDto, Guid>
+        : ControllerWithCruModelsBase<UnitTypeBaseDto, UnitTypeBaseDto, UnitTypeQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="UnitTypesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist Unit Type data.</param>
-        public UnitTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<UnitTypeCommandDto, UnitTypeCommandDto, UnitTypeQueryDto, Guid> facade) 
+        public UnitTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<UnitTypeBaseDto, UnitTypeBaseDto, UnitTypeQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)

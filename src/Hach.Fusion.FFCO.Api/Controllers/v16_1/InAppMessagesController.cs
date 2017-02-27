@@ -30,7 +30,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class InAppMessagesController
-        : ControllerWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
+        : ControllerWithCruModelsBase<InAppMessageBaseDto, InAppMessageBaseDto, InAppMessageQueryDto, Guid>
     {
         private readonly IInAppMessageFacade _facade;
 
@@ -89,14 +89,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Update)]
         [AcceptVerbs("PATCH")]
         [SwaggerResponseRemoveDefaults]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageBaseDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
         [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [ResponseType(typeof(CommandResult<InAppMessageCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageCommandDto> delta)
+        [ResponseType(typeof(CommandResult<InAppMessageBaseDto, Guid>))]
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageBaseDto> delta)
         {
             var result = await _facade.Update(key, delta);
             return Command(result);

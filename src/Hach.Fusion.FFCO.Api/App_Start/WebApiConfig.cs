@@ -92,8 +92,8 @@ namespace Hach.Fusion.FFCO.Api
 
             builder.EntitySet<UnitTypeBaseDto>("UnitTypes");
             builder.EntitySet<UnitTypeGroupQueryDto>("UnitTypeGroups");
-            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
-            builder.EntitySet<ParameterDto>("Parameters");
+            builder.EntitySet<ParameterTypeQueryDto>("ParameterTypes");
+            builder.EntitySet<ParameterQueryDto>("Parameters");
             builder.EntitySet<ParameterValidRangeQueryDto>("ParameterValidRanges");
             builder.EntitySet<LimitTypeQueryDto>("LimitTypes");
             builder.EntitySet<ChemicalFormTypeQueryDto>("ChemicalFormTypes");

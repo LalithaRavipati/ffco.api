@@ -86,7 +86,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(ParameterValidRangeQueryDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterDto> queryOptions)
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterQueryDto> queryOptions)
         {
             var results = await _facade.Get(key);
             return Query(results);
