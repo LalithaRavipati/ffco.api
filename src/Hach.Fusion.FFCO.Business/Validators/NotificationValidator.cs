@@ -8,17 +8,17 @@ namespace Hach.Fusion.FFCO.Business.Validators
     /// </summary>
     /// <remarks>
     /// </remarks>
-    public class NotificationValidator : FFValidator<NotificationDto>
+    public class NotificationValidator : FFValidator<NotificationQueryDto>
     {
         /// <summary>
         /// Validates the state of the specified <see cref="NotificationDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(NotificationDto dto)
+        public override FFValidationResponse Validate(NotificationQueryDto dto)
         {
             IsNull(dto);
 
-            IsType(dto, typeof(NotificationDto));
+            IsType(dto, typeof(NotificationQueryDto));
 
             if (FFErrors.Count > 0)
                 return new FFValidationResponse

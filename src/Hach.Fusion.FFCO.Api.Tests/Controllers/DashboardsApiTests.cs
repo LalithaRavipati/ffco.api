@@ -1,6 +1,6 @@
 ﻿using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Data.Database;
-using Hach.Fusion.Data.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
 using Hach.Fusion.FFCO.Business;
 using Hach.Fusion.FFCO.Business.Facades;

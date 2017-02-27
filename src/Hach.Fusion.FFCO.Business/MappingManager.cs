@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using Hach.Fusion.Data.Dtos;
-using Hach.Fusion.Data.Dtos.Dashboards;
-using Hach.Fusion.Data.Dtos.LimitTypes;
-using Hach.Fusion.Data.Dtos.LocationType;
-using Hach.Fusion.Data.Dtos.LocationTypeGroup;
 using Hach.Fusion.Data.Entities;
 using Hach.Fusion.Data.Spatial;
 

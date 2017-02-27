@@ -72,21 +72,21 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _context.Dispose();
         }
 
-        #region Get Tests
+        //#region Get Tests
 
-        [Test]
-        public async Task When_Get_UnitTypes_Succeeds()
-        {
-            var queryResult = await _facade.Get(_mockDtoOptions.Object);
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+        //[Test]
+        //public async Task When_Get_UnitTypes_Succeeds()
+        //{
+        //    var queryResult = await _facade.Get(_mockDtoOptions.Object);
+        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-            var results = queryResult.Results;
+        //    var results = queryResult.Results;
 
-            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Centigrade.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.UnitTypes.Fahrenheit.Id), Is.True);
-            //Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
-        }
+        //    Assert.That(results.Any(x => x.Id == Data.UnitTypes.Centigrade.Id), Is.True);
+        //    Assert.That(results.Any(x => x.Id == Data.UnitTypes.Fahrenheit.Id), Is.True);
+        //    Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
+        //}
 
-        #endregion Get Tests
+        //#endregion Get Tests
     }
 }

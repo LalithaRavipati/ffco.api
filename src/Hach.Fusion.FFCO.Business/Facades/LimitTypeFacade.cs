@@ -11,7 +11,7 @@ using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.Data.Database;
-using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.Data.Entities;
 using Hach.Fusion.Data.Extensions;
 

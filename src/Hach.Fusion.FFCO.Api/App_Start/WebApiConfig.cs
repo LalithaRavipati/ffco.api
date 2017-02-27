@@ -1,9 +1,6 @@
 ﻿using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Handlers;
 using Hach.Fusion.Data.Dtos;
-using Hach.Fusion.Data.Dtos.Dashboards;
-using Hach.Fusion.Data.Dtos.LimitTypes;
-using Hach.Fusion.Data.Dtos.LocationType;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;

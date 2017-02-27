@@ -65,17 +65,17 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _facade = new ParameterValidRangeFacade(_context);
 
             Seeder.SeedWithTestData(_context);
-            RetrieveSeededData();
+            //RetrieveSeededData();
         }
 
-        private void RetrieveSeededData()
-        {
-            // Needed so that audit time fields aren't reset
-            _parameterValidRangePh = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.pH.Id);
-            _parameterValidRangeFlowMinAndMax = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMinAndMax.Id);
-            _parameterValidRangeFlowMinOnly = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMinOnly.Id);
-            _parameterValidRangeFlowMaxOnly = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMaxOnly.Id);
-        }
+        //private void RetrieveSeededData()
+        //{
+        //    // Needed so that audit time fields aren't reset
+        //    _parameterValidRangePh = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.pH.Id);
+        //    _parameterValidRangeFlowMinAndMax = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMinAndMax.Id);
+        //    _parameterValidRangeFlowMinOnly = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMinOnly.Id);
+        //    _parameterValidRangeFlowMaxOnly = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMaxOnly.Id);
+        //}
 
         [TearDown]
         public void TearDown()
@@ -83,45 +83,45 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _context.Dispose();
         }
 
-        #region Get Tests
+        //#region Get Tests
 
-        [Test]
-        public async Task When_GetAll_Succeeds()
-        {
-            var queryResult = await _facade.Get(_mockDtoOptions.Object);
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+        //[Test]
+        //public async Task When_GetAll_Succeeds()
+        //{
+        //    var queryResult = await _facade.Get(_mockDtoOptions.Object);
+        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-            var results = queryResult.Results;
-            Assert.That(results.Count, Is.EqualTo(4));
+        //    var results = queryResult.Results;
+        //    Assert.That(results.Count, Is.EqualTo(4));
 
-            Compare(_parameterValidRangePh, results.First(x => x.Id == Data.ParameterValidRanges.pH.Id));
-            Compare(_parameterValidRangeFlowMinAndMax, results.First(x => x.Id == Data.ParameterValidRanges.FlowMinAndMax.Id));
-            Compare(_parameterValidRangeFlowMinOnly, results.First(x => x.Id == Data.ParameterValidRanges.FlowMinOnly.Id));
-            Compare(_parameterValidRangeFlowMaxOnly, results.First(x => x.Id == Data.ParameterValidRanges.FlowMaxOnly.Id));
-        }
+        //    Compare(_parameterValidRangePh, results.First(x => x.Id == Data.ParameterValidRanges.pH.Id));
+        //    Compare(_parameterValidRangeFlowMinAndMax, results.First(x => x.Id == Data.ParameterValidRanges.FlowMinAndMax.Id));
+        //    Compare(_parameterValidRangeFlowMinOnly, results.First(x => x.Id == Data.ParameterValidRanges.FlowMinOnly.Id));
+        //    Compare(_parameterValidRangeFlowMaxOnly, results.First(x => x.Id == Data.ParameterValidRanges.FlowMaxOnly.Id));
+        //}
 
-        [Test]
-        public async Task When_GetOne_Succeeds()
-        {
-            var queryResult = await _facade.Get(_parameterValidRangePh.Id);
+        //[Test]
+        //public async Task When_GetOne_Succeeds()
+        //{
+        //    var queryResult = await _facade.Get(_parameterValidRangePh.Id);
 
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-            var dto = queryResult.Dto;
+        //    var dto = queryResult.Dto;
             
-            Compare(_parameterValidRangePh, dto);
-        }
+        //    Compare(_parameterValidRangePh, dto);
+        //}
 
-        [Test]
-        public async Task When_GetOne_EntityNotFound_Fails()
-        {
-            var queryResult = await _facade.Get(Guid.NewGuid());
+        //[Test]
+        //public async Task When_GetOne_EntityNotFound_Fails()
+        //{
+        //    var queryResult = await _facade.Get(Guid.NewGuid());
 
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
-            Assert.That(queryResult.Dto, Is.Null);
-        }
+        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
+        //    Assert.That(queryResult.Dto, Is.Null);
+        //}
 
-        #endregion Get Tests
+        //#endregion Get Tests
 
         #region Compare
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.OData.Core;
 using Swashbuckle.Swagger;
 using Hach.Fusion.Data.Dtos;
-using Hach.Fusion.Data.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api
 {

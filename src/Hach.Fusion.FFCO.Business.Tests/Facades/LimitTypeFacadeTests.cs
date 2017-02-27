@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Database;
-using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Moq;

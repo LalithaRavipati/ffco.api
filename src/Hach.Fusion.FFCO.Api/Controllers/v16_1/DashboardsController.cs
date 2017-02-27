@@ -13,7 +13,7 @@ using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Enums;
 
 using Swashbuckle.Swagger.Annotations;
-using Hach.Fusion.Data.Dtos.Dashboards;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
