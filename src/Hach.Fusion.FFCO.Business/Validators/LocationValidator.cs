@@ -8,23 +8,23 @@ using Hach.Fusion.Data.Dtos;
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="LocationBaseDto"/>s.
+    /// Validates <see cref="LocationCommandDto"/>s.
     /// </summary>
     /// <remarks>
     /// In addition to the override of the <see cref="Validate"/> method, this class contains a static method
     /// used to test whether updating the parent of a location would result in a circular reference.
     /// </remarks>
-    public class LocationValidator : FFValidator<LocationBaseDto, Guid>
+    public class LocationValidator : FFValidator<LocationCommandDto, Guid>
     {
         private const int NameMaximumLength = 200;
 
         private const int NameMinimumLength = 4;
 
         /// <summary>
-        /// Validates the state of the specified <see cref="LocationBaseDto"/>.
+        /// Validates the state of the specified <see cref="LocationCommandDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(LocationBaseDto dto)
+        public override FFValidationResponse Validate(LocationCommandDto dto)
         {
             IsNull(dto);
 

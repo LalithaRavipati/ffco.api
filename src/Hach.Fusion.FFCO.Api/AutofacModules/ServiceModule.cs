@@ -56,7 +56,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<NotificationSender>().AsSelf().As<INotificationSender>();
 
             // LocationParameters
-            builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationBaseDto, LocationBaseDto,
+            builder.RegisterType<LocationFacade>().As<IFacadeWithCruModels<LocationCommandDto, LocationCommandDto,
                 LocationQueryDto, Guid>>();
 
             builder.RegisterType<LocationTypeFacade>().As<IFacadeWithCruModels<LocationTypeBaseDto, LocationTypeBaseDto,
@@ -70,7 +70,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<UnitTypeGroupFacade>().As<IFacadeWithCruModels<UnitTypeGroupBaseDto, UnitTypeGroupBaseDto,
                UnitTypeGroupQueryDto, Guid>>();
 
-            builder.RegisterType<LocationValidator>().As<IFFValidator<LocationBaseDto>>();
+            builder.RegisterType<LocationValidator>().As<IFFValidator<LocationCommandDto>>();
             builder.RegisterType<LocationLogEntryValidator>().As<IFFValidator<LocationLogEntryBaseDto>>();
             builder.RegisterType<LocationTypeValidator>().As<IFFValidator<LocationTypeBaseDto>>();
             builder.RegisterType<UnitTypeValidator>().As<IFFValidator<UnitTypeBaseDto>>();

@@ -10,7 +10,7 @@ using Autofac.Integration.WebApi;
 using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.FFCO.Api.AutofacModules;
-using Hach.Fusion.FFCO.Business;
+using Hach.Fusion.Data.Mapping;
 using IdentityServer3.AccessTokenValidation;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;

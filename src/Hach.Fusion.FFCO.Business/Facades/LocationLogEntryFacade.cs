@@ -14,6 +14,8 @@ using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.Data.Extensions;
 using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
+
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
