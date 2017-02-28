@@ -220,7 +220,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (entity.OwnerUserId != userIdGuid)
                 return Command.Error<DashboardBaseDto>(EntityErrorCode.PermissionActivityInvalid);
 
-            var dto = _mapper.Map(entity, new DashboardQueryDto());
+            var dto = _mapper.Map(entity, new DashboardBaseDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
