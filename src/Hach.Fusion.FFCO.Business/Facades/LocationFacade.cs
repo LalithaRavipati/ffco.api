@@ -66,6 +66,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var results = await Task.Run(() => _context.GetLocationsForUser(uid.Value)
                 .Include(x => x.LocationType)
+                .Include(x => x.LocationType.LocationTypeGroup)
                 .Include(x => x.Parent)
                 .Include(x => x.Locations.Select(y => y.Locations))
                 .Include(x => x.ProductOfferingTenantLocations)
