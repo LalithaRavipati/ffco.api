@@ -154,7 +154,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = "Create Log Entry",
                 TimeStamp = DateTimeOffset.UtcNow
             };
@@ -162,7 +162,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var commandResult = await _facade.Create(locationLogEntryDto);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
-            Assert.That(commandResult.Entity.LocationId, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id));
+            Assert.That(commandResult.Entity.LocationId, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId));
             Assert.That(commandResult.Entity.LogEntry, Is.EqualTo("Create Log Entry"));
             Assert.That(commandResult.Entity.CreatedById, Is.EqualTo(_userId));
             Assert.That((DateTime.Now - commandResult.Entity.CreatedOn).Seconds, Is.LessThanOrEqualTo(10));
@@ -193,7 +193,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
                 Id = Guid.NewGuid(),
-                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = "Create Log Entry",
                 TimeStamp = DateTimeOffset.UtcNow
             };
@@ -210,7 +210,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = null,
                 TimeStamp = DateTimeOffset.UtcNow
             };
@@ -245,7 +245,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = "Create Log Entry"
             };
 
