@@ -89,13 +89,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Update)]
         [AcceptVerbs("PATCH")]
         [SwaggerResponseRemoveDefaults]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageBaseDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
         [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [ResponseType(typeof(CommandResult<InAppMessageBaseDto, Guid>))]
+        [ResponseType(typeof(CommandResult<InAppMessageQueryDto, Guid>))]
         public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageBaseDto> delta)
         {
             var result = await _facade.Update(key, delta);

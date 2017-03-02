@@ -200,7 +200,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (entity == null)
                 return Command.Error<LimitTypeBaseDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map(entity, new LimitTypeQueryDto());
+            var dto = _mapper.Map(entity, new LimitTypeBaseDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);

@@ -203,7 +203,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (entity == null)
                 return Command.Error<DashboardOptionBaseDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map(entity, new DashboardOptionQueryDto());
+            var dto = _mapper.Map(entity, new DashboardOptionBaseDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);

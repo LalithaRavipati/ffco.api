@@ -1,12 +1,12 @@
 ﻿using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -22,7 +22,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
     [TestFixture]
     public class UnitTypeFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<UnitTypeQueryDto>> _mockDtoOptions;
         private UnitTypeFacade _facade;
 
@@ -55,38 +55,34 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "5170AE58-21B4-40F5-A025-E886489E9B82");
+            _mockContext = new Mock<DataContext>();
+
+            Seeder.InitializeMockDataContext(_mockContext);
+
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
+
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
             var validator = new UnitTypeValidator();
-            _facade = new UnitTypeFacade(_context, validator);
-
-            Seeder.SeedWithTestData(_context);
+            _facade = new UnitTypeFacade(_mockContext.Object, validator);
         }
 
-        [TearDown]
-        public void TearDown()
+        #region Get Tests
+
+        [Test]
+        public async Task When_Get_UnitTypes_Succeeds()
         {
-            _context.Dispose();
+            var queryResult = await _facade.Get(_mockDtoOptions.Object);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+
+            var results = queryResult.Results;
+
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.UnitTypes.Single(ut => ut.I18NKeyName == "Centigrade").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.UnitTypes.Single(ut => ut.I18NKeyName == "Fahrenheit").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.UnitTypes.Single(ut => ut.I18NKeyName == "Hectopascal").Id), Is.True);
         }
 
-        //#region Get Tests
-
-        //[Test]
-        //public async Task When_Get_UnitTypes_Succeeds()
-        //{
-        //    var queryResult = await _facade.Get(_mockDtoOptions.Object);
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
-
-        //    var results = queryResult.Results;
-
-        //    Assert.That(results.Any(x => x.Id == Data.UnitTypes.Centigrade.Id), Is.True);
-        //    Assert.That(results.Any(x => x.Id == Data.UnitTypes.Fahrenheit.Id), Is.True);
-        //    Assert.That(results.Any(x => x.Id == Data.UnitTypes.Hectopascal.Id), Is.True);
-        //}
-
-        //#endregion Get Tests
+        #endregion Get Tests
     }
 }

@@ -2,6 +2,8 @@
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Moq;
@@ -24,11 +26,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
     [TestFixture]
     public class LimitTypeFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<LimitTypeQueryDto>> _mockDtoOptions;
         private LimitTypeFacade _facade;
         private readonly IMapper _mapper;
-        private readonly Guid _userId = Data.Users.tnt01user.Id;
+        private Guid _userId;
 
         public LimitTypeFacadeTests()
         {
@@ -56,21 +58,16 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
+            _mockContext = new Mock<DataContext>();
+
+            Seeder.InitializeMockDataContext(_mockContext);
+
+            var validator = new LimitTypeValidator();
+            _facade = new LimitTypeFacade(_mockContext.Object, validator);
+            _userId = _mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id;
+
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
-            var validator = new LimitTypeValidator();
-            _facade = new LimitTypeFacade(_context, validator);
-
-            Seeder.SeedWithTestData(_context);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
         }
 
         #region Get Tests
@@ -84,11 +81,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var results = queryResult.Results;
 
             Assert.That(results.Count(), Is.EqualTo(5));
-            Assert.That(results.Any(x => x.Id == Data.LimitTypes.Under.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LimitTypes.Over.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LimitTypes.NearUnder.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LimitTypes.NearOver.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LimitTypes.ToDelete.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName == "Over").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Near Under").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Near Over").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="ToDelete").Id), Is.True);
         }
 
         [Test]
@@ -106,7 +103,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var seed = Data.LimitTypes.Under;
+            var seed = _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under");
 
             var queryResult = await _facade.Get(seed.Id);
 
@@ -139,7 +136,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_Succeeds()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under"));
             toCreate.Id = Guid.Empty;
             toCreate.I18NKeyName = "New LimitType";
             var callTime = DateTime.UtcNow;
@@ -184,7 +181,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_IdNotEmpty_Fails()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under"));
             toCreate.Id = Guid.NewGuid();
             toCreate.I18NKeyName = "New LimitType";
 
@@ -198,7 +195,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_EmptyKeyName_Fails()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under"));
             toCreate.Id = Guid.Empty;
             toCreate.I18NKeyName = "";
 
@@ -213,7 +210,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadKeyName_Fails()
         {
-            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(Data.LimitTypes.Under);
+            var toCreate = _mapper.Map<LimitType, LimitTypeQueryDto>(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under"));
             toCreate.Id = Guid.Empty;
             toCreate.I18NKeyName = "123";
 
@@ -231,7 +228,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Delete_Succeeds()
         {
-            var commandResult = await _facade.Delete(Data.LimitTypes.ToDelete.Id);
+            var commandResult = await _facade.Delete(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="ToDelete").Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
             Assert.That(commandResult.ErrorCodes, Is.Null);
@@ -242,7 +239,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var commandResult = await _facade.Delete(Data.LimitTypes.ToDelete.Id);
+            var commandResult = await _facade.Delete(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="ToDelete").Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }
@@ -262,9 +259,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_Succeeds()
         {
-            var seed = Data.LimitTypes.Under;
+            var seed = _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under");
             const int newSeverity = 3;
-            var delta = new Delta<LimitTypeQueryDto>();
+            var delta = new Delta<LimitTypeBaseDto>();
             delta.TrySetPropertyValue("Severity", newSeverity);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -283,9 +280,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var seed = Data.LimitTypes.Under;
+            var seed = _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under");
             const int newSeverity = 3;
-            var delta = new Delta<LimitTypeQueryDto>();
+            var delta = new Delta<LimitTypeBaseDto>();
             delta.TrySetPropertyValue("Severity", newSeverity);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -296,10 +293,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_ChangeId_Fails()
         {
-            var delta = new Delta<LimitTypeQueryDto>();
+            var delta = new Delta<LimitTypeBaseDto>();
             delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
-            var commandResult = await _facade.Update(Data.LimitTypes.Under.Id, delta);
+            var commandResult = await _facade.Update(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under").Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -309,7 +306,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_NullDelta_Fails()
         {
-            var commandResult = await _facade.Update(Data.LimitTypes.Under.Id, null);
+            var commandResult = await _facade.Update(_mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under").Id, null);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -319,7 +316,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadId_Fails()
         {
-            var delta = new Delta<LimitTypeQueryDto>();
+            var delta = new Delta<LimitTypeBaseDto>();
             delta.TrySetPropertyValue("Severity", 3);
 
             var commandResult = await _facade.Update(Guid.Empty, delta);
@@ -332,9 +329,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_EmptyKeyName_Fails()
         {
-            var seed = Data.LimitTypes.Under;
+            var seed = _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under");
 
-            var delta = new Delta<LimitTypeQueryDto>();
+            var delta = new Delta<LimitTypeBaseDto>();
             delta.TrySetPropertyValue("I18NKeyName", "");
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -348,9 +345,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadKeyName_Fails()
         {
-            var seed = Data.LimitTypes.Under;
+            var seed = _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under");
 
-            var delta = new Delta<LimitTypeQueryDto>();
+            var delta = new Delta<LimitTypeBaseDto>();
             delta.TrySetPropertyValue("I18NKeyName", "123");
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -363,10 +360,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_Duplicate_Fails()
         {
-            var seed = Data.LimitTypes.Under;
+            var seed = _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Under");
 
-            var delta = new Delta<LimitTypeQueryDto>();
-            delta.TrySetPropertyValue("I18NKeyName", Data.LimitTypes.Over.I18NKeyName);
+            var delta = new Delta<LimitTypeBaseDto>();
+            delta.TrySetPropertyValue("I18NKeyName", _mockContext.Object.LimitTypes.Single(lt => lt.I18NKeyName=="Over").I18NKeyName);
 
             var commandResult = await _facade.Update(seed.Id, delta);
 

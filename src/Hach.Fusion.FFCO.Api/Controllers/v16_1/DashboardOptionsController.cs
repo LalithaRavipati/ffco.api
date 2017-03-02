@@ -104,7 +104,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<DashboardOptionQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Post(DashboardOptionQueryDto dto)
+        public async Task<IHttpActionResult> Post(DashboardOptionBaseDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -127,12 +127,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<DashboardOptionBaseDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<DashboardOptionQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<DashboardOptionBaseDto, Guid>))]
+        [ResponseType(typeof(CommandResult<DashboardOptionQueryDto, Guid>))]
         public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<DashboardOptionBaseDto> delta)
         {
             var result = await Facade.Update(key, delta);

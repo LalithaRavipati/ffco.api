@@ -19,7 +19,7 @@ namespace Hach.Fusion.FFCO.Business.Validators
         {
             IsNull(dto);
 
-            IsType(dto, typeof(InAppMessageQueryDto));
+            IsType(dto, typeof(InAppMessageBaseDto));
 
             if (FFErrors.Count > 0)
                 return new FFValidationResponse

@@ -112,7 +112,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Post(LocationLogEntryQueryDto dto)
+        public async Task<IHttpActionResult> Post(LocationLogEntryBaseDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -135,12 +135,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationLogEntryBaseDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LocationLogEntryBaseDto, Guid>))]
+        [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
         public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationLogEntryBaseDto> delta)
         {
             var result = await Facade.Update(key, delta);

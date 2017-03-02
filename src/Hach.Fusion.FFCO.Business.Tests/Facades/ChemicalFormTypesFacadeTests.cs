@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.Core.Testing;
+using Hach.Fusion.Core.Test.EntityFramework;
 using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.Data.Entities;
@@ -10,7 +10,6 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -31,9 +30,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         private ChemicalFormTypesFacade _facade;
         private readonly IMapper _mapper;
         private readonly Guid _userId = Guid.Parse("85c04bda-4416-44bf-8654-868ba9f5dd3a");
-
-
-        private List<ChemicalFormType> _chemicalFormTypeSeedData;
 
         public ChemicalFormTypesFacadeTests()
         {
@@ -71,13 +67,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
         private Mock<DataContext> SetupMockDbContext()
         {
-            _chemicalFormTypeSeedData = GetChemicalFormTypeSeedData();
-
             var result = new Mock<DataContext>();
 
-            result.Setup(x => x.ChemicalFormTypes).Returns(new InMemoryDbSet<ChemicalFormType>(_chemicalFormTypeSeedData));
 
-            result.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+            Seeder.InitializeMockDataContext(result);
 
             return result;
         }
@@ -86,42 +79,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public void TearDown()
         {
             _mockContext.Object.Dispose();
-        }
-
-        private static List<ChemicalFormType> GetChemicalFormTypeSeedData()
-        {
-            return new List<ChemicalFormType>
-            {
-                new ChemicalFormType
-                {
-                    Id = Guid.Parse("029654E6-996F-4D13-B9F7-5DAE0D5EE632"),
-                    I18NKeyName = "Ethanol",
-                    Form = "C2H6O"
-                },
-                new ChemicalFormType
-                {
-                      Id = Guid.Parse("1705A4BF-CE9B-455E-A325-E32971265153"),
-                      I18NKeyName = "Caffeine",
-                      Form = "C8H10N4O2"
-                },
-                new ChemicalFormType
-                {
-                      Id = Guid.Parse("781E04A9-FDCF-4968-89D6-FE92023B28BF"),
-                      I18NKeyName = "Alum",
-                      Form = "12H2O"},
-                new ChemicalFormType
-                {
-                      Id = Guid.Parse("350F30B7-E48D-4A24-8A6E-8ACAECA619F2"),
-                      I18NKeyName = "Water",
-                      Form = "H2O"
-                },
-                new ChemicalFormType
-                {
-                      Id = Guid.Parse("B32B2B70-F0D1-42F7-9FF9-582DF538756C"),
-                      I18NKeyName = "GalliumArsenide",
-                      Form = "GaAs"
-                }
-            };
         }
 
         #region Get Tests
@@ -136,11 +93,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             Assert.That(results.Count(), Is.EqualTo(5));
 
-            Assert.That(results.SingleOrDefault(x => x.Id == _chemicalFormTypeSeedData.Single(c => c.I18NKeyName== "Caffeine").Id), Is.Not.Null);
-            Assert.That(results.SingleOrDefault(x => x.Id == _chemicalFormTypeSeedData.Single(c => c.I18NKeyName == "Alum").Id), Is.Not.Null);
-            Assert.That(results.SingleOrDefault(x => x.Id == _chemicalFormTypeSeedData.Single(c => c.I18NKeyName == "Ethanol").Id), Is.Not.Null);
-            Assert.That(results.SingleOrDefault(x => x.Id == _chemicalFormTypeSeedData.Single(c => c.I18NKeyName== "GalliumArsenide").Id), Is.Not.Null);
-            Assert.That(results.SingleOrDefault(x => x.Id == _chemicalFormTypeSeedData.Single(c => c.I18NKeyName== "Water").Id), Is.Not.Null);
+            Assert.That(results.SingleOrDefault(x => x.I18NKeyName == "Caffeine"), Is.Not.Null);
+            Assert.That(results.SingleOrDefault(x => x.I18NKeyName == "Alum"), Is.Not.Null);
+            Assert.That(results.SingleOrDefault(x => x.I18NKeyName == "Ethanol"), Is.Not.Null);
+            Assert.That(results.SingleOrDefault(x => x.I18NKeyName == "GalliumArsenide"), Is.Not.Null);
+            Assert.That(results.SingleOrDefault(x => x.I18NKeyName == "Water"), Is.Not.Null);
         }
 
         [Test]
@@ -150,12 +107,12 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 _userId.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var queryResult = await _facade.Get(_chemicalFormTypeSeedData.Single(c => c.I18NKeyName== "Caffeine").Id);
+            var queryResult = await _facade.Get(_mockContext.Object.ChemicalFormTypes.Single(c => c.I18NKeyName == "Caffeine").Id);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             Assert.That(queryResult.Dto, Is.Not.Null);
-            Assert.That(queryResult.Dto.Id, Is.EqualTo(_chemicalFormTypeSeedData.Single(c => c.I18NKeyName== "Caffeine").Id));
-            Assert.That(queryResult.Dto.Form, Is.EqualTo(_chemicalFormTypeSeedData.Single(c => c.I18NKeyName== "Caffeine").Form));
+            Assert.That(queryResult.Dto.Id, Is.EqualTo(_mockContext.Object.ChemicalFormTypes.Single(c => c.I18NKeyName == "Caffeine").Id));
+            Assert.That(queryResult.Dto.Form, Is.EqualTo(_mockContext.Object.ChemicalFormTypes.Single(c => c.I18NKeyName == "Caffeine").Form));
         }
 
         [Test]

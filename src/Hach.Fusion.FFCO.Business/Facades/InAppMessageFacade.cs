@@ -98,7 +98,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (!shareTenant)
                 return Command.Error<InAppMessageBaseDto>(ValidationErrorCode.ForeignKeyValueDoesNotExist("UserId"));
 
-            var dto = _mapper.Map(entity, new InAppMessageQueryDto());
+            var dto = _mapper.Map(entity, new InAppMessageBaseDto());
 
             delta.Patch(dto);
 

@@ -1,16 +1,14 @@
 ﻿using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
 using Hach.Fusion.FFCO.Business.Facades;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Builder;
@@ -22,7 +20,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
     [TestFixture]
     public class ParameterTypeFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<ParameterTypeQueryDto>> _mockDtoOptions;
         private ParameterTypeFacade _facade;
 
@@ -51,59 +49,53 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "5170AE58-21B4-40F5-A025-E886489E9B82");
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            _mockContext = new Mock<DataContext>();
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
-            _facade = new ParameterTypeFacade(_context);
+            Seeder.InitializeMockDataContext(_mockContext);
 
-            Seeder.SeedWithTestData(_context);
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
+
+            _facade = new ParameterTypeFacade(_mockContext.Object);
         }
 
-        [TearDown]
-        public void TearDown()
+        #region Get Tests
+
+        [Test]
+        public async Task When_Get_ParameterTypes_Succeeds()
         {
-            _context.Dispose();
+            var queryResult = await _facade.Get(_mockDtoOptions.Object);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+
+            var results = queryResult.Results;
+            Assert.That(results.Count, Is.EqualTo(2));
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.ParameterTypes.Single(t => t.I18NKeyName=="Chemical").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.ParameterTypes.Single(t => t.I18NKeyName == "Sensed").Id), Is.True);
         }
 
-        //#region Get Tests
+        [Test]
+        public async Task When_Get_ParameterType_Succeeds()
+        {
+            var seed = _mockContext.Object.ParameterTypes.Single(t => t.I18NKeyName == "Chemical");
 
-        //[Test]
-        //public async Task When_Get_ParameterTypes_Succeeds()
-        //{
-        //    var queryResult = await _facade.Get(_mockDtoOptions.Object);
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            var queryResult = await _facade.Get(seed.Id);
 
-        //    var results = queryResult.Results;
-        //    Assert.That(results.Count, Is.EqualTo(2));
-        //    Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Chemical.Id), Is.True);
-        //    Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Sensed.Id), Is.True);
-        //}
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-        //[Test]
-        //public async Task When_Get_ParameterType_Succeeds()
-        //{
-        //    var seed = Data.ParameterTypes.Chemical;
+            var dto = queryResult.Dto;
+            Assert.That(dto.Id, Is.EqualTo(seed.Id));
+            Assert.That(dto.I18NKeyName, Is.EqualTo(seed.I18NKeyName));
+        }
 
-        //    var queryResult = await _facade.Get(seed.Id);
+        [Test]
+        public async Task When_Get_ParameterType_InvalidId_Fails()
+        {
+            var queryResult = await _facade.Get(Guid.Empty);
 
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
+            Assert.That(queryResult.Dto, Is.Null);
+        }
 
-        //    var dto = queryResult.Dto;
-        //    Assert.That(dto.Id, Is.EqualTo(seed.Id));
-        //    Assert.That(dto.I18NKeyName, Is.EqualTo(seed.I18NKeyName));
-        //}
-
-        //[Test]
-        //public async Task When_Get_ParameterType_InvalidId_Fails()
-        //{
-        //    var queryResult = await _facade.Get(Guid.Empty);
-
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
-        //    Assert.That(queryResult.Dto, Is.Null);
-        //}
-
-        //#endregion Get Tests
+        #endregion Get Tests
     }
 }

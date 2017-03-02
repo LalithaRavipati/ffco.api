@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Core.Test.EntityFramework;
 using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Validators;
 using Moq;
@@ -25,16 +28,20 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
     [TestFixture]
     public class DashboardOptionFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<DashboardOptionQueryDto>> _mockDtoOptions;
         private DashboardOptionFacade _facade;
         private readonly IMapper _mapper;
-        private readonly IPrincipal _adHachClaims;
-        private readonly IPrincipal _tnt01Claims;
-        private readonly IPrincipal _tnt01And02Claims;
+        private IPrincipal _adHachClaims;
+        private IPrincipal _tnt01Claims;
+        private IPrincipal _tnt01And02Claims;
+
+        private DashboardOption _toCreateHachFusion;
 
         public DashboardOptionFacadeTests()
         {
+
+
             MappingManager.Initialize();
             _mapper = MappingManager.AutoMapper;
 
@@ -45,14 +52,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
 
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.Adhach.Id.ToString());
-            _adHachClaims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
-            claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01user.Id.ToString());
-            _tnt01Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
-
-            claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01and02user.Id.ToString());
-            _tnt01And02Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
         }
 
         private static ODataModelBuilder BuildODataModel()
@@ -70,18 +69,42 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01Claims;
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
-            var validator = new DashboardOptionValidator();
-            _facade = new DashboardOptionFacade(_context, validator);
+            _mockContext = SetupMockDataContext();
 
-            Seeder.SeedWithTestData(_context);
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
+            _adHachClaims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
+            claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "tnt01user").Id.ToString());
+            _tnt01Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
+            claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "tnt01and02user").Id.ToString());
+            _tnt01And02Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
+            var validator = new DashboardOptionValidator();
+            _facade = new DashboardOptionFacade(_mockContext.Object, validator);
+
+            _toCreateHachFusion = new DashboardOption()
+            {
+                Id = Guid.Parse("7DDD52F4-A21D-4B99-A87F-A837DA940D40"),
+                TenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Hach Fusion").Id,
+                Options = "HachFusion_Options"
+            };
+        }
+
+        private Mock<DataContext> SetupMockDataContext()
+        {
+            var result = new Mock<DataContext>();
+
+            Seeder.InitializeMockDataContext(result);
+
+
+            return result;
         }
 
         [TearDown]
         public void TearDown()
         {
-            _context.Dispose();
+            _mockContext.Object.Dispose();
         }
 
         #region Get Tests
@@ -96,7 +119,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             // Only dashboard options for DevTenant01 should be returned.
             Assert.That(results.Count(), Is.EqualTo(1));
-            Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant01_Options.Id), Is.True);
+
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id), Is.True);
         }
 
         [Test]
@@ -111,8 +135,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             // DashboardsOptions for DevTenant01 and DevTenant02 should be returned.
             Assert.That(results.Count(), Is.EqualTo(2));
-            Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant01_Options.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.DashboardOptions.DevTenant02_Options.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant02_Options").Id), Is.True);
         }
 
         [Test]
@@ -128,7 +152,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Get_Same_Tenant_Succeeds()
         {
-            var seed = Data.DashboardOptions.DevTenant01_Options;
+            var seed = _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options");
 
             var queryResult = await _facade.Get(seed.Id);
 
@@ -145,7 +169,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01And02Claims;
 
-            var seed = Data.DashboardOptions.DevTenant02_Options;
+            var seed = _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant02_Options");
 
             var queryResult = await _facade.Get(seed.Id);
 
@@ -162,7 +186,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var seed = Data.DashboardOptions.DevTenant01_Options;
+            var seed = _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options");
 
             var queryResult = await _facade.Get(seed.Id);
 
@@ -173,7 +197,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Get_Other_Tenant_Fails()
         {
-            var seed = Data.DashboardOptions.DevTenant02_Options;
+            var seed = _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant02_Options");
 
             var queryResult = await _facade.Get(seed.Id);
 
@@ -207,9 +231,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Create_DashboardOption_Succeeds()
         {
             Thread.CurrentPrincipal = _adHachClaims;
-            var user = Data.Users.Adhach;
+            var user = _mockContext.Object.Users.Single(u => u.UserName == "adhach");
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(_toCreateHachFusion);
             toCreate.Id = Guid.Empty;
             var callTime = DateTime.UtcNow;
 
@@ -218,9 +242,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
             Assert.That(commandResult.GeneratedId, Is.Not.EqualTo(Guid.Empty));
 
-            var queryResult = await _facade.Get(commandResult.GeneratedId);
-
-            var dto = queryResult.Dto;
+            var dto = _mockContext.Object.DashboardOptions.Single(x => x.Id == commandResult.GeneratedId);
+            
             Assert.That(dto.TenantId, Is.EqualTo(toCreate.TenantId));
             Assert.That(dto.Options, Is.EqualTo(toCreate.Options));
             Assert.That(dto.CreatedById, Is.EqualTo(user.Id));
@@ -232,10 +255,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_OtherTenant_Fails()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.Adhach.Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.DevTenant02_Options);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant02_Options"));
             toCreate.Id = Guid.Empty;
             toCreate.Options = "New Options";
 
@@ -272,7 +294,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(_toCreateHachFusion);
             toCreate.Id = Guid.NewGuid();
             toCreate.Options = "New Options";
 
@@ -288,7 +310,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(_toCreateHachFusion);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.Empty;
             toCreate.Options = "New Options";
@@ -305,7 +327,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _adHachClaims;
 
-            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(Data.DashboardOptions.HachFusion_ToCreate);
+            var toCreate = _mapper.Map<DashboardOption, DashboardOptionQueryDto>(_toCreateHachFusion);
             toCreate.Id = Guid.Empty;
             toCreate.TenantId = Guid.NewGuid();
             toCreate.Options = "New Options";
@@ -321,10 +343,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
         #region Delete Tests
 
-        [Test,Ignore("Fix for referential integrity check")]
+        [Test, Ignore("Fix for referential integrity check")]
         public async Task When_Delete_Succeeds()
         {
-            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant01_Options.Id);
+            var commandResult = await _facade.Delete(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
             Assert.That(commandResult.ErrorCodes, Is.Null);
@@ -335,7 +357,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant01_Options.Id);
+            var commandResult = await _facade.Delete(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }
@@ -351,7 +373,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Delete_OtherTenant_Fails()
         {
-            var commandResult = await _facade.Delete(Data.DashboardOptions.DevTenant02_Options.Id);
+            var commandResult = await _facade.Delete(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant02_Options").Id);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
         }
@@ -363,9 +385,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_Succeeds()
         {
-            var seed = Data.DashboardOptions.DevTenant01_Options;
+            Thread.CurrentPrincipal = _tnt01Claims;
+
+            var seed = _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options");
             const string newOptions = "NewOptions";
-            var delta = new Delta<DashboardOptionQueryDto>();
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("Options", newOptions);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -384,9 +408,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var seed = Data.DashboardOptions.DevTenant01_Options;
+            var seed = _mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options");
             const string newOptions = "NewOptions";
-            var delta = new Delta<DashboardOptionQueryDto>();
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("Options", newOptions);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -397,10 +421,12 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_ChangeId_Fails()
         {
-            var delta = new Delta<DashboardOptionQueryDto>();
+            Thread.CurrentPrincipal = _tnt01Claims;
+
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
-            var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, delta);
+            var commandResult = await _facade.Update(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -410,7 +436,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_NullDelta_Fails()
         {
-            var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, null);
+            var commandResult = await _facade.Update(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id, null);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -420,7 +446,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadId_Fails()
         {
-            var delta = new Delta<DashboardOptionQueryDto>();
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("Options", "New Options");
 
             var commandResult = await _facade.Update(Guid.Empty, delta);
@@ -433,10 +459,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_OtherTenant_Fails()
         {
-            var delta = new Delta<DashboardOptionQueryDto>();
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("Options", "New Options");
 
-            var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant02_Options.Id, delta);
+            var commandResult = await _facade.Update(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant02_Options").Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -446,10 +472,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_EmptyTenantId_Fails()
         {
-            var delta = new Delta<DashboardOptionQueryDto>();
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("TenantId", Guid.Empty);
 
-            var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, delta);
+            var commandResult = await _facade.Update(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -459,10 +485,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadTenantId_Fails()
         {
-            var delta = new Delta<DashboardOptionQueryDto>();
+            var delta = new Delta<DashboardOptionBaseDto>();
             delta.TrySetPropertyValue("TenantId", Guid.NewGuid());
 
-            var commandResult = await _facade.Update(Data.DashboardOptions.DevTenant01_Options.Id, delta);
+            var commandResult = await _facade.Update(_mockContext.Object.DashboardOptions.Single(d => d.Options == "DevTenant01_Options").Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));

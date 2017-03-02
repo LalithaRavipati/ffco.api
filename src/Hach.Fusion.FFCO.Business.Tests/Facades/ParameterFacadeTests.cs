@@ -1,4 +1,11 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
+using Hach.Fusion.FFCO.Business.Facades;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -10,20 +17,13 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.Data.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.Data.Dtos;
-
-using Moq;
-using NUnit.Framework;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
     public class ParameterFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<ParameterQueryDto>> _mockDtoOptions;
         private ParameterFacade _facade;
 
@@ -52,66 +52,63 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "5170AE58-21B4-40F5-A025-E886489E9B82");
+            _mockContext = new Mock<DataContext>();
+
+            Seeder.InitializeMockDataContext(_mockContext);
+
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _mockContext.Object.Users.Single(x=> x.UserName == "adhach").Id.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
-            _facade = new ParameterFacade(_context);
 
-            Seeder.SeedWithTestData(_context);
+            _facade = new ParameterFacade(_mockContext.Object);
         }
 
-        [TearDown]
-        public void TearDown()
+
+        #region Get Tests
+
+        [Test]
+        public async Task When_Get_Parameters_Succeeds()
         {
-            _context.Dispose();
+            var queryResult = await _facade.Get(_mockDtoOptions.Object);
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+
+            var results = queryResult.Results;
+            Assert.That(results.Count, Is.EqualTo(2));
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.Parameters.Single(p=> p.I18NKeyName=="Flow").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.Parameters.Single(p=> p.I18NKeyName=="pH").Id), Is.True);
         }
 
-        //#region Get Tests
+        [Test]
+        public async Task When_Get_Parameter_Succeeds()
+        {
+            var seed = _mockContext.Object.Parameters.Single(p=> p.I18NKeyName=="Flow");
 
-        //[Test]
-        //public async Task When_Get_Parameters_Succeeds()
-        //{
-        //    var queryResult = await _facade.Get(_mockDtoOptions.Object);
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            var queryResult = await _facade.Get(seed.Id);
 
-        //    var results = queryResult.Results;
-        //    Assert.That(results.Count, Is.EqualTo(2));
-        //    Assert.That(results.Any(x => x.Id == Data.Parameters.Flow.Id), Is.True);
-        //    Assert.That(results.Any(x => x.Id == Data.Parameters.pH.Id), Is.True);
-        //}
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-        //[Test]
-        //public async Task When_Get_Parameter_Succeeds()
-        //{
-        //    var seed = Data.Parameters.Flow;
+            var dto = queryResult.Dto;
+            Assert.That(dto.Id, Is.EqualTo(seed.Id));
+            Assert.That(dto.I18NKeyName, Is.EqualTo(seed.I18NKeyName));
+            Assert.That(dto.BaseChemicalFormTypeId, Is.EqualTo(seed.BaseChemicalFormTypeId));
+            Assert.That(dto.BaseUnitTypeId, Is.EqualTo(seed.BaseUnitTypeId));
+            Assert.That(dto.CreatedById, Is.EqualTo(seed.CreatedById));
+            Assert.That(dto.ModifiedById, Is.EqualTo(seed.ModifiedById));
+            Assert.That(dto.CreatedOn, Is.EqualTo(seed.CreatedOn).Within(TimeSpan.FromSeconds(1)));
+            Assert.That(dto.ModifiedOn, Is.EqualTo(seed.ModifiedOn).Within(TimeSpan.FromSeconds(1)));
+            Assert.That(dto.ParameterTypeId, Is.EqualTo(seed.ParameterTypeId));
+        }
 
-        //    var queryResult = await _facade.Get(seed.Id);
+        [Test]
+        public async Task When_Get_Parameter_InvalidId_Fails()
+        {
+            var queryResult = await _facade.Get(Guid.Empty);
 
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
+            Assert.That(queryResult.Dto, Is.Null);
+        }
 
-        //    var dto = queryResult.Dto;
-        //    Assert.That(dto.Id, Is.EqualTo(seed.Id));
-        //    Assert.That(dto.I18NKeyName, Is.EqualTo(seed.I18NKeyName));
-        //    Assert.That(dto.BaseChemicalFormTypeId, Is.EqualTo(seed.BaseChemicalFormTypeId));
-        //    Assert.That(dto.BaseUnitTypeId, Is.EqualTo(seed.BaseUnitTypeId));
-        //    Assert.That(dto.CreatedById, Is.EqualTo(seed.CreatedById));
-        //    Assert.That(dto.ModifiedById, Is.EqualTo(seed.ModifiedById));
-        //    Assert.That(dto.CreatedOn, Is.EqualTo(seed.CreatedOn).Within(TimeSpan.FromSeconds(1)));
-        //    Assert.That(dto.ModifiedOn, Is.EqualTo(seed.ModifiedOn).Within(TimeSpan.FromSeconds(1)));
-        //    Assert.That(dto.ParameterTypeId, Is.EqualTo(seed.ParameterTypeId));
-        //}
-
-        //[Test]
-        //public async Task When_Get_Parameter_InvalidId_Fails()
-        //{
-        //    var queryResult = await _facade.Get(Guid.Empty);
-
-        //    Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
-        //    Assert.That(queryResult.Dto, Is.Null);
-        //}
-
-        //#endregion Get Tests
+        #endregion Get Tests
     }
 }

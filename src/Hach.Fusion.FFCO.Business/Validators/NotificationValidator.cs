@@ -18,7 +18,7 @@ namespace Hach.Fusion.FFCO.Business.Validators
         {
             IsNull(dto);
 
-            IsType(dto, typeof(NotificationQueryDto));
+            IsType(dto, typeof(NotificationBaseDto));
 
             if (FFErrors.Count > 0)
                 return new FFValidationResponse
