@@ -1,8 +1,7 @@
 ﻿using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Data.Database;
-using Hach.Fusion.Data.Dtos.LocationType;
+using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
-using Hach.Fusion.FFCO.Business;
 using Hach.Fusion.FFCO.Business.Tests;
 using Hach.Fusion.FFCO.Business.Validators;
 using Moq;
@@ -21,6 +20,7 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
+using Hach.Fusion.Data.Mapping;
 using LocationTypeFacade = Hach.Fusion.FFCO.Business.Facades.LocationTypeFacade;
 
 namespace Hach.Fusion.FFCO.Api.Tests.Controllers

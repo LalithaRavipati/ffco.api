@@ -1,8 +1,7 @@
 ﻿using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Data.Database;
-using Hach.Fusion.Data.Dtos.LimitTypes;
+using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.FFCO.Api.Controllers.v16_1;
-using Hach.Fusion.FFCO.Business;
 using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Tests;
 using Hach.Fusion.FFCO.Business.Validators;
@@ -22,6 +21,7 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
+using Hach.Fusion.Data.Mapping;
 
 namespace Hach.Fusion.FFCO.Api.Tests.Controllers
 {
@@ -33,7 +33,7 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         private readonly Mock<ODataQueryOptions<LimitTypeQueryDto>> _mockDtoOptions;
         private DataContext _context;
         private LimitTypeFacade _facade;
-        private Guid _userId = Data.Users.tnt01user.Id;
+        //private Guid _userId = Data.Users.tnt01user.Id;
 
         public LimitTypesApiTests()
         {
@@ -60,44 +60,44 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
             return builder;
         }
 
-        #region Setup and Teardown
+        //#region Setup and Teardown
 
-        [SetUp]
-        public void Setup()
-        {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _userId.ToString());
+        //    Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
+        //    var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
+        //    _context = new DataContext(connectionString);
 
-            _facade = new LimitTypeFacade(_context, new LimitTypeValidator());
+        //    _facade = new LimitTypeFacade(_context, new LimitTypeValidator());
 
-            ODataHelper oDataHelper = new ODataHelper();
+        //    ODataHelper oDataHelper = new ODataHelper();
 
-            _controller = new LimitTypesController(oDataHelper, _facade);
-            _controller.Request = new HttpRequestMessage();
-            _controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+        //    _controller = new LimitTypesController(oDataHelper, _facade);
+        //    _controller.Request = new HttpRequestMessage();
+        //    _controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
-            // Setting the URI of the request here is needed for the API POST method to work
-            _controller.Request.RequestUri = new Uri("http://tempuri.com");
+        //    // Setting the URI of the request here is needed for the API POST method to work
+        //    _controller.Request.RequestUri = new Uri("http://tempuri.com");
 
-            /* 
-             * TODO: akrone - Taking on some Techincal Debt doing this, but pulling the Seeder into it's own project would need to 
-             *      be merged into other development work going on for sprint 60
-             */
-            Seeder.SeedWithTestData(_context);
-        }
+        //    /* 
+        //     * TODO: akrone - Taking on some Techincal Debt doing this, but pulling the Seeder into it's own project would need to 
+        //     *      be merged into other development work going on for sprint 60
+        //     */
+        //    Seeder.SeedWithTestData(_context);
+        //}
 
-        [TearDown]
-        public void TearDown()
-        {
-            _facade = null;
-            _controller.Dispose();
-            _context.Dispose();
+        //[TearDown]
+        //public void TearDown()
+        //{
+        //    _facade = null;
+        //    _controller.Dispose();
+        //    _context.Dispose();
 
-        }
-        #endregion
+        //}
+        //#endregion
 
         [Test]
         public async Task When_Get_Succeeds()
