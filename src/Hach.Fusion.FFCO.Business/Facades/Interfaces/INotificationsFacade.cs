@@ -11,6 +11,6 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// </summary>
         /// <param name="dto">Dto containing notification information.</param>
         /// <returns>Task that returns the command result.</returns>
-        Task<CommandResultNoDto> SendNotification(NotificationBaseDto dto);
+        Task<CommandResultNoDto> SendNotification(GenericNotificationDto dto);
     }
 }

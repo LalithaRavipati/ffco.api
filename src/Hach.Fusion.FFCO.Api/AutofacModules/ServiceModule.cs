@@ -8,6 +8,7 @@ using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Queue;
 using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Database.Interfaces;
 using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.FFCO.Api.Notifications;
 using Hach.Fusion.FFCO.Business.Facades;
@@ -40,8 +41,8 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
 
             // Contexts
             builder.Register(c => new DataContext(connectionString)).AsSelf().As<DataContext>().InstancePerLifetimeScope();
-            builder.Register(c => new DocumentDBRepository<UploadTransaction>(endpoint, authKey, databaseId, collectionId))
-                .As<IDocumentDBRepository<UploadTransaction>>().InstancePerLifetimeScope();
+            builder.Register(c => new DocumentDbRepository<UploadTransaction>(endpoint, authKey, databaseId, collectionId))
+                .As<IDocumentDbRepository<UploadTransaction>>().InstancePerLifetimeScope();
 
             // OData Helper
             builder.RegisterType<ODataHelper>().As<IODataHelper>().InstancePerLifetimeScope();
@@ -103,7 +104,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<PlantConfigurationsFacade>().As<IPlantConfigurationsFacade>();
 
             builder.RegisterType<NotificationsFacade>().As<INotificationsFacade>();
-            builder.RegisterType<NotificationValidator>().As<IFFValidator<NotificationBaseDto>>();
+            builder.RegisterType<NotificationValidator>().As<IFFValidator<GenericNotificationDto>>();
 
             base.Load(builder);
         }

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Hach.Fusion.Data.Database.Interfaces;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
@@ -23,7 +24,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         private PlantConfigurationsFacade _facade;
         private Mock<IBlobManager> _blobManager;
         private Mock<IQueueManager> _queueManager;
-        private Mock<IDocumentDBRepository<UploadTransaction>> _documentDbRepository;
+        private Mock<IDocumentDbRepository<UploadTransaction>> _documentDbRepository;
 
         public PlantConfigurationFacadeTests()
         {
@@ -40,7 +41,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 .Returns(Task.Delay(0));
 
             _blobManager = new Mock<IBlobManager>();
-            _documentDbRepository = new Mock<IDocumentDBRepository<UploadTransaction>>();
+            _documentDbRepository = new Mock<IDocumentDbRepository<UploadTransaction>>();
 
             _mockContext = new Mock<DataContext>();
             Seeder.InitializeMockDataContext(_mockContext);

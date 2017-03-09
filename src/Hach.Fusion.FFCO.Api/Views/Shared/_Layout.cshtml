@@ -38,6 +38,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home", new {area = ""}, null)</li>
+                @* ReSharper disable once Mvc.ControllerNotResolved *@
                 <li>@Html.ActionLink("API", "", "docs/index", new {area = ""}, null)</li>
             </ul>
         </div>

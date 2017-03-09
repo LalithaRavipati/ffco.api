@@ -16,6 +16,7 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.Queue;
+using Hach.Fusion.Data.Database.Interfaces;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -26,7 +27,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     {
         private readonly IBlobManager _blobManager;
         private readonly IQueueManager _queueManager;
-        private readonly IDocumentDBRepository<UploadTransaction> _documentDb;
+        private readonly IDocumentDbRepository<UploadTransaction> _documentDb;
         private readonly DataContext _context;
 
         private readonly string _blobStorageConnectionString;
@@ -41,7 +42,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="queueManager">Manager for Azure Queue Storage.</param>
         /// <param name="documentDb">Azure DocumentDB repository</param>
         public PlantConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, 
-            IDocumentDBRepository<UploadTransaction> documentDb)
+            IDocumentDbRepository<UploadTransaction> documentDb)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
