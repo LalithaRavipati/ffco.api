@@ -78,8 +78,8 @@
       <HintPath>..\packages\Flurl.1.1.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Core, Version=2017.69.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Core.2017.69.1\lib\net452\Hach.Fusion.Core.dll</HintPath>
+    <Reference Include="Hach.Fusion.Core, Version=2017.69.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Core.2017.69.3\lib\net452\Hach.Fusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Hach.Fusion.FFCO.Core, Version=2017.69.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -460,24 +460,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-3.1.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.0.min.map" />
-    <None Include="Web.ClientTest.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Demo.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Develop.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Sprint.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Test.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.us-hachtest-stage.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hach.Fusion.FFCO.Business\Hach.Fusion.FFCO.Business.csproj">
