@@ -67,8 +67,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            Thread.CurrentPrincipal = _tnt01Claims;
-
             _mockContext = SetupMockDataContext();
 
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
@@ -79,6 +77,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "tnt01and02user").Id.ToString());
             _tnt01And02Claims = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+
+            Thread.CurrentPrincipal = _tnt01Claims;
 
             var validator = new DashboardOptionValidator();
             _facade = new DashboardOptionFacade(_mockContext.Object, validator);

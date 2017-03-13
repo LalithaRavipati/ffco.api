@@ -82,7 +82,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_WithParent_Should_Succeed()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationBaseDto
             {
                 Name = "New Location",
                 LocationTypeId = _mockContext.Object.LocationTypes.Single(x=> x.I18NKeyName =="Sampling Site").Id,
@@ -151,7 +151,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
 
             var seed = _mockContext.Object.Locations.Single(x => x.Name == "Location Updateable");
-            var delta = new Delta<LocationCommandDto>();
+            var delta = new Delta<LocationBaseDto>();
             delta.TrySetPropertyValue("Name", "New Name");
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -163,7 +163,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Update_SetAndRemoveSortOrder()
         {
             var seed = _mockContext.Object.Locations.Single(x => x.Name == "Location Updateable");
-            var delta = new Delta<LocationCommandDto>();
+            var delta = new Delta<LocationBaseDto>();
             delta.TrySetPropertyValue("SortOrder", 1);
 
             var commandResult = await _facade.Update(seed.Id, delta);
@@ -187,7 +187,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var seed = _mockContext.Object.Locations.Single(x => x.Name == "Location Updateable");
 
-            var delta = new Delta<LocationCommandDto>();
+            var delta = new Delta<LocationBaseDto>();
             var sortOrderUpdateval = _forUpdate.SortOrder == null
                 ? 1
                 : _forUpdate.SortOrder++;
@@ -209,7 +209,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var dto = new LocationCommandDto
+            var dto = new LocationBaseDto
             {
                 Name = "New Location",
                 LocationTypeId = _mockContext.Object.LocationTypes.Single(x => x.I18NKeyName == "Distribution").Id
@@ -223,7 +223,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Create_AlreadyExists_Should_Fail()
         {
             var plant01 = _mockContext.Object.Locations.Single(x => x.Name == "Plant_01");
-            var dto = new LocationCommandDto
+            var dto = new LocationBaseDto
             {
                 Name = plant01.Name,
                 LocationTypeId = plant01.LocationTypeId
@@ -241,7 +241,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_NoLocationTypeId_Should_Fail()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationBaseDto
             {
                 Name = "New Location"
             };
@@ -258,7 +258,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_LocationTypeIdNoExist_Should_Fail()
         {
-            var dto = new LocationCommandDto
+            var dto = new LocationBaseDto
             {
                 Name = "New Location",
                 LocationTypeId = Guid.NewGuid()
@@ -277,7 +277,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Create_ParentIdNoExist_Should_Fail()
         {
             var distributionType = _mockContext.Object.LocationTypes.Single(x => x.I18NKeyName == "Distribution");
-            var dto = new LocationCommandDto
+            var dto = new LocationBaseDto
             {
                 Name = "New Location",
                 LocationTypeId = distributionType.Id,

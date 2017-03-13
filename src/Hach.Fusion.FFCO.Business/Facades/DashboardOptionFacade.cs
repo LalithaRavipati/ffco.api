@@ -15,7 +15,6 @@ using Hach.Fusion.Data.Entities;
 using Hach.Fusion.Data.Extensions;
 using Hach.Fusion.Data.Mapping;
 
-
 namespace Hach.Fusion.FFCO.Business.Facades
 {
     /// <summary>
@@ -59,13 +58,20 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await Task.Run(() => 
-                _context.GetDashboardOptionsForUser(Guid.Parse(userId))
-                .Select(_mapper.Map<DashboardOption, DashboardOptionQueryDto>)
-                .AsQueryable())
-                .ConfigureAwait(false);
+            try
+            {
+                var result = await Task.Run(() =>
+                    _context.GetDashboardOptionsForUser(Guid.Parse(userId))
+                    .Select(_mapper.Map<DashboardOption, DashboardOptionQueryDto>)
+                    .AsQueryable())
+                    .ConfigureAwait(false);
 
-            return Query.Result(result);
+                return Query.Result(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -88,8 +94,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 .ConfigureAwait(false);
 
             return result == null
-                ? Query.Error(EntityErrorCode.EntityNotFound)
-                : Query.Result(_mapper.Map<DashboardOption, DashboardOptionQueryDto>(result));
+                    ? Query.Error(EntityErrorCode.EntityNotFound)
+                    : Query.Result(_mapper.Map<DashboardOption, DashboardOptionQueryDto>(result));
         }
 
         #endregion Get Methods
