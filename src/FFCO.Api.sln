@@ -12,9 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hach.Fusion.FFCO.Business.Tests", "Hach.Fusion.FFCO.Business.Tests\Hach.Fusion.FFCO.Business.Tests.csproj", "{5B9DC3C5-A532-4D79-9104-660AA097EAAA}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientTest|Any CPU = ClientTest|Any CPU
 		Debug|Any CPU = Debug|Any CPU

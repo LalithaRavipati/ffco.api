@@ -6,12 +6,6 @@
         The following uploadTransactionTypes are valid:
         <ul>
           <li>ConfigurePlant</li>
-          <li>ImportBaseUnits</li>
-          <li>ImportUnitTypes</li>
-          <li>ImportParameters</li>
-          <li>ImportFeatures</li>
-          <li>ImportChemicalFormTypes</li>
-          <li>ImportRoles</li>
         </ul>
 
       </p>
