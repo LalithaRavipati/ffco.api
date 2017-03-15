@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.Data.Entities;
 using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Spatial;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {
@@ -42,13 +43,22 @@ namespace Hach.Fusion.FFCO.Business.Validators
             Evaluate(l => l.LocationTypeId, dto.LocationTypeId)
                 .Required();
 
-            Evaluate(l => l.Point, dto.Point)
-                .IsPoint();
+            IsPointValid(dto.Point);
 
             return new FFValidationResponse
             {
                 FFErrors = FFErrors
             };
+        }
+
+        /// <summary>
+        /// Add a validation error if the point is not valid.
+        /// </summary>
+        /// <param name="point">The point to validate.</param>
+        private void IsPointValid(Point point)
+        {
+            if (point == null || !point.IsPointValid())
+                FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(point)));
         }
 
         /// <summary>
