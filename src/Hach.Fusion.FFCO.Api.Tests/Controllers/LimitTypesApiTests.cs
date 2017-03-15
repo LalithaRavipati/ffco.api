@@ -33,7 +33,6 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         private readonly Mock<ODataQueryOptions<LimitTypeQueryDto>> _mockDtoOptions;
         private DataContext _context;
         private LimitTypeFacade _facade;
-        //private Guid _userId = Data.Users.tnt01user.Id;
 
         public LimitTypesApiTests()
         {
