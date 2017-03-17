@@ -1,5 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
+using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Validators;
+using Moq;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -9,22 +16,13 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Dtos.LocationType;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
-using NUnit.Framework;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
     public class LocationTypeFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<LocationTypeQueryDto>> _mockDtoOptions;
         private LocationTypeFacade _facade;
 
@@ -56,22 +54,17 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", 
-                Data.Users.tnt01and02user.Id.ToString());
+            _mockContext = new Mock<DataContext>();
+            Seeder.InitializeMockDataContext(_mockContext);
+
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
+
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
             var validator = new LocationTypeValidator();
-            _facade = new LocationTypeFacade(_context, validator);
+            _facade = new LocationTypeFacade(_mockContext.Object, validator);
 
-            Seeder.SeedWithTestData(_context);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
         }
 
         #region Get Tests
@@ -84,23 +77,23 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var results = queryResult.Results;
 
-            Assert.That(results.Any(x => x.Id == Data.LocationTypes.Plant.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LocationTypes.Process.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LocationTypes.SamplingSite.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LocationTypes.Distribution.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Plant").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Process").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Sampling Site").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Distribution").Id), Is.True);
 
-            var loc = results.FirstOrDefault(x => x.Id == Data.LocationTypes.FortCollinsPlant.Id);
+            var loc = results.FirstOrDefault(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="FortCollinsPlant").Id);
             Assert.That(loc, Is.Not.Null);
-            Assert.That(loc.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsSystemA.Id), Is.True);
-            Assert.That(loc.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsSystemB.Id), Is.True);
+            Assert.That(loc.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="FortCollinsSystemA").Id), Is.True);
+            Assert.That(loc.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsSystemB").Id), Is.True);
 
-            var sys = loc.LocationTypes.First(x => x.Id == Data.LocationTypes.FortCollinsSystemA.Id);
-            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorA1.Id), Is.True);
-            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorA2.Id), Is.True);
+            var sys = loc.LocationTypes.First(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsSystemA").Id);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsCollectorA1").Id), Is.True);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsCollectorA2").Id), Is.True);
 
-            sys = loc.LocationTypes.First(x => x.Id == Data.LocationTypes.FortCollinsSystemB.Id);
-            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorB1.Id), Is.True);
-            Assert.That(sys.LocationTypes.Any(x => x.Id == Data.LocationTypes.FortCollinsCollectorB2.Id), Is.True);
+            sys = loc.LocationTypes.First(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsSystemB").Id);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsCollectorB1").Id), Is.True);
+            Assert.That(sys.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsCollectorB2").Id), Is.True);
         }
 
         [Test]
@@ -115,7 +108,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Get_LocationType_Succeeds()
         {
-            var dto = Data.LocationTypes.Process;
+            var dto = _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "Process");
             var queryResult = await _facade.Get(dto.Id);
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
@@ -127,7 +120,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var queryResult = await _facade.Get(Data.LocationTypes.Process.Id);
+            var queryResult = await _facade.Get(_mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "Process").Id);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
         }
 

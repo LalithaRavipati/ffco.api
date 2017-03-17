@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Api.Controllers;
+using Hach.Fusion.Core.Api.OData;
+using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Business.Facades;
+using Hach.Fusion.Core.Business.Results;
+using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Dtos;
+using Swashbuckle.Swagger.Annotations;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
 using System.Web.OData.Query;
-using Hach.Fusion.Core.Api.Controllers;
-using Hach.Fusion.Core.Api.OData;
-using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Business.Facades;
-using Hach.Fusion.Core.Business.Results;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos.LimitTypes;
-using Swashbuckle.Swagger.Annotations;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -20,7 +20,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// Web API controller for managing LimitTypes.
     /// </summary>
     public class LimitTypesController
-        : ControllerWithCruModelsBase<LimitTypeCommandDto, LimitTypeCommandDto, LimitTypeQueryDto, Guid>
+        : ControllerWithCruModelsBase<LimitTypeBaseDto, LimitTypeBaseDto, LimitTypeQueryDto, Guid>
     {
         /// <summary>
         /// Constructor.
@@ -28,7 +28,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist data.</param>
         public LimitTypesController(IODataHelper oDataHelper,
-            IFacadeWithCruModels<LimitTypeCommandDto, LimitTypeCommandDto, LimitTypeQueryDto, Guid> facade) 
+            IFacadeWithCruModels<LimitTypeBaseDto, LimitTypeBaseDto, LimitTypeQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -99,11 +99,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Create)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LimitTypeCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LimitTypeQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LimitTypeCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Post(LimitTypeCommandDto dto)
+        [ResponseType(typeof(CommandResult<LimitTypeQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Post(LimitTypeBaseDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -126,13 +126,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LimitTypeCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LimitTypeQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LimitTypeCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LimitTypeCommandDto> delta)
+        [ResponseType(typeof(CommandResult<LimitTypeQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LimitTypeBaseDto> delta)
         {
             var result = await Facade.Update(key, delta);
             return Command(result);

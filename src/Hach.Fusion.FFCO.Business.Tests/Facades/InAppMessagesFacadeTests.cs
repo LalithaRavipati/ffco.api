@@ -1,4 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
+using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Validators;
+using Moq;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
@@ -9,22 +18,13 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
-using NUnit.Framework;
-using System;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
     public class InAppMessageFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<InAppMessageQueryDto>> _mockDtoOptions;
         private InAppMessageFacade _facade;
         private ClaimsPrincipal _tnt01UserClaimPrinciple;
@@ -42,14 +42,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
 
-            Claim userClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01user.Id.ToString());
-            _tnt01UserClaimPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userClaim }));
-
-            userClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt01and02user.Id.ToString());
-            _tnt01and02UserClaimPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userClaim }));
-
-            userClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Data.Users.tnt02user.Id.ToString());
-            _tnt02UserClaimPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userClaim }));
+          
         }
 
         private static ODataModelBuilder BuildODataModel()
@@ -68,18 +61,22 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
             var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
+            _mockContext = new Mock<DataContext>();
             var validator = new InAppMessageValidator();
-            _facade = new InAppMessageFacade(_context, validator);
+            _facade = new InAppMessageFacade(_mockContext.Object, validator);
 
-            Seeder.SeedWithTestData(_context);
-        }
+            Seeder.InitializeMockDataContext(_mockContext);
+            
+            Claim userClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(u => u.UserName=="tnt01user").Id.ToString());
+            _tnt01UserClaimPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userClaim }));
 
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
+            userClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(u => u.UserName == "tnt01and02user").Id.ToString());
+            _tnt01and02UserClaimPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userClaim }));
+
+            userClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(u => u.UserName == "tnt02user").Id.ToString());
+            _tnt02UserClaimPrinciple = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userClaim }));
         }
+        
 
         #region Get Tests
 
@@ -87,7 +84,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Get_InAppMessagesTnt01User_Succeeds()
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u=> u.UserName =="tnt01user").Id, _mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
@@ -99,7 +96,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Get_InAppMessagesTnt02User_Succeeds()
         {
             Thread.CurrentPrincipal = _tnt02UserClaimPrinciple;
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt02user.Id, _mockDtoOptions.Object);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt02user").Id, _mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
@@ -111,7 +108,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Get_InAppMessagesTnt02User_Fails()
         {
             Thread.CurrentPrincipal = _tnt02UserClaimPrinciple;
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id, _mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
         }
 
@@ -119,14 +116,14 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Get_InAppMessagesTnt01And02User_Succeeds()
         {
             Thread.CurrentPrincipal = _tnt01and02UserClaimPrinciple;
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id, _mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var results = queryResult.Results;
 
             Assert.That(results.Count(), Is.GreaterThan(0));
 
-            queryResult = await _facade.GetByUserId(Data.Users.tnt02user.Id, _mockDtoOptions.Object);
+            queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt02user").Id, _mockDtoOptions.Object);
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             results = queryResult.Results;
@@ -143,41 +140,41 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageBaseDto>();
 
             toUpdateDto.TrySetPropertyValue("IsRead", true);
-            var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
+            var msg = _mockContext.Object.InAppMessages.Single( x => x.Id == new Guid("4CC29478-EC01-4EF5-B076-637508E241AF"));
 
             DateTime updateDate = DateTime.UtcNow;
-            var updateResult = await _facade.Update(Id, toUpdateDto);
+            var updateResult = await _facade.Update(msg.Id, toUpdateDto);
 
             Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
-            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id, _mockDtoOptions.Object);
+            var result = queryResult.Results.SingleOrDefault(x => x.Id == msg.Id);
 
             Assert.That(result.DateRead, Is.AtLeast(updateDate));
             Assert.That(result.IsRead, Is.EqualTo(true));
-            Assert.That(result.IsTrash, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation1.IsTrash));
+            Assert.That(result.IsTrash, Is.EqualTo(msg.IsTrash));
         }
 
         public async Task When_Update_InAppMessageMarkReadandTrashTnt01User_Succeeds()
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageBaseDto>();
 
             toUpdateDto.TrySetPropertyValue("IsRead", true);
             toUpdateDto.TrySetPropertyValue("IsTrash", true);
-            var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
+            var msg = _mockContext.Object.InAppMessages.Single( x => x.Id == new Guid("4CC29478-EC01-4EF5-B076-637508E241AF"));
 
             DateTime updateDate = DateTime.UtcNow;
-            var updateResult = await _facade.Update(Id, toUpdateDto);
+            var updateResult = await _facade.Update(msg.Id, toUpdateDto);
 
             Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
-            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id, _mockDtoOptions.Object);
+            var result = queryResult.Results.SingleOrDefault(x => x.Id == msg.Id);
 
             Assert.That(result.DateRead, Is.AtLeast(updateDate));
             Assert.That(result.IsRead, Is.EqualTo(true));
@@ -189,21 +186,21 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageBaseDto>();
 
             toUpdateDto.TrySetPropertyValue("IsTrash", true);
-            var Id = Data.InAppMessages.tnt01UserMessageLimitViolation1.Id;
+            var msg = _mockContext.Object.InAppMessages.Single(x => x.Id == new Guid("4CC29478-EC01-4EF5-B076-637508E241AF"));
 
             DateTime updateDate = DateTime.UtcNow;
-            var updateResult = await _facade.Update(Id, toUpdateDto);
+            var updateResult = await _facade.Update(msg.Id, toUpdateDto);
 
             Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
-            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id, _mockDtoOptions.Object);
+            var result = queryResult.Results.SingleOrDefault(x => x.Id == msg.Id);
 
-            Assert.That(result.DateRead, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation1.DateRead));
-            Assert.That(result.IsRead, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation1.IsRead));
+            Assert.That(result.DateRead, Is.EqualTo(msg.DateRead));
+            Assert.That(result.IsRead, Is.EqualTo(msg.IsRead));
             Assert.That(result.IsTrash, Is.EqualTo(true));
         }
 
@@ -211,22 +208,22 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = _tnt01UserClaimPrinciple;
 
-            var toUpdateDto = new Delta<InAppMessageCommandDto>();
+            var toUpdateDto = new Delta<InAppMessageBaseDto>();
 
             toUpdateDto.TrySetPropertyValue("IsRead", false);
-            var Id = Data.InAppMessages.tnt01UserMessageLimitViolation2.Id;
+            var msg = _mockContext.Object.InAppMessages.Single(x => x.Id == new Guid("4CC29478-EC01-4EF5-B076-6375081231AF"));
 
             DateTime updateDate = DateTime.UtcNow;
-            var updateResult = await _facade.Update(Id, toUpdateDto);
+            var updateResult = await _facade.Update(msg.Id, toUpdateDto);
 
             Assert.That(updateResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
-            var queryResult = await _facade.GetByUserId(Data.Users.tnt01user.Id, _mockDtoOptions.Object);
-            var result = queryResult.Results.SingleOrDefault(msg => msg.Id == Id);
+            var queryResult = await _facade.GetByUserId(_mockContext.Object.Users.Single(u => u.UserName == "tnt01user").Id, _mockDtoOptions.Object);
+            var result = queryResult.Results.SingleOrDefault(x => x.Id == msg.Id);
 
             Assert.That(result.DateRead, Is.Null);
             Assert.That(result.IsRead, Is.EqualTo(false));
-            Assert.That(result.IsTrash, Is.EqualTo(Data.InAppMessages.tnt01UserMessageLimitViolation2.IsTrash));
+            Assert.That(result.IsTrash, Is.EqualTo(msg.IsTrash));
         }
 
         #endregion

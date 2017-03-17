@@ -1,4 +1,12 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Api.OData;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.FFCO.Api.Controllers.v16_1;
+using Hach.Fusion.FFCO.Business;
+using Hach.Fusion.FFCO.Business.Tests;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
@@ -12,15 +20,6 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Api.OData;
-using Hach.Fusion.FFCO.Api.Controllers.v16_1;
-using Hach.Fusion.FFCO.Business;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Tests;
-using Hach.Fusion.FFCO.Core.Dtos;
-using NUnit.Framework;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
 using ParameterTypeFacade = Hach.Fusion.FFCO.Business.Facades.ParameterTypeFacade;
 
 namespace Hach.Fusion.FFCO.Api.Tests.Controllers
@@ -30,7 +29,7 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
     {
 
         private ParameterTypesController _controller;
-        private readonly Mock<ODataQueryOptions<ParameterTypeDto>> _mockDtoOptions;
+        private readonly Mock<ODataQueryOptions<ParameterTypeQueryDto>> _mockDtoOptions;
         private DataContext _context;
         private ParameterTypeFacade _facade;
         private Guid _userId = Data.Users.tnt01user.Id;
@@ -43,8 +42,8 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri("http://tempuri.com");
 
-            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterTypeDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterTypeDto), new ODataPath()),
+            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterTypeQueryDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterTypeQueryDto), new ODataPath()),
                 request);
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
@@ -54,8 +53,8 @@ namespace Hach.Fusion.FFCO.Api.Tests.Controllers
         {
             var builder = new ODataModelBuilder();
 
-            builder.EntitySet<ParameterTypeDto>("LocationTypes");
-            builder.EntityType<ParameterTypeDto>().HasKey(x => x.Id);
+            builder.EntitySet<ParameterTypeQueryDto>("LocationTypes");
+            builder.EntityType<ParameterTypeQueryDto>().HasKey(x => x.Id);
 
             return builder;
         }

@@ -10,9 +10,10 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -20,7 +21,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the ChemicalFormTypes repository. 
     /// </summary>    
     public class ChemicalFormTypesFacade
-        : FacadeWithCruModelsBase<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, Guid>
+        : FacadeWithCruModelsBase<ChemicalFormTypeBaseDto, ChemicalFormTypeBaseDto, ChemicalFormTypeQueryDto, Guid>,
+         IFacadeWithCruModels<ChemicalFormTypeBaseDto, ChemicalFormTypeBaseDto, ChemicalFormTypeQueryDto, Guid>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -99,7 +101,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the DTO associated with the entity created.
         /// </returns>
-        public override Task<CommandResult<ChemicalFormTypeQueryDto, Guid>> Create(ChemicalFormTypeQueryDto dto)
+        public override Task<CommandResult<ChemicalFormTypeQueryDto, Guid>> Create(ChemicalFormTypeBaseDto dto)
         {
             throw new NotImplementedException();
         }
@@ -135,7 +137,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override Task<CommandResult<ChemicalFormTypeQueryDto, Guid>> Update(Guid id, Delta<ChemicalFormTypeQueryDto> delta)
+        public override Task<CommandResult<ChemicalFormTypeBaseDto, Guid>> Update(Guid id, Delta<ChemicalFormTypeBaseDto> delta)
         {
             throw new NotImplementedException();
         }

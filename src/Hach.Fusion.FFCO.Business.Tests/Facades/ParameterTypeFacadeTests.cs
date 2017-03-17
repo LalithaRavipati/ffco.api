@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
+using Hach.Fusion.FFCO.Business.Facades;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
-using NUnit.Framework;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
     public class ParameterTypeFacadeTests
     {
-        private DataContext _context;
-        private readonly Mock<ODataQueryOptions<ParameterTypeDto>> _mockDtoOptions;
+        private Mock<DataContext> _mockContext;
+        private readonly Mock<ODataQueryOptions<ParameterTypeQueryDto>> _mockDtoOptions;
         private ParameterTypeFacade _facade;
 
         public ParameterTypeFacadeTests()
@@ -33,8 +30,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var builder = BuildODataModel();
 
-            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterTypeDto>>(
-                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterTypeDto), new ODataPath()), new HttpRequestMessage());
+            _mockDtoOptions = new Mock<ODataQueryOptions<ParameterTypeQueryDto>>(
+                new ODataQueryContext(builder.GetEdmModel(), typeof(ParameterTypeQueryDto), new ODataPath()), new HttpRequestMessage());
 
             _mockDtoOptions.Setup(x => x.Validate(It.IsAny<ODataValidationSettings>())).Callback(() => { });
         }
@@ -43,8 +40,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             var builder = new ODataModelBuilder();
 
-            builder.EntitySet<ParameterTypeDto>("ParameterTypes");
-            builder.EntityType<ParameterTypeDto>().HasKey(x => x.Id);
+            builder.EntitySet<ParameterTypeQueryDto>("ParameterTypes");
+            builder.EntityType<ParameterTypeQueryDto>().HasKey(x => x.Id);
 
             return builder;
         }
@@ -52,20 +49,14 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "5170AE58-21B4-40F5-A025-E886489E9B82");
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            _mockContext = new Mock<DataContext>();
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
-            _facade = new ParameterTypeFacade(_context);
+            Seeder.InitializeMockDataContext(_mockContext);
 
-            Seeder.SeedWithTestData(_context);
-        }
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
 
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
+            _facade = new ParameterTypeFacade(_mockContext.Object);
         }
 
         #region Get Tests
@@ -78,14 +69,14 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var results = queryResult.Results;
             Assert.That(results.Count, Is.EqualTo(2));
-            Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Chemical.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.ParameterTypes.Sensed.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.ParameterTypes.Single(t => t.I18NKeyName=="Chemical").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.ParameterTypes.Single(t => t.I18NKeyName == "Sensed").Id), Is.True);
         }
 
         [Test]
         public async Task When_Get_ParameterType_Succeeds()
         {
-            var seed = Data.ParameterTypes.Chemical;
+            var seed = _mockContext.Object.ParameterTypes.Single(t => t.I18NKeyName == "Chemical");
 
             var queryResult = await _facade.Get(seed.Id);
 

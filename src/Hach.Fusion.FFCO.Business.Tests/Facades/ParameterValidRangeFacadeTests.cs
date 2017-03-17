@@ -1,6 +1,13 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
+using Hach.Fusion.FFCO.Business.Facades;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -10,21 +17,13 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
-using NUnit.Framework;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
     public class ParameterValidRangeFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<ParameterValidRangeQueryDto>> _mockDtoOptions;
         private ParameterValidRangeFacade _facade;
 
@@ -58,30 +57,26 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", "5170AE58-21B4-40F5-A025-E886489E9B82");
+            _mockContext = new Mock<DataContext>();
+            Seeder.InitializeMockDataContext(_mockContext);
+
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _mockContext.Object.Users.Single(x => x.UserName == "adhach").Id.ToString());
+
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
-            _facade = new ParameterValidRangeFacade(_context);
+            _facade = new ParameterValidRangeFacade(_mockContext.Object);
 
-            Seeder.SeedWithTestData(_context);
             RetrieveSeededData();
         }
 
         private void RetrieveSeededData()
         {
             // Needed so that audit time fields aren't reset
-            _parameterValidRangePh = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.pH.Id);
-            _parameterValidRangeFlowMinAndMax = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMinAndMax.Id);
-            _parameterValidRangeFlowMinOnly = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMinOnly.Id);
-            _parameterValidRangeFlowMaxOnly = _context.ParameterValidRanges.First(x => x.Id == Data.ParameterValidRanges.FlowMaxOnly.Id);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
+            _parameterValidRangePh = _mockContext.Object.ParameterValidRanges.First(x => x.Id == new Guid("DD1BB35B-1585-4D6D-B21E-13F06B6A25BF") );
+            _parameterValidRangeFlowMinAndMax = _mockContext.Object.ParameterValidRanges.First(x => x.Id == new Guid("4871F673-5308-4DF9-BE96-2CC34AD856E5"));
+            _parameterValidRangeFlowMinOnly = _mockContext.Object.ParameterValidRanges.First(x => x.Id == new Guid("D138C2F1-9EEB-4F8C-829A-04D8B9598049"));
+            _parameterValidRangeFlowMaxOnly = _mockContext.Object.ParameterValidRanges.First(x => x.Id == new Guid("150CC8CF-49AC-4BC5-A348-9D9FB29BA5DB"));
         }
 
         #region Get Tests
@@ -95,10 +90,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var results = queryResult.Results;
             Assert.That(results.Count, Is.EqualTo(4));
 
-            Compare(_parameterValidRangePh, results.First(x => x.Id == Data.ParameterValidRanges.pH.Id));
-            Compare(_parameterValidRangeFlowMinAndMax, results.First(x => x.Id == Data.ParameterValidRanges.FlowMinAndMax.Id));
-            Compare(_parameterValidRangeFlowMinOnly, results.First(x => x.Id == Data.ParameterValidRanges.FlowMinOnly.Id));
-            Compare(_parameterValidRangeFlowMaxOnly, results.First(x => x.Id == Data.ParameterValidRanges.FlowMaxOnly.Id));
+            Compare(_parameterValidRangePh, results.First(x => x.Id == _parameterValidRangePh.Id));
+            Compare(_parameterValidRangeFlowMinAndMax, results.First(x => x.Id == _parameterValidRangeFlowMinAndMax.Id));
+            Compare(_parameterValidRangeFlowMinOnly, results.First(x => x.Id == _parameterValidRangeFlowMinOnly.Id));
+            Compare(_parameterValidRangeFlowMaxOnly, results.First(x => x.Id == _parameterValidRangeFlowMaxOnly.Id));
         }
 
         [Test]
@@ -109,7 +104,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             var dto = queryResult.Dto;
-            
+
             Compare(_parameterValidRangePh, dto);
         }
 

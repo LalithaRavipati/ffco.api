@@ -7,9 +7,11 @@ using AutoMapper;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
+
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -17,7 +19,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the Unit Type Group repository. 
     /// </summary>    
     public class UnitTypeGroupFacade
-        : FacadeWithCruModelsBase<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, Guid>
+        : FacadeWithCruModelsBase<UnitTypeGroupBaseDto, UnitTypeGroupBaseDto, UnitTypeGroupQueryDto, Guid>,
+        IFacadeWithCruModels<UnitTypeGroupBaseDto, UnitTypeGroupBaseDto, UnitTypeGroupQueryDto, Guid>
     {
         private readonly DataContext _context;
 
@@ -29,7 +32,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing Unit Type Group entities.</param>
         /// <param name="validator">Validator for Unit Type Group DTOs.</param>
-        public UnitTypeGroupFacade(DataContext context, IFFValidator<UnitTypeGroupQueryDto> validator)
+        public UnitTypeGroupFacade(DataContext context, IFFValidator<UnitTypeGroupBaseDto> validator)
         {
             _context = context;
 
@@ -111,7 +114,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the DTO associated with the Unit Type Group.
         /// </returns>
-        public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Create(UnitTypeGroupQueryDto dto)
+        public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Create(UnitTypeGroupBaseDto dto)
         {
             throw new NotImplementedException();
         }
@@ -147,7 +150,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override Task<CommandResult<UnitTypeGroupQueryDto, Guid>> Update(Guid id, Delta<UnitTypeGroupQueryDto> delta)
+        public override Task<CommandResult<UnitTypeGroupBaseDto, Guid>> Update(Guid id, Delta<UnitTypeGroupBaseDto> delta)
         {
             throw new NotImplementedException();
         }

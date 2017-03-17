@@ -11,8 +11,9 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -27,14 +28,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class LocationLogEntriesController
-        : ControllerWithCruModelsBase<LocationLogEntryCommandDto, LocationLogEntryCommandDto, LocationLogEntryQueryDto, Guid>
+        : ControllerWithCruModelsBase<LocationLogEntryBaseDto, LocationLogEntryBaseDto, LocationLogEntryQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="LocationLogEntriesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist Location Type data.</param>
-        public LocationLogEntriesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationLogEntryCommandDto, LocationLogEntryCommandDto, LocationLogEntryQueryDto, Guid> facade) 
+        public LocationLogEntriesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationLogEntryBaseDto, LocationLogEntryBaseDto, LocationLogEntryQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -111,7 +112,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Post(LocationLogEntryCommandDto dto)
+        public async Task<IHttpActionResult> Post(LocationLogEntryBaseDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -134,13 +135,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationLogEntryCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(CommandResult<LocationLogEntryQueryDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationLogEntryCommandDto> delta)
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationLogEntryBaseDto> delta)
         {
             var result = await Facade.Update(key, delta);
             return Command(result);

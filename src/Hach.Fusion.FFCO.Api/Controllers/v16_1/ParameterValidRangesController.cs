@@ -10,8 +10,9 @@ using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -85,7 +86,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         [ResponseType(typeof(ParameterValidRangeQueryDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterDto> queryOptions)
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterQueryDto> queryOptions)
         {
             var results = await _facade.Get(key);
             return Query(results);

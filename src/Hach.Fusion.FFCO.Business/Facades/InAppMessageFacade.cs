@@ -1,20 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.OData;
-using System.Web.OData.Query;
-using AutoMapper;
+﻿using AutoMapper;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Extensions;
-
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Extensions;
+using Hach.Fusion.Data.Mapping;
+using System;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Web.OData;
+using System.Web.OData.Query;
+
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -22,7 +22,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the InAppMessage repository. 
     /// </summary>    
     public class InAppMessageFacade
-        : FacadeWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>,
+        : FacadeWithCruModelsBase<InAppMessageBaseDto, InAppMessageBaseDto, InAppMessageQueryDto, Guid>,
         IInAppMessageFacade
     {
         private readonly DataContext _context;
@@ -34,7 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing InAppMessage entities.</param>
         /// <param name="validator">Validator for InAppMessage DTOs.</param>
-        public InAppMessageFacade(DataContext context, IFFValidator<InAppMessageCommandDto> validator)
+        public InAppMessageFacade(DataContext context, IFFValidator<InAppMessageBaseDto> validator)
         {
             _context = context;
 
@@ -77,28 +77,28 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
         #region Update Methods
 
-        public override async Task<CommandResult<InAppMessageCommandDto, Guid>> Update(Guid id, Delta<InAppMessageCommandDto> delta)
+        public override async Task<CommandResult<InAppMessageBaseDto, Guid>> Update(Guid id, Delta<InAppMessageBaseDto> delta)
         {
             // Check user has proper access to update the message
             var uid = GetCurrentUser();
 
             if (!uid.HasValue)
-                return Command.Error<InAppMessageCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<InAppMessageBaseDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
-                return Command.Error<InAppMessageCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<InAppMessageBaseDto>(EntityErrorCode.EntityFormatIsInvalid);
 
             var entity = _context.InAppMessages.SingleOrDefault(msg => msg.Id == id);
             if (entity == null)
-                return Command.Error<InAppMessageCommandDto>(EntityErrorCode.EntityNotFound);
+                return Command.Error<InAppMessageBaseDto>(EntityErrorCode.EntityNotFound);
 
             // Check if the calling User shares a Tenant with the UserId passed in
             var tenants = _context.GetTenantsForUser(uid.Value);
             var shareTenant = tenants.Any(t => t.Users.Any(u => u.Id == entity.UserId));
             if (!shareTenant)
-                return Command.Error<InAppMessageCommandDto>(ValidationErrorCode.ForeignKeyValueDoesNotExist("UserId"));
+                return Command.Error<InAppMessageBaseDto>(ValidationErrorCode.ForeignKeyValueDoesNotExist("UserId"));
 
-            var dto = _mapper.Map(entity, new InAppMessageCommandDto());
+            var dto = _mapper.Map(entity, new InAppMessageBaseDto());
 
             delta.Patch(dto);
 
@@ -109,7 +109,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<InAppMessageCommandDto>(validationResponse);
+                return Command.Error<InAppMessageBaseDto>(validationResponse);
 
             // Apply the update
             _context.InAppMessages.Attach(entity);
@@ -129,7 +129,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<InAppMessageCommandDto>();
+            return Command.NoContent<InAppMessageBaseDto>();
         }
         #endregion
 
@@ -154,7 +154,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             throw new NotImplementedException();
         }
 
-        public override Task<CommandResult<InAppMessageQueryDto, Guid>> Create(InAppMessageCommandDto dto)
+        public override Task<CommandResult<InAppMessageQueryDto, Guid>> Create(InAppMessageBaseDto dto)
         {
             throw new NotImplementedException();
         }

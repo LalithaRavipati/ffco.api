@@ -10,15 +10,16 @@ using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
     /// Web API controller for retriving ChemicalFormTypes.
     /// </summary>
-    public class ChemicalFormTypesController : ControllerWithCruModelsBase<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, Guid>
+    public class ChemicalFormTypesController : ControllerWithCruModelsBase<ChemicalFormTypeBaseDto, ChemicalFormTypeBaseDto, ChemicalFormTypeQueryDto, Guid>
     {
         /// <summary>
         /// Constructor.
@@ -26,7 +27,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist data.</param>
         public ChemicalFormTypesController(IODataHelper oDataHelper,
-            IFacadeWithCruModels<ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, ChemicalFormTypeQueryDto, Guid> facade)
+            IFacadeWithCruModels<ChemicalFormTypeBaseDto, ChemicalFormTypeBaseDto, ChemicalFormTypeQueryDto, Guid> facade)
             : base(oDataHelper)
         {
             if (facade == null)

@@ -11,8 +11,9 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
+
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -20,7 +21,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// Web API controller for managing Dashboards.
     /// </summary>
     public class DashboardsController
-        : ControllerWithCruModelsBase<DashboardCommandDto, DashboardCommandDto, DashboardQueryDto, Guid>
+        : ControllerWithCruModelsBase<DashboardBaseDto, DashboardBaseDto, DashboardQueryDto, Guid>
     {
         /// <summary>
         /// Constructor.
@@ -28,7 +29,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist data.</param>
         public DashboardsController(IODataHelper oDataHelper, 
-            IFacadeWithCruModels<DashboardCommandDto, DashboardCommandDto, DashboardQueryDto, Guid> facade) 
+            IFacadeWithCruModels<DashboardBaseDto, DashboardBaseDto, DashboardQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -99,11 +100,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Create)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<DashboardCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<DashboardQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<DashboardCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Post(DashboardCommandDto dto)
+        [ResponseType(typeof(CommandResult<DashboardQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Post(DashboardQueryDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -126,13 +127,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<DashboardCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<DashboardQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<DashboardCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<DashboardCommandDto> delta)
+        [ResponseType(typeof(CommandResult<DashboardQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<DashboardBaseDto> delta)
         {
             var result = await Facade.Update(key, delta);
             return Command(result);

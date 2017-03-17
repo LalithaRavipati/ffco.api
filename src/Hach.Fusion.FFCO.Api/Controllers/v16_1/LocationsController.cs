@@ -11,8 +11,8 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -27,14 +27,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class LocationsController
-        : ControllerWithCruModelsBase<LocationCommandDto, LocationCommandDto, LocationQueryDto, Guid>
+        : ControllerWithCruModelsBase<LocationBaseDto, LocationBaseDto, LocationQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="LocationsController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist Location data.</param>
-        public LocationsController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationCommandDto, LocationCommandDto, LocationQueryDto, Guid> facade) 
+        public LocationsController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationBaseDto, LocationBaseDto, LocationQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -108,11 +108,11 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Create)]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.Created, null, typeof(CommandResult<LocationBaseDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LocationCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Post(LocationCommandDto dto)
+        [ResponseType(typeof(CommandResult<LocationBaseDto, Guid>))]
+        public async Task<IHttpActionResult> Post(LocationBaseDto dto)
         {
             var result = await Facade.Create(dto);
             return Command(result);
@@ -135,13 +135,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [AcceptVerbs("PATCH", "MERGE")]
         [SwaggerResponseRemoveDefaults]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<LocationBaseDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(CommandResult<LocationCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationCommandDto> delta)
+        [ResponseType(typeof(CommandResult<LocationBaseDto, Guid>))]
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<LocationBaseDto> delta)
         {
             var result = await Facade.Update(key, delta);
             return Command(result);

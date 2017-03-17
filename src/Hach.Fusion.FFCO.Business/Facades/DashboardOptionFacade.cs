@@ -9,11 +9,11 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Extensions;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Extensions;
+using Hach.Fusion.Data.Mapping;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -21,7 +21,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the DashboardOption repository. 
     /// </summary>    
     public class DashboardOptionFacade
-        : FacadeWithCruModelsBase<DashboardOptionCommandDto, DashboardOptionCommandDto, DashboardOptionQueryDto, Guid>
+        : FacadeWithCruModelsBase<DashboardOptionBaseDto, DashboardOptionBaseDto, DashboardOptionQueryDto, Guid>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +32,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing dashboard option entities.</param>
         /// <param name="validator">Validator for DTOs.</param>
-        public DashboardOptionFacade(DataContext context, IFFValidator<DashboardOptionCommandDto> validator)
+        public DashboardOptionFacade(DataContext context, IFFValidator<DashboardOptionBaseDto> validator)
         {
             _context = context;
             _mapper = MappingManager.AutoMapper;
@@ -58,13 +58,20 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 return Query.Error(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            var result = await Task.Run(() => 
-                _context.GetDashboardOptionsForUser(Guid.Parse(userId))
-                .Select(_mapper.Map<DashboardOption, DashboardOptionQueryDto>)
-                .AsQueryable())
-                .ConfigureAwait(false);
+            try
+            {
+                var result = await Task.Run(() =>
+                    _context.GetDashboardOptionsForUser(Guid.Parse(userId))
+                    .Select(_mapper.Map<DashboardOption, DashboardOptionQueryDto>)
+                    .AsQueryable())
+                    .ConfigureAwait(false);
 
-            return Query.Result(result);
+                return Query.Result(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -87,8 +94,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 .ConfigureAwait(false);
 
             return result == null
-                ? Query.Error(EntityErrorCode.EntityNotFound)
-                : Query.Result(_mapper.Map<DashboardOption, DashboardOptionQueryDto>(result));
+                    ? Query.Error(EntityErrorCode.EntityNotFound)
+                    : Query.Result(_mapper.Map<DashboardOption, DashboardOptionQueryDto>(result));
         }
 
         #endregion Get Methods
@@ -103,7 +110,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the DTO associated with the entity created.
         /// </returns>
-        public override async Task<CommandResult<DashboardOptionQueryDto, Guid>> Create(DashboardOptionCommandDto dto)
+        public override async Task<CommandResult<DashboardOptionQueryDto, Guid>> Create(DashboardOptionBaseDto dto)
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
@@ -187,22 +194,22 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<DashboardOptionCommandDto, Guid>> Update(Guid id, Delta<DashboardOptionCommandDto> delta)
+        public override async Task<CommandResult<DashboardOptionBaseDto, Guid>> Update(Guid id, Delta<DashboardOptionBaseDto> delta)
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
-                return Command.Error<DashboardOptionCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<DashboardOptionBaseDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
-                return Command.Error<DashboardOptionCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<DashboardOptionBaseDto>(EntityErrorCode.EntityFormatIsInvalid);
 
             var userDashboardOptions = _context.GetDashboardOptionsForUser(Guid.Parse(userId));
             var entity = userDashboardOptions.SingleOrDefault(x => x.Id == id);
 
             if (entity == null)
-                return Command.Error<DashboardOptionCommandDto>(EntityErrorCode.EntityNotFound);
+                return Command.Error<DashboardOptionBaseDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map(entity, new DashboardOptionCommandDto());
+            var dto = _mapper.Map(entity, new DashboardOptionBaseDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
@@ -219,7 +226,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<DashboardOptionCommandDto>(validationResponse);
+                return Command.Error<DashboardOptionBaseDto>(validationResponse);
 
             _context.DashboardOptions.Attach(entity);
             _mapper.Map(dto, entity);
@@ -227,7 +234,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<DashboardOptionCommandDto>();
+            return Command.NoContent<DashboardOptionBaseDto>();
         }
 
         #endregion Update Method

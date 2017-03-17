@@ -6,7 +6,8 @@ using Hach.Fusion.FFCO.Business.Facades;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Notifications;
 using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
+using Hach.Fusion.Data.Dtos;
+
 using Moq;
 using NUnit.Framework;
 
@@ -35,7 +36,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public void When_SendBroadcastNotification_Succeeds()
         {
-            var dto = new NotificationDto
+            var dto = new GenericNotificationDto()
             {
                 BroadcastAll = true,
                 Message = "Test Message"
@@ -51,7 +52,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public void When_SendGroupNotification_Succeeds()
         {
-            var dto = new NotificationDto
+            var dto = new GenericNotificationDto
             {
                 BroadcastAll = false,
                 GroupName = "Test Group",
@@ -68,7 +69,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public void When_SendBroadcastNotification_EmptyMessage_Fails()
         {
-            var dto = new NotificationDto
+            var dto = new GenericNotificationDto
             {
                 BroadcastAll = true,
                 Message = ""
@@ -89,7 +90,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public void When_SendGroupNotification_EmptyGroupName_Fails()
         {
-            var dto = new NotificationDto
+            var dto = new GenericNotificationDto
             {
                 BroadcastAll = false,
                 GroupName = "",
@@ -106,7 +107,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public void When_SendGroupNotification_EmptyMessage_Fails()
         {
-            var dto = new NotificationDto
+            var dto = new GenericNotificationDto
             {
                 BroadcastAll = false,
                 GroupName = "Test Group",

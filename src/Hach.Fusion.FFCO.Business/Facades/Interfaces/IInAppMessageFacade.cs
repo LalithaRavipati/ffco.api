@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Facades;
-using Hach.Fusion.FFCO.Core.Dtos;
 using System.Web.OData.Query;
 using Hach.Fusion.Core.Business.Results;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
-    public interface IInAppMessageFacade : IFacadeWithCruModels<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
+    public interface IInAppMessageFacade : IFacadeWithCruModels<InAppMessageBaseDto, InAppMessageBaseDto, InAppMessageQueryDto, Guid>
     {
         /// <summary>
         /// Retrieves InAppMessages for the specified User
