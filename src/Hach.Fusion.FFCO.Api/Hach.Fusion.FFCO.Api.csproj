@@ -388,7 +388,7 @@
     <Compile Include="Controllers\v16_1\LocationsController.cs" />
     <Compile Include="Controllers\v16_1\ParametersController.cs" />
     <Compile Include="Controllers\v16_1\ParameterTypesController.cs" />
-    <Compile Include="Controllers\v16_1\PlantConfigurationsController.cs" />
+    <Compile Include="Controllers\v16_1\OperationConfigurationsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -429,7 +429,7 @@
     <Content Include="Controllers\v16_1\XmlDocumentation\InAppMessagesController.doc">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Controllers\v16_1\XmlDocumentation\PlantConfigurationsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\OperationConfigurationsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\NotificationsController.doc" />
     <None Include="Properties\PublishProfiles\ffco-prod-demo-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-feature.pubxml" />

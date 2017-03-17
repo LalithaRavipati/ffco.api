@@ -21,9 +21,9 @@ using Hach.Fusion.Data.Database.Interfaces;
 namespace Hach.Fusion.FFCO.Business.Facades
 {
     /// <summary>
-    /// The facade that provides the functionality for plant configuration operations.
+    /// The facade that provides the functionality for operation configuration operations.
     /// </summary>
-    public class PlantConfigurationsFacade : IPlantConfigurationsFacade
+    public class OperationConfigurationsFacade : IOperationConfigurationsFacade
     {
         private readonly IBlobManager _blobManager;
         private readonly IQueueManager _queueManager;
@@ -35,13 +35,13 @@ namespace Hach.Fusion.FFCO.Business.Facades
         private readonly string _queueStorageContainerName;
 
         /// <summary>
-        /// Constructor for the <see cref="PlantConfigurationsFacade"/>.
+        /// Constructor for the <see cref="OperationConfigurationsFacade"/>.
         /// </summary>
         /// <param name="context">Database context containing dashboard type entities.</param>
         /// <param name="blobManager">Manager for Azure Blob Storage.</param>
         /// <param name="queueManager">Manager for Azure Queue Storage.</param>
         /// <param name="documentDb">Azure DocumentDB repository</param>
-        public PlantConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, 
+        public OperationConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, 
             IDocumentDbRepository<UploadTransaction> documentDb)
         {
             if (context == null)
@@ -64,7 +64,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Accepts a single xls file that contains plant configuration.
+        /// Accepts a single xls file that contains operation configuration.
         /// </summary>
         /// <param name="fileMetadata">Metadata associated with the file upload request.</param>
         /// <param name="authenticationHeader">Authentication header for the request.</param>
@@ -116,17 +116,17 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Creates an xlxs file that contains configuration plant data and save it to blob storage. When
+        /// Creates an xlxs file that contains operation configuration data and save it to blob storage. When
         /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
         /// requst.
         /// </summary>
-        /// <param name="tenantId">Identifies the tenant that the plant belongs to.</param>
-        /// <param name="plantId">Identifies the plant to download the configuration for.</param>
+        /// <param name="tenantId">Identifies the tenant that the operation belongs to.</param>
+        /// <param name="operationId">Identifies the operation to download the configuration for.</param>
         /// <param name="authenticationHeader">Authentication header for the request.</param>
         /// <returns>A task that returns the result of the request.</returns>
-        public async Task<CommandResultNoDto> Download(Guid tenantId, Guid plantId, string authenticationHeader)
+        public async Task<CommandResultNoDto> Download(Guid tenantId, Guid operationId, string authenticationHeader)
         {
-            const string transactionType = "PlantConfigExport";
+            const string transactionType = "OperationConfigExport";
             var errors = new List<FFErrorCode>();
 
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
@@ -138,14 +138,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var userIdGuid = Guid.Parse(userId);
 
-            var plant = await _context.Locations.FirstOrDefaultAsync(x => x.Id == plantId).ConfigureAwait(false);
-            if (plant == null)
+            var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
+            if (operation == null)
             {
-                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("plantId"));
+                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("operationId"));
             }
             else
             {
-                var validTenant = plant.ProductOfferingTenantLocations.Any(x => x.TenantId == tenantId);
+                var validTenant = operation.ProductOfferingTenantLocations.Any(x => x.TenantId == tenantId);
                 if (!validTenant)
                     errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
             }
@@ -158,7 +158,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 BlobTransactionType = transactionType,
                 UserId = userIdGuid,
                 TenantId = tenantId,
-                OperationId = plantId,
+                OperationId = operationId,
                 AuthenticationHeader = authenticationHeader
             };
 

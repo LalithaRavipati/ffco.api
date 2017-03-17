@@ -16,22 +16,24 @@ using System.Net;
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Controller that manages plant configuration file uploads.
-    /// This endpoint uploads plant configuration files to the cloud. The file is immediately persisted
+    /// Controller that manages operation configuration file uploads.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint uploads operation configuration files to the cloud. The file is immediately persisted
     /// in BLOB storage, where it is permanently archived. The data in the file is then queued for
     /// further asynchronous processing by a web job (FFCO.WebJobs.BlobProcessor).
-    /// </summary>
+    /// </remarks>
     [Authorize]
     [FFExceptionHandling]
-    public class PlantConfigurationsController : ApiController
+    public class OperationConfigurationsController : ApiController
     {
-        private readonly IPlantConfigurationsFacade _facade;
+        private readonly IOperationConfigurationsFacade _facade;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="facade">Class that provides the functionality for this controller.</param>
-        public PlantConfigurationsController(IPlantConfigurationsFacade facade)
+        public OperationConfigurationsController(IOperationConfigurationsFacade facade)
         {
             if (facade == null)
                 throw new ArgumentNullException(nameof(facade));
@@ -40,13 +42,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Accepts a single xls file that contains configuration plant data.
+        /// Accepts a single xls file that contains operation configuration data.
         /// </summary>
         /// <returns></returns>
         /// /// <example>
-        /// POST: ~/api/v16.1/PlantConfigurationsController
+        /// POST: ~/api/v16.1/OperationConfigurationsController
         /// </example>
-        /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Post"]/*'/>
+        /// <include file='XmlDocumentation/OperationConfigurationsController.doc' path='OperationConfigurationsController/Methods[@name="Post"]/*'/>
         [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -93,37 +95,37 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Creates an xlxs file that contains configuration plant data and save it to blob storage. When
+        /// Creates an xlxs file that contains operation configuration data and save it to blob storage. When
         /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
         /// requst.
         /// </summary>
-        /// <param name="tenantId">Identifies the tenant that the plant belongs to.</param>
-        /// <param name="plantId">Identifies the plant to download the configuration for.</param>
+        /// <param name="tenantId">Identifies the tenant that the operation belongs to.</param>
+        /// <param name="operationId">Identifies the operation to download the configuration for.</param>
         /// <returns>Task that returns the request result.</returns>
         /// /// <example>
-        /// GET: ~/api/v16.1/PlantConfigurationsController
+        /// GET: ~/api/v16.1/OperationConfigurationsController
         /// </example>
-        /// <include file='XmlDocumentation/PlantConfigurationsController.doc' path='PlantConfigurationsController/Methods[@name="Get"]/*'/>
+        /// <include file='XmlDocumentation/OperationConfigurationsController.doc' path='OperationConfigurationsController/Methods[@name="Get"]/*'/>
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> Download([FromUri] Guid? tenantId, [FromUri] Guid? plantId)
+        public async Task<IHttpActionResult> Download([FromUri] Guid? tenantId, [FromUri] Guid? operationId)
         {
             var errors = new List<FFErrorCode>();
 
             if (!tenantId.HasValue)
                 errors.Add(ValidationErrorCode.PropertyRequired(nameof(tenantId)));
 
-            if (!plantId.HasValue)
-                errors.Add(ValidationErrorCode.PropertyRequired(nameof(plantId)));
+            if (!operationId.HasValue)
+                errors.Add(ValidationErrorCode.PropertyRequired(nameof(operationId)));
 
             if (errors.Any())
                 return Request.CreateApiResponse(NoDtoHelpers.CreateCommandResult(errors));
 
             var authHeader = Request.Headers.Authorization.ToString();
-            var result = await _facade.Download((Guid)tenantId, (Guid)plantId, authHeader);
+            var result = await _facade.Download((Guid)tenantId, (Guid)operationId, authHeader);
 
             return Request.CreateApiResponse(result);
         }

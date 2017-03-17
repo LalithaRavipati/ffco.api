@@ -253,13 +253,13 @@
     <Compile Include="Facades\Interfaces\INotificationsFacade.cs" />
     <Compile Include="Facades\Interfaces\IInAppMessageFacade.cs" />
     <Compile Include="Notifications\INotificationSender.cs" />
-    <Compile Include="Facades\Interfaces\IPlantConfigurationsFacade.cs" />
+    <Compile Include="Facades\Interfaces\IOperationConfigurationsFacade.cs" />
     <Compile Include="Facades\LimitTypeFacade.cs" />
     <Compile Include="Facades\LocationLogEntryFacade.cs" />
     <Compile Include="Facades\NotificationsFacade.cs" />
     <Compile Include="Facades\ParameterValidRangeFacade.cs" />
     <Compile Include="Facades\InAppMessageFacade.cs" />
-    <Compile Include="Facades\PlantConfigurationsFacade.cs" />
+    <Compile Include="Facades\OperationConfigurationsFacade.cs" />
     <Compile Include="Facades\UnitTypeGroupFacade.cs" />
     <Compile Include="Facades\UnitTypeFacade.cs" />
     <Compile Include="Facades\LocationTypeFacade.cs" />

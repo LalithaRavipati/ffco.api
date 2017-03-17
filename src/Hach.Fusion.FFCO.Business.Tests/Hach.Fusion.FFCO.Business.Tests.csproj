@@ -268,7 +268,7 @@
     <Compile Include="Facades\ParameterFacadeTests.cs" />
     <Compile Include="Facades\ParameterTypeFacadeTests.cs" />
     <Compile Include="Facades\ParameterValidRangeFacadeTests.cs" />
-    <Compile Include="Facades\PlantConfigurationFacadeTests.cs" />
+    <Compile Include="Facades\OperationConfigurationFacadeTests.cs" />
     <Compile Include="Facades\UnitTypeFacadeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seeder.cs" />

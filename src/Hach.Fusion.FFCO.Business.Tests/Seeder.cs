@@ -916,8 +916,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 new Location
                 {
                     Id = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"),
-                    Name = "Plant_01",
-                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Plant").Id,
+                    Name = "Operation_01",
+                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Operation").Id,
                     ParentId = null,
                     SortOrder = null
                 },
@@ -925,8 +925,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 new Location
                 {
                     Id = Guid.Parse("C5A3A070-1394-4734-B114-24AE9073BCF2"),
-                    Name = "Plant_02",
-                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Plant").Id,
+                    Name = "Operation_02",
+                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Operation").Id,
                     ParentId = null,
                     SortOrder = null
                 },
@@ -934,8 +934,8 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 new Location
                 {
                     Id = Guid.Parse("6508A6ED-DE7C-4E26-849B-72F44AF4931A"),
-                    Name = "Plant_03",
-                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Plant").Id,
+                    Name = "Operation_03",
+                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Operation").Id,
                     ParentId = null,
                     SortOrder = null
                 },
@@ -945,7 +945,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                     Id = Guid.Parse("5E510C45-7BBE-47C6-80D1-F86D79F418E6"),
                     Name = "Process_Preliminary",
                     LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Process").Id,
-                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Plant_01.Id,
+                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Operation_01.Id,
                     SortOrder = 1
 
                 },
@@ -955,7 +955,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                     Id = Guid.Parse("e9562dff-5204-4aff-a413-d1212327dea8"),
                     Name = "Process_Influent",
                     LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Process").Id,
-                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Plant_01.Id,
+                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Operation_01.Id,
                     SortOrder = null
 
                 },
@@ -965,7 +965,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                     Id = Guid.Parse("eef791a6-01f0-4274-9bf1-98c27fbeb2b2"),
                     Name = "Process_PrimaryTreatment",
                     LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Process").Id,
-                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Plant_01.Id,
+                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Operation_01.Id,
                     SortOrder = null
 
                 },
@@ -975,7 +975,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                     Id = Guid.Parse("b317b8ab-d1b1-4c09-9b36-014fc024879f"),
                     Name = "Process_SecondaryTreatment",
                     LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Process").Id,
-                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Plant_01.Id,
+                    ParentId = Guid.Parse("B73C185D-667F-4636-A245-AB7B8EAA9BDA"), // Operation_01.Id,
                     SortOrder = null
 
                 },
@@ -1107,7 +1107,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 {
                     Id = Guid.Parse("e2cc3b11-a951-43a5-83ad-539b09584614"),
                     Name = "Location To Delete",
-                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Plant").Id,
+                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Operation").Id,
                     SortOrder = null
                 },
 
@@ -1115,7 +1115,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 {
                     Id = Guid.Parse("2b3faf82-988a-4dcf-9b4b-2cba3a3c8a58"),
                     Name = "Location Updateable",
-                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Plant").Id,
+                    LocationTypeId = locationTypesList.Single(t => t.I18NKeyName == "Operation").Id,
                     SortOrder = null,
                 }
 
@@ -1130,7 +1130,7 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 new LocationType
                 {
                     Id = Guid.Parse("66b8a397-96ae-4c6b-b1f1-9f28a823a8e6"),
-                    I18NKeyName = "Plant"
+                    I18NKeyName = "Operation"
                 },
 
                 new LocationType
@@ -1154,21 +1154,21 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 new LocationType
                 {
                     Id = Guid.Parse("03CEA526-C2D4-4DAF-B5E9-DC21427A45EC"),
-                    I18NKeyName = "FortCollinsPlant"
+                    I18NKeyName = "FortCollinsOperation"
                 },
 
                 new LocationType
                 {
                     Id = Guid.Parse("5A9000D2-1D69-4B1C-86DB-C915677286AE"),
                     I18NKeyName = "FortCollinsSystemA",
-                    ParentId = Guid.Parse("03CEA526-C2D4-4DAF-B5E9-DC21427A45EC") //FortCollinsPlant.Id
+                    ParentId = Guid.Parse("03CEA526-C2D4-4DAF-B5E9-DC21427A45EC") //FortCollinsOperation.Id
                 },
 
                 new LocationType
                 {
                     Id = Guid.Parse("202B4B72-C811-41BC-B66F-D91B84E84A90"),
                     I18NKeyName = "FortCollinsSystemB",
-                    ParentId = Guid.Parse("03CEA526-C2D4-4DAF-B5E9-DC21427A45EC") //FortCollinsPlant.Id
+                    ParentId = Guid.Parse("03CEA526-C2D4-4DAF-B5E9-DC21427A45EC") //FortCollinsOperation.Id
                 },
 
                 new LocationType
@@ -1213,21 +1213,21 @@ namespace Hach.Fusion.FFCO.Business.Tests
                 {
                     ProductOfferingId = productOfferingsList.Single(x=> x.Name == "Fusion Foundation").Id,
                     TenantId = tenantsList.Single(x=> x.Name =="Dev Tenant 01").Id,
-                    LocationId = locationsList.Single(x=> x.Name =="Plant_01").Id
+                    LocationId = locationsList.Single(x=> x.Name =="Operation_01").Id
                 },
 
                 new ProductOfferingTenantLocation
                 {
                     ProductOfferingId = productOfferingsList.Single(x=> x.Name == "Fusion Foundation").Id,
                     TenantId = tenantsList.Single(x=> x.Name =="Dev Tenant 01").Id,
-                    LocationId = locationsList.Single(x=> x.Name =="Plant_02").Id
+                    LocationId = locationsList.Single(x=> x.Name =="Operation_02").Id
                 },
 
                 new ProductOfferingTenantLocation
                 {
                     ProductOfferingId = productOfferingsList.Single(x=> x.Name == "Fusion Foundation").Id,
                     TenantId = tenantsList.Single(x=> x.Name =="Dev Tenant 02").Id,
-                    LocationId = locationsList.Single(x=> x.Name =="Plant_03").Id
+                    LocationId = locationsList.Single(x=> x.Name =="Operation_03").Id
                 },
 
                 new ProductOfferingTenantLocation
@@ -1302,57 +1302,57 @@ namespace Hach.Fusion.FFCO.Business.Tests
             var locationsList = GetLocations();
 
             return new List<LocationLogEntry> { 
-            //public static LocationLogEntry Plant1Log1 =>
+            //public static LocationLogEntry Operation1Log1 =>
             new LocationLogEntry
             {
                 Id = Guid.Parse("44E0C497-3A2C-4A89-99BD-F7B14C1A9187"),
-                LocationId = locationsList.Single(x=> x.Name =="Plant_01").Id,
-                LogEntry = "Plant 1, Log 1",
+                LocationId = locationsList.Single(x=> x.Name =="Operation_01").Id,
+                LogEntry = "Operation 1, Log 1",
                 TimeStamp = DateTimeOffset.Parse("10/01/2016 8:00:00")
             },
 
-            //public static LocationLogEntry Plant1Log2 =>
+            //public static LocationLogEntry Operation1Log2 =>
                 new LocationLogEntry
                 {
                     Id = Guid.Parse("C7267A62-A2F1-4C2A-8F36-2BEABD9B0F66"),
-                    LocationId = locationsList.Single(x=> x.Name =="Plant_01").Id,
-                    LogEntry = "Plant 1, Log 2",
+                    LocationId = locationsList.Single(x=> x.Name =="Operation_01").Id,
+                    LogEntry = "Operation 1, Log 2",
                     TimeStamp = DateTimeOffset.Parse("10/01/2016 8:05:00")
                 },
 
-            //public static LocationLogEntry Plant2Log1 =>
+            //public static LocationLogEntry Operation2Log1 =>
                 new LocationLogEntry
                 {
                     Id = Guid.Parse("83FFABC0-D51B-4B82-8DCC-80D1F258DB2F"),
-                    LocationId = locationsList.Single(x=> x.Name =="Plant_02").Id,
-                    LogEntry = "Plant 2, Log 1",
+                    LocationId = locationsList.Single(x=> x.Name =="Operation_02").Id,
+                    LogEntry = "Operation 2, Log 1",
                     TimeStamp = DateTimeOffset.Parse("10/01/2016 8:10:00")
                 },
 
-            //public static LocationLogEntry Plant2Log2_NoLocation =>
+            //public static LocationLogEntry Operation2Log2_NoLocation =>
                 new LocationLogEntry
                 {
                     Id = Guid.Parse("53B3C397-54F0-4915-B02E-6301A0864A49"),
                     LocationId = Guid.Empty,
-                    LogEntry = "Plant 2, Log 2",
+                    LogEntry = "Operation 2, Log 2",
                     TimeStamp = DateTimeOffset.Parse("10/01/2016 8:15:00")
                 },
 
-            //public static LocationLogEntry Plant2Log3_LocationNoExist =>
+            //public static LocationLogEntry Operation2Log3_LocationNoExist =>
                 new LocationLogEntry
                 {
                     Id = Guid.Parse("BBA19BAB-0E0F-4FC5-B5CF-4929F6870FF4"),
                     LocationId = Guid.NewGuid(),
-                    LogEntry = "Plant 2, Log 3",
+                    LogEntry = "Operation 2, Log 3",
                     TimeStamp = DateTimeOffset.Parse("10/01/2016 8:20:00")
                 },
 
-            //public static LocationLogEntry Plant3Log1 =>
+            //public static LocationLogEntry Operation3Log1 =>
                 new LocationLogEntry
                 {
                     Id = Guid.Parse("EA7E094D-B5F7-4E59-B642-7FDC08DF58FC"),
                     LocationId = locationsList.Single(x=> x.Name =="Process_PrimaryTreatment").Id,
-                    LogEntry = "Plant 3, Log 1",
+                    LogEntry = "Operation 3, Log 1",
                     TimeStamp = DateTimeOffset.Parse("10/01/2016 8:25:00")
                 }
             };

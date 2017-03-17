@@ -18,15 +18,15 @@ using Hach.Fusion.Data.Database.Interfaces;
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
-    public class PlantConfigurationFacadeTests
+    public class OperationConfigurationFacadeTests
     {
         private Mock<DataContext> _mockContext;
-        private PlantConfigurationsFacade _facade;
+        private OperationConfigurationsFacade _facade;
         private Mock<IBlobManager> _blobManager;
         private Mock<IQueueManager> _queueManager;
         private Mock<IDocumentDbRepository<UploadTransaction>> _documentDbRepository;
 
-        public PlantConfigurationFacadeTests()
+        public OperationConfigurationFacadeTests()
         {
             MappingManager.Initialize();
         }
@@ -49,7 +49,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x=> x.UserName == "tnt01user").Id.ToString());
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
 
-            _facade = new PlantConfigurationsFacade(_mockContext.Object, _blobManager.Object, _queueManager.Object, _documentDbRepository.Object);
+            _facade = new OperationConfigurationsFacade(_mockContext.Object, _blobManager.Object, _queueManager.Object, _documentDbRepository.Object);
 
         }
 
@@ -57,9 +57,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Download_Succeeds()
         {
             var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
-            var plantId = _mockContext.Object.Locations.Single(l => l.Name =="Plant_01").Id;
+            var operationId = _mockContext.Object.Locations.Single(l => l.Name =="Operation_01").Id;
 
-            var result = await _facade.Download(tenantId, plantId, "");
+            var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
             Assert.That(result.ErrorCodes, Is.Empty);
 
@@ -72,9 +72,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Thread.CurrentPrincipal = null;
 
             var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
-            var plantId = _mockContext.Object.Locations.Single(l => l.Name == "Plant_01").Id;
+            var operationId = _mockContext.Object.Locations.Single(l => l.Name == "Operation_01").Id;
 
-            var result = await _facade.Download(tenantId, plantId, "");
+            var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-304");
             Assert.That(errorCode, Is.Not.Null);
@@ -82,24 +82,24 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
         [Test]
-        public async Task When_Download_EmptyPlantId_Fails()
+        public async Task When_Download_EmptyOperationId_Fails()
         {
             var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
-            var plantId = Guid.Empty;
+            var operationId = Guid.Empty;
 
-            var result = await _facade.Download(tenantId, plantId, "");
+            var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209");
             Assert.That(errorCode, Is.Not.Null);
         }
 
         [Test]
-        public async Task When_Download_InvalidPlantId_Fails()
+        public async Task When_Download_InvalidOperationId_Fails()
         {
             var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
-            var plantId = Guid.Parse("23F0B5B9-6F97-4150-A1F0-3E1B6EAEE29E");
+            var operationId = Guid.Parse("23F0B5B9-6F97-4150-A1F0-3E1B6EAEE29E");
 
-            var result = await _facade.Download(tenantId, plantId, "");
+            var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209");
             Assert.That(errorCode, Is.Not.Null);
@@ -109,9 +109,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Download_EmptyTenantId_Fails()
         {
             var tenantId = Guid.Empty;
-            var plantId = _mockContext.Object.Locations.Single(l => l.Name == "Plant_01").Id;
+            var operationId = _mockContext.Object.Locations.Single(l => l.Name == "Operation_01").Id;
 
-            var result = await _facade.Download(tenantId, plantId, "");
+            var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209");
             Assert.That(errorCode, Is.Not.Null);
@@ -121,9 +121,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Download_InvalidTenantId_Fails()
         {
             var tenantId = Guid.Parse("5066B0D1-CAC3-4719-9D17-0C80FE0C16A5");
-            var plantId = _mockContext.Object.Locations.Single(l => l.Name == "Plant_01").Id;
+            var operationId = _mockContext.Object.Locations.Single(l => l.Name == "Operation_01").Id;
 
-            var result = await _facade.Download(tenantId, plantId, "");
+            var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209");
             Assert.That(errorCode, Is.Not.Null);
