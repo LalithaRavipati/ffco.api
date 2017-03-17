@@ -384,6 +384,7 @@
     <Compile Include="Controllers\v16_1\HomeController.cs" />
     <Compile Include="Controllers\v16_1\LimitTypesController.cs" />
     <Compile Include="Controllers\v16_1\LocationLogEntriesController.cs" />
+    <Compile Include="Controllers\v16_1\FilesController.cs" />
     <Compile Include="Controllers\v16_1\ParameterValidRangesController.cs" />
     <Compile Include="Controllers\v16_1\UnitTypeGroupsController.cs" />
     <Compile Include="Controllers\v16_1\InAppMessagesController.cs" />
