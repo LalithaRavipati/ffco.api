@@ -254,6 +254,8 @@
     <Compile Include="Facades\ChemicalFormTypesFacade.cs" />
     <Compile Include="Facades\DashboardFacade.cs" />
     <Compile Include="Facades\DashboardOptionFacade.cs" />
+    <Compile Include="Facades\FileFacade.cs" />
+    <Compile Include="Facades\Interfaces\IFileFacade.cs" />
     <Compile Include="Facades\Interfaces\INotificationsFacade.cs" />
     <Compile Include="Facades\Interfaces\IInAppMessageFacade.cs" />
     <Compile Include="Notifications\INotificationSender.cs" />

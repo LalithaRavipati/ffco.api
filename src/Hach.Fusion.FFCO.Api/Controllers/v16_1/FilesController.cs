@@ -1,40 +1,35 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
-using System.Web.OData.Query;
 using Hach.Fusion.Core.Api.Controllers;
-using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Enums;
-
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.FFCO.Business.Facades.Interfaces;
+using Hach.Fusion.FFCO.Business.Helpers;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
     /// <summary>
-    /// Web API controller for managing blob storage files whose metadata is stored in DocumentDb.
+    /// Web API controller for retrieving blob storage files whose metadata is stored in DocumentDb.
     /// </summary>
-    /// <remarks>
-    /// All of the public methods below return an asynchronous task result containing information needed to create
-    /// an API response message. Client applications using this API will not receive the task, but will instead receive
-    /// a response message that originates from information in the task result. Since clients using this API, will
-    /// see the XML comments in this class, the "return" fields below indicate the information returned to the
-    /// client applications.
-    /// </remarks>
-    public class FilesController : FFAABaseController<ParameterQueryDto, Guid>
+    public class FilesController : ApiController
     {
         /// <summary>
-        /// Default constructor for the <see cref="ParametersController"/> class taking OData helper and repository facade arguments.
+        /// Facade that retrieves files from Azure blob storage.
         /// </summary>
-        /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
-        /// <param name="facade">Facade for the repository used to retrieve location type data.</param>
-        public FilesController(IODataHelper oDataHelper, IFacade<ParameterQueryDto, Guid> facade) 
-            : base(oDataHelper)
+        private readonly IFileFacade _facade;
+
+        /// <summary>
+        /// Default constructor for the <see cref="FilesController"/> class taking a facade argument.
+        /// </summary>
+        /// <param name="facade">Facade that retrieves files from Azure blob storage.</param>
+        public FilesController(IFileFacade facade)
         {
             if (facade == null)
                 throw new ArgumentNullException(nameof(facade));
@@ -43,29 +38,26 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Retrieves the Parameter with the specified ID.
+        /// Retrieves the blob storage file with the specified ID.
         /// </summary>
-        /// <param name="key">ID that identifies the entity to be retrieved.</param>
-        /// <param name="queryOptions">OData query options.</param>
+        /// <param name="id">ID that uniquely identifies the blob storage file to be retrieved.</param>
         /// <returns>
-        /// The DTO for the indicated Parameter.
+        /// The specified file.
         /// </returns>
         /// <example>
-        /// GET: ~/odata/v16.1/Parameters(CDB928DA-365A-431E-A419-E9D6AF0C4FE5)
+        /// GET: ~/api/v16.1/Files/id
         /// </example>
         /// <include file='XmlDocumentation/ParametersController.doc' path='ParametersController/Methods[@name="GetOne"]/*'/>
-        [FFSEAuthorize(PermissionAction.Read)]
-        [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(ParameterQueryDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterQueryDto> queryOptions)
+        public async Task<IHttpActionResult> Get(Guid id)
         {
-            var results = await _facade.Get(key);
-            return Query(results);
+            var results = await _facade.Get(id);
+
+            return Request.CreateApiResponse(result);
         }
     }
 }
