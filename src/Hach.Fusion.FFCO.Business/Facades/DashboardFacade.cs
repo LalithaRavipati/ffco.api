@@ -9,11 +9,12 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
-using Hach.Fusion.FFCO.Core.Dtos.Dashboards;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Extensions;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Extensions;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
+
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -21,7 +22,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the Dashboard repository. 
     /// </summary>    
     public class DashboardFacade
-        : FacadeWithCruModelsBase<DashboardCommandDto, DashboardCommandDto, DashboardQueryDto, Guid>
+        : FacadeWithCruModelsBase<DashboardBaseDto, DashboardBaseDto, DashboardQueryDto, Guid>,
+        IFacadeWithCruModels<DashboardBaseDto, DashboardBaseDto, DashboardQueryDto, Guid>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing dashboard type entities.</param>
         /// <param name="validator">Validator for DTOs.</param>
-        public DashboardFacade(DataContext context, IFFValidator<DashboardCommandDto> validator)
+        public DashboardFacade(DataContext context, IFFValidator<DashboardBaseDto> validator)
         {
             _context = context;
             _mapper = MappingManager.AutoMapper;
@@ -103,7 +105,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the DTO associated with the entity created.
         /// </returns>
-        public override async Task<CommandResult<DashboardQueryDto, Guid>> Create(DashboardCommandDto dto)
+        public override async Task<CommandResult<DashboardQueryDto, Guid>> Create(DashboardBaseDto dto)
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
@@ -197,28 +199,28 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<DashboardCommandDto, Guid>> Update(Guid id, Delta<DashboardCommandDto> delta)
+        public override async Task<CommandResult<DashboardBaseDto, Guid>> Update(Guid id, Delta<DashboardBaseDto> delta)
         {
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
-                return Command.Error<DashboardCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<DashboardBaseDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             var userIdGuid = Guid.Parse(userId);
 
             if (delta == null)
-                return Command.Error<DashboardCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<DashboardBaseDto>(EntityErrorCode.EntityFormatIsInvalid);
 
             var userDashboards = _context.GetDashboardsForUser(Guid.Parse(userId));
             var entity = userDashboards.SingleOrDefault(x => x.Id == id);
 
             if (entity == null)
-                return Command.Error<DashboardCommandDto>(EntityErrorCode.EntityNotFound);
+                return Command.Error<DashboardBaseDto>(EntityErrorCode.EntityNotFound);
 
             // Only the dashboard creator can modify the dashboard.
             if (entity.OwnerUserId != userIdGuid)
-                return Command.Error<DashboardCommandDto>(EntityErrorCode.PermissionActivityInvalid);
+                return Command.Error<DashboardBaseDto>(EntityErrorCode.PermissionActivityInvalid);
 
-            var dto = _mapper.Map(entity, new DashboardCommandDto());
+            var dto = _mapper.Map(entity, new DashboardBaseDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
@@ -241,7 +243,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 validationResponse.FFErrors.Add(ValidationErrorCode.EntityIDUpdateNotAllowed("Id"));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<DashboardCommandDto>(validationResponse);
+                return Command.Error<DashboardBaseDto>(validationResponse);
 
             _context.Dashboards.Attach(entity);
             _mapper.Map(dto, entity);
@@ -249,7 +251,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<DashboardCommandDto>();
+            return Command.NoContent<DashboardBaseDto>();
         }
 
         #endregion Update Method

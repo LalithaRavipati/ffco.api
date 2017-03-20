@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Api.Controllers;
+using Hach.Fusion.Core.Api.OData;
+using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Business.Facades;
+using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Dtos;
+using Swashbuckle.Swagger.Annotations;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
 using System.Web.OData.Query;
-using Hach.Fusion.Core.Api.Controllers;
-using Hach.Fusion.Core.Api.OData;
-using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Business.Facades;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos.LocationType;
-using Swashbuckle.Swagger.Annotations;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -26,14 +26,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class LocationTypesController
-        : ControllerWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
+        : ControllerWithCruModelsBase<LocationTypeBaseDto, LocationTypeBaseDto, LocationTypeQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="LocationTypesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist Location Type data.</param>
-        public LocationTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid> facade) 
+        public LocationTypesController(IODataHelper oDataHelper, IFacadeWithCruModels<LocationTypeBaseDto, LocationTypeBaseDto, LocationTypeQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)

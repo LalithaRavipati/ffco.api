@@ -2,29 +2,30 @@
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Entities;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Spatial;
 
 namespace Hach.Fusion.FFCO.Business.Validators
 {
     /// <summary>
-    /// Validates <see cref="LocationCommandDto"/>s.
+    /// Validates <see cref="LocationBaseDto"/>s.
     /// </summary>
     /// <remarks>
     /// In addition to the override of the <see cref="Validate"/> method, this class contains a static method
     /// used to test whether updating the parent of a location would result in a circular reference.
     /// </remarks>
-    public class LocationValidator : FFValidator<LocationCommandDto, Guid>
+    public class LocationValidator : FFValidator<LocationBaseDto, Guid>
     {
         private const int NameMaximumLength = 200;
 
         private const int NameMinimumLength = 4;
 
         /// <summary>
-        /// Validates the state of the specified <see cref="LocationQueryDto"/>.
+        /// Validates the state of the specified <see cref="LocationBaseDto"/>.
         /// </summary>
         /// <param name="dto">Data transfer object whose state is to be validated.</param>
-        public override FFValidationResponse Validate(LocationCommandDto dto)
+        public override FFValidationResponse Validate(LocationBaseDto dto)
         {
             IsNull(dto);
 
@@ -42,8 +43,8 @@ namespace Hach.Fusion.FFCO.Business.Validators
             Evaluate(l => l.LocationTypeId, dto.LocationTypeId)
                 .Required();
 
-            Evaluate(l => l.Point, dto.Point)
-                .IsPoint();
+            if (dto.Point != null)
+                IsPointValid(dto.Point);
 
             return new FFValidationResponse
             {
@@ -52,11 +53,21 @@ namespace Hach.Fusion.FFCO.Business.Validators
         }
 
         /// <summary>
+        /// Add a validation error if the point is not valid.
+        /// </summary>
+        /// <param name="point">The point to validate.</param>
+        private void IsPointValid(Point point)
+        {
+            if (point == null || !point.IsPointValid())
+                FFErrors.Add(ValidationErrorCode.PropertyIsInvalid(nameof(point)));
+        }
+
+        /// <summary>
         /// Returns whether an updated location would result in a circular reference.
         /// </summary>
         /// <param name="locations">Database set of locations.</param>
         /// <param name="locationToUpdateDto">
-        /// Data transfer object for the location to be updated. The <see cref="LocationQueryDto.ParentId"/> must exist
+        /// Data transfer object for the location to be updated. The <see cref="LocationBaseDto.ParentId"/> must exist
         /// or an <exception cref="InvalidOperationException"/> will be thrown.
         /// </param>
         /// <param name="id">Id of the location being validated for a circular reference.</param>
@@ -64,10 +75,10 @@ namespace Hach.Fusion.FFCO.Business.Validators
         /// <exception cref="ArgumentNullException">Thrown if either argument is null.</exception>
         /// <exception cref="ArgumentException">Thrown if the location to update is not currently in the repository.</exception>
         /// <exception cref="InvalidOperationException">
-        /// Thrown if the <see cref="LocationQueryDto.ParentId"/> of the <paramref name="locationToUpdateDto"/> argument or
+        /// Thrown if the <see cref="LocationBaseDto.ParentId"/> of the <paramref name="locationToUpdateDto"/> argument or
         /// one of the locations in the <paramref name="locations"/> argument refers to a location that does not exist.
         /// </exception>
-        public static async Task<bool> IsCircularReference(IDbSet<Location> locations, LocationCommandDto locationToUpdateDto,
+        public static async Task<bool> IsCircularReference(IDbSet<Location> locations, LocationBaseDto locationToUpdateDto,
             Guid id)
         {
             if (locations == null)

@@ -10,11 +10,12 @@ using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Extensions;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Entities;
-using Hach.Fusion.FFCO.Core.Extensions;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Extensions;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
+
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -22,7 +23,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the Location Log Entry repository. 
     /// </summary>    
     public class LocationLogEntryFacade
-        : FacadeWithCruModelsBase<LocationLogEntryCommandDto, LocationLogEntryCommandDto, LocationLogEntryQueryDto, Guid>
+        : FacadeWithCruModelsBase<LocationLogEntryBaseDto, LocationLogEntryBaseDto, LocationLogEntryQueryDto, Guid>
     {
         private readonly DataContext _context;
 
@@ -34,7 +35,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing location type entities.</param>
         /// <param name="validator">Validator for location DTOs.</param>
-        public LocationLogEntryFacade(DataContext context, IFFValidator<LocationLogEntryCommandDto> validator)
+        public LocationLogEntryFacade(DataContext context, IFFValidator<LocationLogEntryBaseDto> validator)
         {
             _context = context;
 
@@ -110,7 +111,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// An asynchronous task result containing information needed to create an API response message.
         /// If successful, the task result contains the DTO associated with the Location Log Entry.
         /// </returns>
-        public override async Task<CommandResult<LocationLogEntryQueryDto, Guid>> Create(LocationLogEntryCommandDto dto)
+        public override async Task<CommandResult<LocationLogEntryQueryDto, Guid>> Create(LocationLogEntryBaseDto dto)
         {
             // User ID should always be available, but if not ...
             var userId = GetCurrentUser();
@@ -193,24 +194,24 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>
         /// An asynchronous task result containing information needed to create an API response message.
         /// </returns>
-        public override async Task<CommandResult<LocationLogEntryCommandDto, Guid>> Update(Guid id, Delta<LocationLogEntryCommandDto> delta)
+        public override async Task<CommandResult<LocationLogEntryBaseDto, Guid>> Update(Guid id, Delta<LocationLogEntryBaseDto> delta)
         {
             // User ID should always be available, but if not ...
             var userId = GetCurrentUser();
             if (!userId.HasValue)
-                return Command.Error<LocationLogEntryCommandDto>(GeneralErrorCodes.TokenInvalid("UserId"));
+                return Command.Error<LocationLogEntryBaseDto>(GeneralErrorCodes.TokenInvalid("UserId"));
 
             if (delta == null)
-                return Command.Error<LocationLogEntryCommandDto>(EntityErrorCode.EntityFormatIsInvalid);
+                return Command.Error<LocationLogEntryBaseDto>(EntityErrorCode.EntityFormatIsInvalid);
 
             var locationLogEntry = await _context.GetLocationLogEntriesForUser(userId.Value)
                 .SingleOrDefaultAsync(l => l.Id == id)
                 .ConfigureAwait(false);
 
             if (locationLogEntry == null)
-                return Command.Error<LocationLogEntryCommandDto>(EntityErrorCode.EntityNotFound);
+                return Command.Error<LocationLogEntryBaseDto>(EntityErrorCode.EntityNotFound);
 
-            var dto = _mapper.Map(locationLogEntry, new LocationLogEntryCommandDto());
+            var dto = _mapper.Map(locationLogEntry, new LocationLogEntryQueryDto());
             delta.Patch(dto);
 
             var validationResponse = ValidatorUpdate.Validate(dto);
@@ -224,7 +225,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 validationResponse.FFErrors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist(nameof(LocationLogEntry.LocationId)));
 
             if (validationResponse.IsInvalid)
-                return Command.Error<LocationLogEntryCommandDto>(validationResponse);
+                return Command.Error<LocationLogEntryBaseDto>(validationResponse);
 
             _context.LocationLogEntries.Attach(locationLogEntry);
             _mapper.Map(dto, locationLogEntry);
@@ -233,7 +234,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return Command.NoContent<LocationLogEntryCommandDto>();
+            return Command.NoContent<LocationLogEntryBaseDto>();
         }
 
         #endregion Update Method

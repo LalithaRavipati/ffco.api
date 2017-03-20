@@ -10,8 +10,9 @@ using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -25,14 +26,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// see the XML comments in this class, the "return" fields below indicate the information returned to the
     /// client applications.
     /// </remarks>
-    public class ParametersController : FFAABaseController<ParameterDto, Guid>
+    public class ParametersController : FFAABaseController<ParameterQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="ParametersController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to retrieve location type data.</param>
-        public ParametersController(IODataHelper oDataHelper, IFacade<ParameterDto, Guid> facade) 
+        public ParametersController(IODataHelper oDataHelper, IFacade<ParameterQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -58,8 +59,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(ParameterDto))]
-        public async Task<IHttpActionResult> Get(ODataQueryOptions<ParameterDto> queryOptions)
+        [ResponseType(typeof(ParameterQueryDto))]
+        public async Task<IHttpActionResult> Get(ODataQueryOptions<ParameterQueryDto> queryOptions)
         {
             var results = await _facade.Get(queryOptions);
             return Query(results);
@@ -84,8 +85,8 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        [ResponseType(typeof(ParameterDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterDto> queryOptions)
+        [ResponseType(typeof(ParameterQueryDto))]
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterQueryDto> queryOptions)
         {
             var results = await _facade.Get(key);
             return Query(results);

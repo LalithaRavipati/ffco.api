@@ -1,18 +1,20 @@
-﻿using System;
+﻿using AutoMapper;
+using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Business.Facades;
+using Hach.Fusion.Core.Business.Results;
+using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Entities;
+using Hach.Fusion.Data.Mapping;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.OData;
 using System.Web.OData.Query;
-using AutoMapper;
-using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Business.Facades;
-using Hach.Fusion.Core.Business.Results;
-using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Core.Dtos.LocationType;
-using Hach.Fusion.FFCO.Core.Entities;
+
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -20,7 +22,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// Facade for managing the Location Type repository. 
     /// </summary>    
     public class LocationTypeFacade
-        : FacadeWithCruModelsBase<LocationTypeCommandDto, LocationTypeCommandDto, LocationTypeQueryDto, Guid>
+        : FacadeWithCruModelsBase<LocationTypeBaseDto, LocationTypeBaseDto, LocationTypeQueryDto, Guid>,
+          IFacadeWithCruModels<LocationTypeBaseDto, LocationTypeBaseDto, LocationTypeQueryDto, Guid>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -31,7 +34,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="context">Database context containing Location Type entities.</param>
         /// <param name="validator">Validator for Location Type DTOs.</param>
-        public LocationTypeFacade(DataContext context, IFFValidator<LocationTypeCommandDto> validator)
+        public LocationTypeFacade(DataContext context, IFFValidator<LocationTypeBaseDto> validator)
         {
             _context = context;
             _context.Configuration.LazyLoadingEnabled = false;
@@ -122,7 +125,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
         #region Not Implemented Methods
 
-        public override Task<CommandResult<LocationTypeQueryDto, Guid>> Create(LocationTypeCommandDto dto)
+        public override Task<CommandResult<LocationTypeQueryDto, Guid>> Create(LocationTypeBaseDto dto)
         {
             throw new NotImplementedException();
         }
@@ -132,8 +135,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
             throw new NotImplementedException();
         }
 
-        public override Task<CommandResult<LocationTypeCommandDto, Guid>> Update(Guid id,
-            Delta<LocationTypeCommandDto> delta)
+        public override Task<CommandResult<LocationTypeBaseDto, Guid>> Update(Guid id,
+            Delta<LocationTypeBaseDto> delta)
         {
             throw new NotImplementedException();
         }

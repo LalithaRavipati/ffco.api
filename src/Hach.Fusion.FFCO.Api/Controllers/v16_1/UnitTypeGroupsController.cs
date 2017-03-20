@@ -10,8 +10,8 @@ using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -26,14 +26,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class UnitTypeGroupsController
-        : ControllerWithCruModelsBase<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, Guid>
+        : ControllerWithCruModelsBase<UnitTypeGroupBaseDto, UnitTypeGroupBaseDto, UnitTypeGroupQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="UnitTypeGroupsController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to persist Unit Type Group data.</param>
-        public UnitTypeGroupsController(IODataHelper oDataHelper, IFacadeWithCruModels<UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, UnitTypeGroupQueryDto, Guid> facade) 
+        public UnitTypeGroupsController(IODataHelper oDataHelper, IFacadeWithCruModels<UnitTypeGroupBaseDto, UnitTypeGroupBaseDto, UnitTypeGroupQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)

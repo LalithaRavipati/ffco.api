@@ -9,12 +9,13 @@ using Hach.Fusion.Core.Api.Controllers;
 using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.FFCO.Business.Facades;
 using Microsoft.Data.OData;
 using System.Collections.Generic;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -29,7 +30,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// client applications.
     /// </remarks>
     public class InAppMessagesController
-        : ControllerWithCruModelsBase<InAppMessageCommandDto, InAppMessageCommandDto, InAppMessageQueryDto, Guid>
+        : ControllerWithCruModelsBase<InAppMessageBaseDto, InAppMessageBaseDto, InAppMessageQueryDto, Guid>
     {
         private readonly IInAppMessageFacade _facade;
 
@@ -88,14 +89,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [FFSEAuthorize(PermissionAction.Update)]
         [AcceptVerbs("PATCH")]
         [SwaggerResponseRemoveDefaults]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageCommandDto, Guid>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(CommandResult<InAppMessageQueryDto, Guid>))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
         [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
         [SwaggerResponse(HttpStatusCode.NoContent)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [ResponseType(typeof(CommandResult<InAppMessageCommandDto, Guid>))]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageCommandDto> delta)
+        [ResponseType(typeof(CommandResult<InAppMessageQueryDto, Guid>))]
+        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<InAppMessageBaseDto> delta)
         {
             var result = await _facade.Update(key, delta);
             return Command(result);

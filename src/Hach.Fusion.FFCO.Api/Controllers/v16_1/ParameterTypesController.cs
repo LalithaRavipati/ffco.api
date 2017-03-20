@@ -11,9 +11,10 @@ using Hach.Fusion.Core.Api.OData;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Core.Business.Facades;
 using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Core.Dtos;
+
 using Microsoft.OData.Core;
 using Swashbuckle.Swagger.Annotations;
+using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -27,14 +28,14 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// see the XML comments in this class, the "return" fields below indicate the information returned to the
     /// client applications.
     /// </remarks>
-    public class ParameterTypesController : FFAABaseController<ParameterTypeDto, Guid>
+    public class ParameterTypesController : FFAABaseController<ParameterTypeQueryDto, Guid>
     {
         /// <summary>
         /// Default constructor for the <see cref="ParameterTypesController"/> class taking OData helper and repository facade arguments.
         /// </summary>
         /// <param name="oDataHelper">Helper that provides OData utilities to manage requests.</param>
         /// <param name="facade">Facade for the repository used to retrieve location type data.</param>
-        public ParameterTypesController(IODataHelper oDataHelper, IFacade<ParameterTypeDto, Guid> facade) 
+        public ParameterTypesController(IODataHelper oDataHelper, IFacade<ParameterTypeQueryDto, Guid> facade) 
             : base(oDataHelper)
         {
             if (facade == null)
@@ -56,12 +57,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetAll"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(ICollection<ParameterTypeDto>))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(ICollection<ParameterTypeQueryDto>))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
         [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
-        [ResponseType(typeof(ICollection<ParameterTypeDto>))]
-        public async Task<IHttpActionResult> Get(ODataQueryOptions<ParameterTypeDto> queryOptions)
+        [ResponseType(typeof(ICollection<ParameterTypeQueryDto>))]
+        public async Task<IHttpActionResult> Get(ODataQueryOptions<ParameterTypeQueryDto> queryOptions)
         {
             var results = await _facade.Get(queryOptions);
             return Query(results);
@@ -81,13 +82,13 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/ParameterTypesController.doc' path='ParameterTypesController/Methods[@name="GetOne"]/*'/>
         [FFSEAuthorize(PermissionAction.Read)]
         [EnableQuery(MaxExpansionDepth=Constants.DefaultMaxExpansionDepth)]
-        [SwaggerResponse(HttpStatusCode.OK, null, typeof(ParameterTypeDto))]
+        [SwaggerResponse(HttpStatusCode.OK, null, typeof(ParameterTypeQueryDto))]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
         [SwaggerResponse(HttpStatusCode.NotFound, null, typeof(SwaggerResponseNotFound))]
         [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
-        [ResponseType(typeof(ParameterTypeDto))]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterTypeDto> queryOptions)
+        [ResponseType(typeof(ParameterTypeQueryDto))]
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid key, ODataQueryOptions<ParameterTypeQueryDto> queryOptions)
         {
             var results = await _facade.Get(key);
             return Query(results);

@@ -1,6 +1,13 @@
-﻿using System;
+﻿using Hach.Fusion.Core.Enums;
+using Hach.Fusion.Data.Database;
+using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Data.Mapping;
+using Hach.Fusion.FFCO.Business.Facades;
+using Hach.Fusion.FFCO.Business.Validators;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -10,24 +17,16 @@ using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
-using Hach.Fusion.Core.Enums;
-using Hach.Fusion.FFCO.Business.Database;
-using Hach.Fusion.FFCO.Business.Facades;
-using Hach.Fusion.FFCO.Business.Validators;
-using Hach.Fusion.FFCO.Core.Dtos;
-using Hach.Fusion.FFCO.Core.Seed;
-using Moq;
-using NUnit.Framework;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
     [TestFixture]
     public class LocationLogEntryFacadeTests
     {
-        private DataContext _context;
+        private Mock<DataContext> _mockContext;
         private readonly Mock<ODataQueryOptions<LocationLogEntryQueryDto>> _mockDtoOptions;
         private LocationLogEntryFacade _facade;
-        private Guid _userId = Data.Users.tnt01user.Id;
+        private Guid _userId;
 
         public LocationLogEntryFacadeTests()
         {
@@ -56,23 +55,19 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [SetUp]
         public void Setup()
         {
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-                _userId.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> {claim}));
 
-            var connectionString = ConfigurationManager.ConnectionStrings["DataContext"].ConnectionString;
-            _context = new DataContext(connectionString);
+            _mockContext = new Mock<DataContext>();
+            Seeder.InitializeMockDataContext(_mockContext);
             var validator = new LocationLogEntryValidator();
-            _facade = new LocationLogEntryFacade(_context, validator);
+            _facade = new LocationLogEntryFacade(_mockContext.Object, validator);
 
-            Seeder.SeedWithTestData(_context);
+            _userId = _mockContext.Object.Users.Single(x=> x.UserName =="tnt01user").Id;
+
+            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                , _userId.ToString());
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
-        }
 
         #region Get Tests
 
@@ -86,9 +81,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var results = queryResult.Results;
 
             Assert.That(results.Count(), Is.EqualTo(3));
-            Assert.That(results.Any(x => x.Id == Data.LocationLogEntries.Plant1Log1.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LocationLogEntries.Plant1Log2.Id), Is.True);
-            Assert.That(results.Any(x => x.Id == Data.LocationLogEntries.Plant2Log1.Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationLogEntries.Single(l=> l.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationLogEntries.Single(l=> l.Id == new Guid("C7267A62-A2F1-4C2A-8F36-2BEABD9B0F66")).Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationLogEntries.Single(l=> l.Id == new Guid("83FFABC0-D51B-4B82-8DCC-80D1F258DB2F")).Id), Is.True);
         }
 
         [Test]
@@ -106,16 +101,16 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_GetOne_Succeeds()
         {
-            var queryResult = await _facade.Get(Data.LocationLogEntries.Plant1Log1.Id);
+            var queryResult = await _facade.Get(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id);
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
             Assert.That(queryResult.Dto, Is.Not.Null);
-            Assert.That(queryResult.Dto.Id, Is.EqualTo(Data.LocationLogEntries.Plant1Log1.Id));
-            Assert.That(queryResult.Dto.LocationId, Is.EqualTo(Data.LocationLogEntries.Plant1Log1.LocationId));
-            Assert.That(queryResult.Dto.LogEntry, Is.EqualTo(Data.LocationLogEntries.Plant1Log1.LogEntry));
-            Assert.That(queryResult.Dto.CreatedById, Is.EqualTo(Data.LocationLogEntries.Plant1Log1.CreatedById));
-            Assert.That(queryResult.Dto.ModifiedById, Is.EqualTo(Data.LocationLogEntries.Plant1Log1.ModifiedById));
+            Assert.That(queryResult.Dto.Id, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x => x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id));
+            Assert.That(queryResult.Dto.LocationId, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId));
+            Assert.That(queryResult.Dto.LogEntry, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LogEntry));
+            Assert.That(queryResult.Dto.CreatedById, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).CreatedById));
+            Assert.That(queryResult.Dto.ModifiedById, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).ModifiedById));
         }
 
         [Test]
@@ -131,7 +126,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_GetOne_WrongTenant()
         {
-            var queryResult = await _facade.Get(Data.LocationLogEntries.Plant3Log1.Id);
+            var queryResult = await _facade.Get(_mockContext.Object.LocationLogEntries.Single(l=> l.Id == new Guid("EA7E094D-B5F7-4E59-B642-7FDC08DF58FC")).Id);
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
             Assert.That(queryResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -143,7 +138,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()));
 
-            var queryResult = await _facade.Get(Data.LocationLogEntries.Plant1Log1.Id);
+            var queryResult = await _facade.Get(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id);
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
             Assert.That(queryResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -157,9 +152,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_Succeeds()
         {
-            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = Data.Locations.Plant_01.Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = "Create Log Entry",
                 TimeStamp = DateTimeOffset.UtcNow
             };
@@ -167,7 +162,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var commandResult = await _facade.Create(locationLogEntryDto);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Created));
-            Assert.That(commandResult.Entity.LocationId, Is.EqualTo(Data.Locations.Plant_01.Id));
+            Assert.That(commandResult.Entity.LocationId, Is.EqualTo(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId));
             Assert.That(commandResult.Entity.LogEntry, Is.EqualTo("Create Log Entry"));
             Assert.That(commandResult.Entity.CreatedById, Is.EqualTo(_userId));
             Assert.That((DateTime.Now - commandResult.Entity.CreatedOn).Seconds, Is.LessThanOrEqualTo(10));
@@ -178,7 +173,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadLocation()
         {
-            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
                 LocationId = Guid.NewGuid(),
                 LogEntry = "Create Log Entry",
@@ -195,10 +190,10 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadId()
         {
-            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
                 Id = Guid.NewGuid(),
-                LocationId = Data.Locations.Plant_01.Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = "Create Log Entry",
                 TimeStamp = DateTimeOffset.UtcNow
             };
@@ -213,9 +208,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_BadLogEntry()
         {
-            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = Data.Locations.Plant_01.Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = null,
                 TimeStamp = DateTimeOffset.UtcNow
             };
@@ -232,9 +227,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()));
 
-            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = Data.Locations.Plant_01.Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id,
                 LogEntry = "Create Log Entry"
             };
 
@@ -248,9 +243,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_MissingTimestamp()
         {
-            var locationLogEntryDto = new LocationLogEntryCommandDto()
+            var locationLogEntryDto = new LocationLogEntryQueryDto()
             {
-                LocationId = Data.Locations.Plant_01.Id,
+                LocationId = _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).LocationId,
                 LogEntry = "Create Log Entry"
             };
 
@@ -268,13 +263,13 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Delete_Succeeds()
         {
-            var deleteResult = await _facade.Delete(Data.LocationLogEntries.Plant1Log1.Id);
+            var deleteResult = await _facade.Delete(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id);
 
             Assert.That(deleteResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
-            var queryResult = await _facade.Get(Data.LocationLogEntries.Plant1Log1.Id);
+            var queryResult = _mockContext.Object.LocationLogEntries.SingleOrDefault(x=> x.Id ==  new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187"));
 
-            Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.NotFound));
+            Assert.That(queryResult, Is.Null);
         }
 
         [Test]
@@ -282,7 +277,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()));
 
-            var deleteResult = await _facade.Delete(Data.LocationLogEntries.Plant1Log1.Id);
+            var deleteResult = await _facade.Delete(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id);
 
             Assert.That(deleteResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
             Assert.That(deleteResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -297,15 +292,15 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_Succeeds()
         {
-            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            var delta = new Delta<LocationLogEntryBaseDto>(typeof(LocationLogEntryBaseDto));
             delta.TrySetPropertyValue("LogEntry", "Update Log Entry");
 
             var commandResult = await _facade.Update(
-                Data.LocationLogEntries.Plant1Log1.Id, delta);
+                _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
-            var queryResult = await _facade.Get(Data.LocationLogEntries.Plant1Log1.Id);
+            var queryResult = await _facade.Get(_mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id);
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
             Assert.That(queryResult.Dto.LogEntry, Is.EqualTo("Update Log Entry"));
@@ -316,7 +311,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_NotFound()
         {
-            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            var delta = new Delta<LocationLogEntryBaseDto>(typeof(LocationLogEntryBaseDto));
             delta.TrySetPropertyValue("LogEntry", "Update Log Entry");
 
             var commandResult = await _facade.Update(
@@ -331,7 +326,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Update_BadDelta()
         {
             var commandResult = await _facade.Update(
-                Data.LocationLogEntries.Plant1Log1.Id, null);
+                _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id, null);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
 
@@ -342,11 +337,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_CantUpdateId()
         {
-            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            var delta = new Delta<LocationLogEntryBaseDto>(typeof(LocationLogEntryBaseDto));
             delta.TrySetPropertyValue("Id", Guid.NewGuid());
 
             var commandResult = await _facade.Update(
-                Data.LocationLogEntries.Plant1Log1.Id, delta);
+                _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -356,11 +351,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_BadLocationId()
         {
-            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            var delta = new Delta<LocationLogEntryBaseDto>(typeof(LocationLogEntryBaseDto));
             delta.TrySetPropertyValue("LocationId", Guid.NewGuid());
 
             var commandResult = await _facade.Update(
-                Data.LocationLogEntries.Plant1Log1.Id, delta);
+                _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -370,11 +365,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Update_NullTimestamp()
         {
-            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            var delta = new Delta<LocationLogEntryBaseDto>(typeof(LocationLogEntryBaseDto));
             delta.TrySetPropertyValue("TimeStamp", null);
 
             var commandResult = await _facade.Update(
-                Data.LocationLogEntries.Plant1Log1.Id, delta);
+                _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
@@ -386,11 +381,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()));
 
-            var delta = new Delta<LocationLogEntryCommandDto>(typeof(LocationLogEntryCommandDto));
+            var delta = new Delta<LocationLogEntryBaseDto>(typeof(LocationLogEntryBaseDto));
             delta.TrySetPropertyValue("LogEntry", "Update Log Entry");
 
             var commandResult = await _facade.Update(
-                Data.LocationLogEntries.Plant1Log1.Id, delta);
+                _mockContext.Object.LocationLogEntries.Single(x=> x.Id == new Guid("44E0C497-3A2C-4A89-99BD-F7B14C1A9187")).Id, delta);
 
             Assert.That(commandResult.StatusCode, Is.EqualTo(FacadeStatusCode.Unauthorized));
             Assert.That(commandResult.ErrorCodes.Count, Is.EqualTo(1));
