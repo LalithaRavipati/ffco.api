@@ -52,7 +52,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 {
                     Id = Guid.Parse("fb990272-34cf-4a55-bc39-16d899bacaca"),
                     Name = "Location For Update",
-                    LocationTypeId = _mockContext.Object.LocationTypes.Single(t => t.I18NKeyName == "Plant").Id,
+                    LocationTypeId = _mockContext.Object.LocationTypes.Single(t => t.I18NKeyName == "Operation").Id,
                     //Geography = DbGeography.PointFromText("POINT(-121.11 44.11)", 4326),
                     SortOrder = null
                 };
@@ -123,20 +123,20 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Get_Location_Succeeds()
         {
-            var plant01Id = _mockContext.Object.Locations.Single(x => x.Name == "Plant_01").Id;
-            var queryResult = await _facade.Get(plant01Id);
+            var operation01Id = _mockContext.Object.Locations.Single(x => x.Name == "Operation_01").Id;
+            var queryResult = await _facade.Get(operation01Id);
 
             Assert.That(queryResult.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
 
-            Assert.That(queryResult.Dto.Id == plant01Id);
+            Assert.That(queryResult.Dto.Id == operation01Id);
         }
 
         [Test]
         public async Task When_Get_Locations_Succeeds()
         {
-            var plant01Id = _mockContext.Object.Locations.Single(x => x.Name == "Plant_01").Id;
-            var plant02Id = _mockContext.Object.Locations.Single(x => x.Name == "Plant_02").Id;
-            var plant03Id = _mockContext.Object.Locations.Single(x => x.Name == "Plant_03").Id;
+            var operation01Id = _mockContext.Object.Locations.Single(x => x.Name == "Operation_01").Id;
+            var operation02Id = _mockContext.Object.Locations.Single(x => x.Name == "Operation_02").Id;
+            var operation03Id = _mockContext.Object.Locations.Single(x => x.Name == "Operation_03").Id;
             var updateableId = _mockContext.Object.Locations.Single(x => x.Name == "Location Updateable").Id;
 
             var queryResult = await _facade.Get(_mockDtoOptions.Object);
@@ -144,9 +144,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var results = queryResult.Results;
 
-            Assert.That(results.Any(x => x.Id == plant01Id), Is.True);
-            Assert.That(results.Any(x => x.Id == plant01Id), Is.True);
-            Assert.That(results.Any(x => x.Id == plant01Id), Is.True);
+            Assert.That(results.Any(x => x.Id == operation01Id), Is.True);
+            Assert.That(results.Any(x => x.Id == operation01Id), Is.True);
+            Assert.That(results.Any(x => x.Id == operation01Id), Is.True);
             Assert.That(results.Any(x => x.Id == updateableId), Is.True);
         }
 
@@ -228,11 +228,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Create_AlreadyExists_Should_Fail()
         {
-            var plant01 = _mockContext.Object.Locations.Single(x => x.Name == "Plant_01");
+            var operation01 = _mockContext.Object.Locations.Single(x => x.Name == "Operation_01");
             var dto = new LocationBaseDto
             {
-                Name = plant01.Name,
-                LocationTypeId = plant01.LocationTypeId
+                Name = operation01.Name,
+                LocationTypeId = operation01.LocationTypeId
             };
 
             var commandResult = await _facade.Create(dto);

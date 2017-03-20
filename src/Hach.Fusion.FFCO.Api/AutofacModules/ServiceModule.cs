@@ -101,7 +101,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<InAppMessageFacade>().As<IInAppMessageFacade>();
             builder.RegisterType<InAppMessageValidator>().As<IFFValidator<InAppMessageBaseDto>>();
 
-            builder.RegisterType<PlantConfigurationsFacade>().As<IPlantConfigurationsFacade>();
+            builder.RegisterType<OperationConfigurationsFacade>().As<IOperationConfigurationsFacade>();
 
             builder.RegisterType<NotificationsFacade>().As<INotificationsFacade>();
             builder.RegisterType<NotificationValidator>().As<IFFValidator<GenericNotificationDto>>();

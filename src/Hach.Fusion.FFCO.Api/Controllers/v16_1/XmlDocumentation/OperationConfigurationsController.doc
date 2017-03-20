@@ -1,11 +1,11 @@
-﻿<PlantConfigurationsController>
+﻿<OperationConfigurationsController>
 
   <Methods name="Post">
     <remarks>
       <p>
         The following uploadTransactionTypes are valid:
         <ul>
-          <li>ConfigurePlant</li>
+          <li>ConfigureOperation</li>
         </ul>
 
       </p>
@@ -61,7 +61,7 @@
           <tr>
             <td>FFERR-209</td >
             <td>ForeignKeyValueDoesNotExist</td >
-            <td>The foreign key value does not exist (applies to the tenantId and plantId parameters).</td>
+            <td>The foreign key value does not exist (applies to the tenantId and operationId parameters).</td>
           </tr>
           <tr>
             <td>FFERR-304</td >
@@ -73,4 +73,4 @@
     </remarks>
   </Methods>
 
-</PlantConfigurationsController>
+</OperationConfigurationsController>

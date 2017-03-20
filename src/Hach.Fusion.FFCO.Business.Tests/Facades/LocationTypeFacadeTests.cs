@@ -77,12 +77,12 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
             var results = queryResult.Results;
 
-            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Plant").Id), Is.True);
+            Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Operation").Id), Is.True);
             Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Process").Id), Is.True);
             Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Sampling Site").Id), Is.True);
             Assert.That(results.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="Distribution").Id), Is.True);
 
-            var loc = results.FirstOrDefault(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="FortCollinsPlant").Id);
+            var loc = results.FirstOrDefault(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="FortCollinsOperation").Id);
             Assert.That(loc, Is.Not.Null);
             Assert.That(loc.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName=="FortCollinsSystemA").Id), Is.True);
             Assert.That(loc.LocationTypes.Any(x => x.Id == _mockContext.Object.LocationTypes.Single(t=> t.I18NKeyName== "FortCollinsSystemB").Id), Is.True);
