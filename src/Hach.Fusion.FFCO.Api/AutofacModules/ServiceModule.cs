@@ -18,6 +18,7 @@ using Hach.Fusion.FFCO.Business.Validators;
 using System;
 using System.Configuration;
 using System.Security.Claims;
+using Hach.Fusion.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.AutofacModules
 {
@@ -104,7 +105,7 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<OperationConfigurationsFacade>().As<IOperationConfigurationsFacade>();
 
             builder.RegisterType<NotificationsFacade>().As<INotificationsFacade>();
-            builder.RegisterType<NotificationValidator>().As<IFFValidator<GenericNotificationDto>>();
+            builder.RegisterType<NotificationValidator>().As<IFFValidator<NotificationDto>>();
 
             base.Load(builder);
         }
