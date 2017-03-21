@@ -83,7 +83,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 string.IsNullOrWhiteSpace(metadata.BlobStorageBlobName))
                 return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
 
-            // Make sure the user is authorized (intentionally returns Not Found if they aren't)
+            // Make sure the user is authorized (intentionally returns Not Found even though it's an authorization problem)
             if (metadata.TenantIds.Count < 1 ||
                 !metadata.TenantIds.Intersect(user.Tenants.Select(u => u.Id)).Any())
                 return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
@@ -103,8 +103,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 Content = new StreamContent(stream)
             };
 
-            string filename = result.BlobName;
             // Determine file name
+            string filename = result.BlobName;
             if (!string.IsNullOrWhiteSpace(metadata.OriginalFileName))
             {
                 var fileInfo = new FileInfo(metadata.OriginalFileName);

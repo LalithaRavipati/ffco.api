@@ -4,8 +4,10 @@
 
     <remarks>
       <p>
-      The "Try It Out!" feature for this API method will display gibberish in the response.
-      It may also take a long time to execute if the file being "downloaded" is large.
+      The "Try it out!" feature (executed when the "Try it out!" button below is pressed) for this
+      API method will display gibberish in the Response Body text box. This is because the file is
+      downloaded as a binary. It may also take a long time to execute if the file being
+      "downloaded" is large.
       </p>
       <p>
         <h4>Errors</h4>
