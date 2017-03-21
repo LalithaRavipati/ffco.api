@@ -1,0 +1,41 @@
+﻿<FilesController>
+
+  <Methods name="GetOne">
+
+    <remarks>
+      <p>
+      The "Try It Out!" feature for this API method will display gibberish in the response.
+      It may also take a long time to execute if the file being "downloaded" is large.
+      </p>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>The specified entity was not found.</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>
+  
+</FilesController>

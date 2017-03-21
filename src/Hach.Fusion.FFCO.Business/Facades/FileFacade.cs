@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.IO;
@@ -53,7 +52,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _blobStorageConnectionString = ConfigurationManager.ConnectionStrings["BlobProcessorStorageConnectionString"].ConnectionString;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Retrieves the indicated file.
+        /// </summary>
+        /// <param name="id">
+        /// ID that uniquely identifies the file to be retrieved. The ID is is the key of the
+        /// metadata stored in DocumentDb.
+        /// </param>
+        /// <returns>The file indicated by the specified ID.</returns>
         public async Task<HttpResponseMessage> Get(Guid id)
         {
             // Check that token contains a user ID
@@ -67,10 +73,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (user == null || !user.IsActive)
                 return HandleErrors(GeneralErrorCodes.TokenInvalid("UserId"), HttpStatusCode.Unauthorized);
 
-            // Retrieve the first tenant associated with the user
+            // Make sure there's a tenant associated with the user
             if (user.Tenants.Count < 1)
                 return HandleErrors(GeneralErrorCodes.TokenInvalid("UserId"), HttpStatusCode.Unauthorized);
-            var tenant = user.Tenants.First();
 
             // Retrieve the metadata associated with the specified ID
             var metadata = await _documentDb.GetItemAsync(id.ToString());
@@ -79,7 +84,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
 
             // Make sure the user is authorized (intentionally returns Not Found if they aren't)
-            if (metadata.TenantIds.Count < 1 || metadata.TenantIds[0] != tenant.Id)
+            if (metadata.TenantIds.Count < 1 ||
+                !metadata.TenantIds.Intersect(user.Tenants.Select(u => u.Id)).Any())
                 return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
 
             // Retrieve the blob
@@ -97,11 +103,22 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 Content = new StreamContent(stream)
             };
 
+            string filename = result.BlobName;
+            // Determine file name
+            if (!string.IsNullOrWhiteSpace(metadata.OriginalFileName))
+            {
+                var fileInfo = new FileInfo(metadata.OriginalFileName);
+                if (!string.IsNullOrWhiteSpace(fileInfo.Name))
+                {
+                    filename = fileInfo.Name;
+                }    
+            }
+
             // Set response content headers
             response.Content.Headers.ContentLength = stream.Length;
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = result.BlobName,
+                FileName = filename,
                 Size = stream.Length
             };
 
@@ -109,17 +126,19 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Returns an HTTP Response Message for errors.
+        /// Returns an HTTP response message for reporting an error to the client.
         /// </summary>
         /// <param name="errorCode">Fusion Foundation error object.</param>
         /// <param name="statusCode">HTTP status code.</param>
         /// <returns></returns>
         private HttpResponseMessage HandleErrors(FFErrorCode errorCode, HttpStatusCode statusCode)
         {
-            var errors = new [] {new  {ErrorCode = errorCode.Code, Message = errorCode.Description}}.ToList();
+            var errors = new [] {new  {errorCode = errorCode.Code, message = errorCode.Description}}.ToList();
 
-            var response = new HttpResponseMessage(statusCode);
-            response.Content = new ObjectContent(errors.GetType(), errors, new JsonMediaTypeFormatter());
+            var response = new HttpResponseMessage(statusCode)
+            {
+                Content = new ObjectContent(errors.GetType(), errors, new JsonMediaTypeFormatter())
+            };
 
             return response;
         }

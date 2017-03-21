@@ -436,6 +436,7 @@
     </Content>
     <Content Include="Controllers\v16_1\XmlDocumentation\OperationConfigurationsController.doc" />
     <Content Include="Controllers\v16_1\XmlDocumentation\NotificationsController.doc" />
+    <Content Include="Controllers\v16_1\XmlDocumentation\FilesController.doc" />
     <None Include="Properties\PublishProfiles\ffco-prod-demo-hachtest-stage.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-feature.pubxml" />
     <None Include="Properties\PublishProfiles\ffco-sprint-hachtest-hardening.pubxml" />
