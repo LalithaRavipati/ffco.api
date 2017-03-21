@@ -54,7 +54,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> Upload()
+        public async Task<IHttpActionResult> Post()
         {
             var errors = new List<FFErrorCode>();
 
@@ -64,6 +64,9 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 
             if (string.IsNullOrEmpty(parts.FormData["uploadTransactionType"]))
                 errors.Add(GeneralErrorCodes.FormDataFieldMissing("uploadTransactionType"));
+
+            if (string.IsNullOrEmpty(parts.FormData["tenantId"]))
+                errors.Add(GeneralErrorCodes.FormDataFieldMissing("tenantId"));
 
             // Get files
             var files = parts.FileData.Select(x => x.LocalFileName);
