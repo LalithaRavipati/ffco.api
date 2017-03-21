@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.Core.Dtos;
 using Hach.Fusion.Core.Enums;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Notifications;
-using Hach.Fusion.Data.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -15,14 +15,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
     public class NotificationsFacade : INotificationsFacade
     {
         private readonly INotificationSender _notificationSender;
-        private readonly IFFValidator<GenericNotificationDto> _validator;
+        private readonly IFFValidator<NotificationDto> _validator;
 
         /// <summary>
         /// Constructor for <see cref="NotificationsFacade"/>.
         /// </summary>
         /// <param name="notificationSender">Object responsible for sending notifications.</param>
         /// <param name="validator">Validates <see cref="NotificationQueryDto"/>.</param>
-        public NotificationsFacade(INotificationSender notificationSender, IFFValidator<GenericNotificationDto> validator)
+        public NotificationsFacade(INotificationSender notificationSender, IFFValidator<NotificationDto> validator)
         {
             if (notificationSender == null)
                 throw new ArgumentNullException(nameof(notificationSender));
@@ -38,7 +38,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="dto">Dto containing notification information.</param>
         /// <returns>Task that returns the command result.</returns>
-        public async Task<CommandResultNoDto> SendNotification(GenericNotificationDto dto)
+        public async Task<CommandResultNoDto> SendNotification(NotificationDto dto)
         {
             var validationResult = _validator.Validate(dto);
 

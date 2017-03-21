@@ -1,5 +1,4 @@
 ﻿using Hach.Fusion.Core.Api.Handlers;
-using Hach.Fusion.Data.Dtos;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Helpers;
 using Swashbuckle.Swagger.Annotations;
@@ -7,6 +6,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Hach.Fusion.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -45,7 +45,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> SendNotification([FromBody] GenericNotificationDto dto)
+        public async Task<IHttpActionResult> SendNotification([FromBody] NotificationDto dto)
         {
             var result = await _facade.SendNotification(dto);
 
