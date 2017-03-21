@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
-using Hach.Fusion.Core.Api.Security;
-using Hach.Fusion.Core.Business.Results;
-using Hach.Fusion.Core.Business.Validation;
+using Hach.Fusion.Core.Api.Security;using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.DocumentDB;
+using Hach.Fusion.Data.Database;
 using Hach.Fusion.Data.Database.Interfaces;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
-using Hach.Fusion.FFCO.Business.Helpers;
-using Newtonsoft.Json;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -23,56 +24,104 @@ namespace Hach.Fusion.FFCO.Business.Facades
     /// </summary>
     public class FileFacade : IFileFacade
     {
-        private readonly IBlobManager _blobManager;
+        private readonly DataContext _context;
         private readonly IDocumentDbRepository<UploadTransaction> _documentDb;
+        private readonly IBlobManager _blobManager;
 
         private readonly string _blobStorageConnectionString;
-        private readonly string _blobStorageContainerName;
 
         /// <summary>
-        /// Constructor for the <see cref="FileFacade"/>.
+        /// Constructor for the <see cref="FileFacade"/> class taking datbase context, DocumentDb repository,
+        /// and blob manager arguments.
         /// </summary>
-        /// <param name="blobManager">Manager for Azure Blob Storage.</param>
-        /// <param name="documentDb">Azure DocumentDB repository</param>
-        public FileFacade(IBlobManager blobManager, IDocumentDbRepository<UploadTransaction> documentDb)
+        /// <param name="context">Database context used to access user and tenant information.</param>
+        /// <param name="documentDb">Azure DocumentDB repository containing file metadata.</param>
+        /// <param name="blobManager">Manager used to access Azure Blob Storage.</param>
+        public FileFacade(DataContext context, IDocumentDbRepository<UploadTransaction> documentDb, IBlobManager blobManager)
         {
-            if (blobManager == null)
-                throw new ArgumentNullException(nameof(blobManager));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
             if (documentDb == null)
                 throw new ArgumentNullException(nameof(documentDb));
+            if (blobManager == null)
+                throw new ArgumentNullException(nameof(blobManager));
 
-            _blobStorageConnectionString = ConfigurationManager.ConnectionStrings["BlobProcessorStorageConnectionString"].ConnectionString;
-            _blobStorageContainerName = ConfigurationManager.AppSettings["BlobProcessorBlobStorageContainerName"];
-
+            _context = context;
             _blobManager = blobManager;
             _documentDb = documentDb;
+
+            _blobStorageConnectionString = ConfigurationManager.ConnectionStrings["BlobProcessorStorageConnectionString"].ConnectionString;
         }
 
         /// <inheritdoc />
-        public async Task<CommandResultNoDto> Get(Guid id)
+        public async Task<HttpResponseMessage> Get(Guid id)
         {
-            var errors = new List<FFErrorCode>();
-
+            // Check that token contains a user ID
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
-                errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
+                return HandleErrors(GeneralErrorCodes.TokenInvalid("UserId"), HttpStatusCode.Unauthorized);
 
-            if (errors.Count > 0)
-                return NoDtoHelpers.CreateCommandResult(errors);
+            // Make sure user ID is active
+            var userIdGuid = new Guid(userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userIdGuid);
+            if (user == null || !user.IsActive)
+                return HandleErrors(GeneralErrorCodes.TokenInvalid("UserId"), HttpStatusCode.Unauthorized);
 
-            var userIdGuid = Guid.Parse(userId);
+            // Retrieve the first tenant associated with the user
+            if (user.Tenants.Count < 1)
+                return HandleErrors(GeneralErrorCodes.TokenInvalid("UserId"), HttpStatusCode.Unauthorized);
+            var tenant = user.Tenants.First();
 
-            if (errors.Count > 0)
-                return NoDtoHelpers.CreateCommandResult(errors);
+            // Retrieve the metadata associated with the specified ID
+            var metadata = await _documentDb.GetItemAsync(id.ToString());
+            if (metadata == null || string.IsNullOrWhiteSpace(metadata.BlobStorageContainerName) ||
+                string.IsNullOrWhiteSpace(metadata.BlobStorageBlobName))
+                return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
 
-            using (var stream = new MemoryStream())
+            // Make sure the user is authorized (intentionally returns Not Found if they aren't)
+            if (metadata.TenantIds.Count < 1 || metadata.TenantIds[0] != tenant.Id)
+                return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
+
+            // Retrieve the blob
+            var stream = new MemoryStream();
+            var result =
+                await _blobManager.DownloadBlobAsync(stream, _blobStorageConnectionString,
+                      metadata.BlobStorageContainerName, metadata.BlobStorageBlobName);
+            if (stream.Length == 0)
+                return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
+
+            // Create the response
+            stream.Position = 0;
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                _blobManager.DownloadBlob(stream, _blobStorageConnectionString, _blobStorageContainerName, "BodyPart_0738841b-b676-4abc-9f4f-0cbedf006abb");
-            }
+                Content = new StreamContent(stream)
+            };
 
-            var result = await _blobManager.DownloadBlobAsync(null, _blobStorageConnectionString, _blobStorageContainerName, "");
+            // Set response content headers
+            response.Content.Headers.ContentLength = stream.Length;
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = result.BlobName,
+                Size = stream.Length
+            };
 
-            return NoDtoHelpers.CreateCommandResult(errors);
+            return response;
+        }
+
+        /// <summary>
+        /// Returns an HTTP Response Message for errors.
+        /// </summary>
+        /// <param name="errorCode">Fusion Foundation error object.</param>
+        /// <param name="statusCode">HTTP status code.</param>
+        /// <returns></returns>
+        private HttpResponseMessage HandleErrors(FFErrorCode errorCode, HttpStatusCode statusCode)
+        {
+            var errors = new [] {new  {ErrorCode = errorCode.Code, Message = errorCode.Description}}.ToList();
+
+            var response = new HttpResponseMessage(statusCode);
+            response.Content = new ObjectContent(errors.GetType(), errors, new JsonMediaTypeFormatter());
+
+            return response;
         }
     }
 }

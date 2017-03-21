@@ -16,6 +16,6 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// </summary>
         /// <param name="id">ID that uniquely identifies the file to be retrieved.</param>
         /// <returns>The file indicated by the specified ID.</returns>
-        Task<CommandResultNoDto> Get(Guid id);
+        Task<HttpResponseMessage> Get(Guid id);
     }
 }
