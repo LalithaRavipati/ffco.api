@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
-using Hach.Fusion.Data.Dtos;
+using Hach.Fusion.Core.Dtos;
 
 namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
 {
@@ -11,6 +11,6 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// </summary>
         /// <param name="dto">Dto containing notification information.</param>
         /// <returns>Task that returns the command result.</returns>
-        Task<CommandResultNoDto> SendNotification(GenericNotificationDto dto);
+        Task<CommandResultNoDto> SendNotification(NotificationDto dto);
     }
 }

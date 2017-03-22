@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Hach.Fusion.Core.Dtos;
 using Microsoft.OData.Core;
 using Swashbuckle.Swagger;
 using Hach.Fusion.Data.Dtos;
@@ -183,7 +184,7 @@ namespace Hach.Fusion.FFCO.Api
         /// </summary>
         private static void BuildNotificationExamples()
         {
-            Examples[typeof(NotificationQueryDto)] = new
+            Examples[typeof(NotificationDto)] = new
             {
                 broadcastAll = false,
                 groupName = "GroupName",
