@@ -27,12 +27,15 @@
           <tr>
             <td>FFERR-100</td >
             <td>EntityNotFound</td >
-            <td>The specified entity was not found.</td>
+            <td>Either the file was not found or the metadata for the file was not found. This error
+                also is returned if the user is not a member of the tenant associated with the file
+                (even if the file and its metadata exists).</td>
           </tr>
           <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
-            <td>Information expected in a token is either invalid or missing (applies to the User ID field).</td>
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).
+                This error also occurs if the user is not associated with any tenants.</td>
           </tr>
         </table>
       </p>
