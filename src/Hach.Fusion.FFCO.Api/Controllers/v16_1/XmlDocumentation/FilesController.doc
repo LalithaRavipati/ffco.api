@@ -1,0 +1,46 @@
+﻿<FilesController>
+
+  <Methods name="GetOne">
+
+    <remarks>
+      <p>
+      The "Try it out!" feature (executed when the "Try it out!" button below is pressed) for this
+      API method will display gibberish in the Response Body text box. This is because the file is
+      downloaded as a binary. It may also take a long time to execute if the file being
+      "downloaded" is large.
+      </p>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityNotFound</td >
+            <td>Either the file was not found or the metadata for the file was not found. This error
+                also is returned if the user is not a member of the tenant associated with the file
+                (even if the file and its metadata exists).</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>TokenInvalid</td >
+            <td>Information expected in a token is either invalid or missing (applies to the User ID field).
+                This error also occurs if the user is not associated with any tenants.</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+
+  </Methods>
+  
+</FilesController>
