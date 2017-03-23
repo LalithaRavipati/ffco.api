@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Hach.Fusion.Core.Dtos;
 using Hach.Fusion.Data.Database.Interfaces;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
@@ -38,16 +39,23 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _queueManager = new Mock<IQueueManager>();
             _queueManager
                 .Setup(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.Delay(0));
+                .Returns(Task.Delay(0)).Verifiable();
 
             _blobManager = new Mock<IBlobManager>();
+            _blobManager.Setup(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new BlobStoreResult())).Verifiable();
+
             _documentDbRepository = new Mock<IDocumentDbRepository<UploadTransaction>>();
+
+            _documentDbRepository.Setup(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()))
+                .Returns(Task.FromResult(new Microsoft.Azure.Documents.Document())).Verifiable();
 
             _mockContext = new Mock<DataContext>();
             Seeder.InitializeMockDataContext(_mockContext);
 
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x=> x.UserName == "tnt01user").Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            var userIdClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "tnt01user").Id.ToString());
+            var tenantClaim = new Claim("Tenants", "[{\"id\" : \"494c1c3d-1026-4336-bd0b-23355785fab1\", \"name\": \"Dev Tenant 01\"}]");
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userIdClaim, tenantClaim }));
 
             _facade = new OperationConfigurationsFacade(_mockContext.Object, _blobManager.Object, _queueManager.Object, _documentDbRepository.Object);
 
@@ -56,8 +64,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Download_Succeeds()
         {
-            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
-            var operationId = _mockContext.Object.Locations.Single(l => l.Name =="Operation_01").Id;
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            var operationId = _mockContext.Object.Locations.Single(l => l.Name == "Operation_01").Id;
 
             var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
@@ -71,7 +79,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             Thread.CurrentPrincipal = null;
 
-            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
             var operationId = _mockContext.Object.Locations.Single(l => l.Name == "Operation_01").Id;
 
             var result = await _facade.Download(tenantId, operationId, "");
@@ -84,7 +92,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Download_EmptyOperationId_Fails()
         {
-            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
             var operationId = Guid.Empty;
 
             var result = await _facade.Download(tenantId, operationId, "");
@@ -96,7 +104,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Download_InvalidOperationId_Fails()
         {
-            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name =="Dev Tenant 01").Id;
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
             var operationId = Guid.Parse("23F0B5B9-6F97-4150-A1F0-3E1B6EAEE29E");
 
             var result = await _facade.Download(tenantId, operationId, "");
@@ -127,6 +135,76 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209");
             Assert.That(errorCode, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task When_Import_Succeeds()
+        {
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(result.ErrorCodes.Count, Is.EqualTo(0));
+
+            _blobManager.Verify(x=> x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(),It.IsAny<string>()));
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()));
+            _queueManager.Verify(x=> x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+        }
+
+        [Test]
+        public async Task When_Import__UserClaimNull_Fails()
+        {
+            Thread.CurrentPrincipal = null;
+
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(result.ErrorCodes.FirstOrDefault(x=> x.Code == "FFERR-304"), Is.Not.Null);
+
+            // Make sure no external storage is written to or called
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),Times.Never);
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()),Times.Never);
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public async Task When_Import__UserNotInRequestedTenant_Fails()
+        {
+            var tenantId = new Guid("D4820370-E6E1-4FC4-B3B1-F978E21C0D67");
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209"), Is.Not.Null);
+
+            // Make sure no external storage is written to or called
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()), Times.Never);
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

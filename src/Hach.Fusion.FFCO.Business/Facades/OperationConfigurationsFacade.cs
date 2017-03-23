@@ -79,6 +79,9 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (userId == null)
                 errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
 
+            if (errors.Count >0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
             // ReSharper disable once AssignNullToNotNullAttribute
             var userIdGuid = Guid.Parse(userId);
 
