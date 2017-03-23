@@ -46,7 +46,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// </summary>
         /// <returns></returns>
         /// /// <example>
-        /// POST: ~/api/v16.1/OperationConfigurationsController
+        /// POST: ~/api/v16.1/OperationConfigurations
         /// </example>
         /// <include file='XmlDocumentation/OperationConfigurationsController.doc' path='OperationConfigurationsController/Methods[@name="Post"]/*'/>
         [HttpPost]
@@ -95,37 +95,35 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Creates an xlxs file that contains operation configuration data and save it to blob storage. When
+        /// Creates a configuration file that contains operation configuration data and save it to blob storage. When
         /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
         /// requst.
         /// </summary>
         /// <param name="tenantId">Identifies the tenant that the operation belongs to.</param>
-        /// <param name="operationId">Identifies the operation to download the configuration for.</param>
+        /// <param name="operationId">Identifies the operation to create the configuration for or null to
+        /// create a configuration template without operation information.</param>
         /// <returns>Task that returns the request result.</returns>
         /// /// <example>
-        /// GET: ~/api/v16.1/OperationConfigurationsController
+        /// GET: ~/api/v16.1/OperationConfigurations/tenantId=xxx?operationId=xxx
         /// </example>
-        /// <include file='XmlDocumentation/OperationConfigurationsController.doc' path='OperationConfigurationsController/Methods[@name="Get"]/*'/>
+        /// <include file='XmlDocumentation/OperationConfigurationsController.doc' path='OperationConfigurationsController/Methods[@name="GetConfig"]/*'/>
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> Download([FromUri] Guid? tenantId, [FromUri] Guid? operationId)
+        public async Task<IHttpActionResult> GetConfig([FromUri] Guid? tenantId, [FromUri] Guid? operationId = null)
         {
             var errors = new List<FFErrorCode>();
 
             if (!tenantId.HasValue)
                 errors.Add(ValidationErrorCode.PropertyRequired(nameof(tenantId)));
 
-            if (!operationId.HasValue)
-                errors.Add(ValidationErrorCode.PropertyRequired(nameof(operationId)));
-
             if (errors.Any())
                 return Request.CreateApiResponse(NoDtoHelpers.CreateCommandResult(errors));
 
             var authHeader = Request.Headers.Authorization.ToString();
-            var result = await _facade.Download((Guid)tenantId, (Guid)operationId, authHeader);
+            var result = await _facade.Get((Guid)tenantId, operationId, authHeader);
 
             return Request.CreateApiResponse(result);
         }

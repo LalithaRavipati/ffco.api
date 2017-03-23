@@ -116,15 +116,16 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Creates an xlxs file that contains operation configuration data and save it to blob storage. When
+        /// Creates an operation configuration file and saves it to blob storage. When
         /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
         /// requst.
         /// </summary>
         /// <param name="tenantId">Identifies the tenant that the operation belongs to.</param>
-        /// <param name="operationId">Identifies the operation to download the configuration for.</param>
+        /// <param name="operationId">Identifies the operation to create the configuration for or
+        /// null to create a configuration file template with no operation related data.</param>
         /// <param name="authenticationHeader">Authentication header for the request.</param>
         /// <returns>A task that returns the result of the request.</returns>
-        public async Task<CommandResultNoDto> Download(Guid tenantId, Guid operationId, string authenticationHeader)
+        public async Task<CommandResultNoDto> Get(Guid tenantId, Guid? operationId, string authenticationHeader)
         {
             const string transactionType = "OperationConfigExport";
             var errors = new List<FFErrorCode>();
@@ -138,16 +139,17 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var userIdGuid = Guid.Parse(userId);
 
-            var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
-            if (operation == null)
+            if (operationId != null)
             {
-                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("operationId"));
-            }
-            else
-            {
-                var validTenant = operation.ProductOfferingTenantLocations.Any(x => x.TenantId == tenantId);
-                if (!validTenant)
+                var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
+                if (operation == null)
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("operationId"));
+                else if (operation.ProductOfferingTenantLocations.All(x => x.TenantId != tenantId))
                     errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
+            }
+            else if (_context.Tenants.All(x => x.Id != tenantId))
+            { 
+                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
             }
 
             if (errors.Count > 0)
