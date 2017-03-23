@@ -61,8 +61,8 @@
       <HintPath>..\packages\Hach.Fusion.Core.Test.0.1.0\lib\net452\Hach.Fusion.Core.Test.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Hach.Fusion.Data, Version=0.5.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hach.Fusion.Data.0.5.18\lib\net452\Hach.Fusion.Data.dll</HintPath>
+    <Reference Include="Hach.Fusion.Data, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hach.Fusion.Data.0.6.2\lib\net452\Hach.Fusion.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -239,6 +239,7 @@
     <Compile Include="Facades\DashboardOptionFacadeTests.cs" />
     <Compile Include="Facades\InAppMessagesFacadeTests.cs" />
     <Compile Include="Facades\LimitTypeFacadeTests.cs" />
+    <Compile Include="Facades\FileFacadeTests.cs" />
     <Compile Include="Facades\LocationFacadeTests.cs" />
     <Compile Include="Facades\LocationLogEntryFacadeTests.cs" />
     <Compile Include="Facades\LocationTypeFacadeTests.cs" />
@@ -265,9 +266,6 @@
       <Project>{8C8F97D0-FE18-488C-808D-BB0A1FD6B768}</Project>
       <Name>Hach.Fusion.FFCO.Business</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Azure.DocumentDB.1.12.0\build\Microsoft.Azure.DocumentDB.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.1.12.0\build\Microsoft.Azure.DocumentDB.targets')" />

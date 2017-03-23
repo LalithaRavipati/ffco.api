@@ -34,12 +34,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _mockContext = new Mock<DataContext>();
             Seeder.InitializeMockDataContext(_mockContext);
 
-            var parent  = _mockContext.Object.Locations.Single(x => x.Id == new Guid("B73C185D-667F-4636-A245-AB7B8EAA9BDA"));
-            var child  = _mockContext.Object.Locations.Single(x => x.Id == new Guid("5E510C45-7BBE-47C6-80D1-F86D79F418E6"));
-
-            parent.Locations.Add(child);
-            child.Parent = parent;
-
             var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
                 ,_mockContext.Object.Users.Single(x => x.UserName == "tnt01and02user").Id.ToString());
 
