@@ -68,28 +68,37 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// </summary>
         /// <param name="fileMetadata">Metadata associated with the file upload request.</param>
         /// <param name="authenticationHeader">Authentication header for the request.</param>
+        /// <param name="requestTenantId">The selected Tenant Id from the request import the Operation Config to</param>
         /// <returns>A task that returns the result of the upload option.</returns>
-        public async Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileMetadata, string authenticationHeader)
+        public async Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileMetadata, string authenticationHeader, Guid requestTenantId)
         {
             var errors = new List<FFErrorCode>();
+            var odataHelper = new Core.Api.OData.ODataHelper();
 
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
             if (userId == null)
                 errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
 
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var userIdGuid = Guid.Parse(userId);
+
+            // Check that the Tenant Id in the request body is in the user's claim tenants
+            var tenants = odataHelper.GetTenantIds(Thread.CurrentPrincipal) as List<Guid>;
+
+            // Check user has no tenants in their claim or if the tenantid in the request body is not in the claim 
+            if (tenants == null || tenants.All(x => x != requestTenantId))
+                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+
             if (errors.Count > 0)
                 return NoDtoHelpers.CreateCommandResult(errors);
 
-            var userIdGuid = Guid.Parse(userId);
-
-            var odataHelper = new Fusion.Core.Api.OData.ODataHelper();
-            var tenants = odataHelper.GetTenantIds(Thread.CurrentPrincipal) as List<Guid>;
 
             // Store file in blob storage.
             var result = await _blobManager.StoreAsync(_blobStorageConnectionString, _blobStorageContainerName, fileMetadata.SavedFileName);
 
+            // Add file metadata to documentDB to later be retrieved by request
             // An Id property is created by documentDB and in populated in the result object
-            var docDbresult = await _documentDb.CreateItemAsync(
+            await _documentDb.CreateItemAsync(
                 new UploadTransaction
                 {
                     OriginalFileName = fileMetadata.OriginalFileName,
@@ -106,11 +115,14 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 BlobUrl = result.BlobUrl,
                 BlobTransactionType = fileMetadata.TransactionType,
                 UserId = userIdGuid,
-                AuthenticationHeader = authenticationHeader
+                AuthenticationHeader = authenticationHeader,
+                // TenantId should be checked by the blob processor that it matches the tenant in the Operation Config to be processed
+                TenantId = requestTenantId  
             };
 
+            var msg = JsonConvert.SerializeObject(queueMessage);
             // Add message to queue.
-            await _queueManager.AddAsync(_blobStorageConnectionString, _queueStorageContainerName, JsonConvert.SerializeObject(queueMessage));
+            await _queueManager.AddAsync(_blobStorageConnectionString, _queueStorageContainerName, msg);
 
             return NoDtoHelpers.CreateCommandResult(errors);
         }
@@ -136,6 +148,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (errors.Count > 0)
                 return NoDtoHelpers.CreateCommandResult(errors);
 
+            // ReSharper disable once AssignNullToNotNullAttribute
             var userIdGuid = Guid.Parse(userId);
 
             var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
