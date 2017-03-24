@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
+using Microsoft.OData.Core;
 
 namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 {
@@ -48,9 +49,10 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <include file='XmlDocumentation/FilesController.doc' path='FilesController/Methods[@name="GetOne"]/*'/>
         [SwaggerResponse(HttpStatusCode.OK, "File as an HttpResponseMessage.")]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, typeof(SwaggerResponseUnauthorized))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null, typeof(ODataError))]
         [SwaggerResponse(HttpStatusCode.NotFound, null, typeof(SwaggerResponseNotFound))]
         [SwaggerResponse(HttpStatusCode.InternalServerError, null, typeof(SwaggerResponseInternalServerError))]
-        public async Task<HttpResponseMessage> Get(Guid id)
+        public async Task<HttpResponseMessage> Get(Guid? id)
         {
             var results = await _facade.Get(id);
 
