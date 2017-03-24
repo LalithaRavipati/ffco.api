@@ -28,5 +28,12 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// <param name="authenticationHeader">Authentication header for the request.</param>
         /// <returns>A task that returns the result of the request.</returns>
         Task<CommandResultNoDto> Download(Guid tenantId, Guid operationId, string authenticationHeader);
+
+        /// <summary>
+        /// Deletes the requested operation if the operation has no measurements associated to it's locations.
+        /// </summary>
+        /// <param name="operationId">Identifies the operation to delete</param>
+        /// <returns>Task that returns the request result.</returns>
+        Task<CommandResultNoDto> Delete(Guid? operationId);
     }
 }

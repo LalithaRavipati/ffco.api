@@ -8,6 +8,7 @@ using Hach.Fusion.Core.Test.EntityFramework;
 
 namespace Hach.Fusion.FFCO.Business.Tests
 {
+    [Obsolete("Use of seeder should be phased out. Create test data in each unit test class")]
     public static class Seeder
     {
         /// <summary>

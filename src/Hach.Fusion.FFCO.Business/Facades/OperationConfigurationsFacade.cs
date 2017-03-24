@@ -167,5 +167,21 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             return NoDtoHelpers.CreateCommandResult(errors);
         }
+
+
+        /// <summary>
+        /// Deletes the requested operation if the operation has no measurements associated to it's locations.
+        /// </summary>
+        /// <param name="operationId">Identifies the operation to delete</param>
+        /// <returns>Task that returns the request result.</returns>
+        public async Task<CommandResultNoDto> Delete(Guid? operationId)
+        {
+            var errors = new List<FFErrorCode>();
+
+            // Check if user is in the proper tenant.
+
+
+            return NoDtoHelpers.CreateCommandResult(errors);
+        }
     }
 }
