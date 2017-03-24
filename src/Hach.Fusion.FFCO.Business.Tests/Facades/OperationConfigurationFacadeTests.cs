@@ -45,8 +45,9 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _mockContext = new Mock<DataContext>();
             Seeder.InitializeMockDataContext(_mockContext);
 
-            var claim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x=> x.UserName == "tnt01user").Id.ToString());
-            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { claim }));
+            var userIdClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", _mockContext.Object.Users.Single(x => x.UserName == "tnt01user").Id.ToString());
+            var tenantClaim = new Claim("Tenants", "[{\"id\" : \"494c1c3d-1026-4336-bd0b-23355785fab1\", \"name\": \"Dev Tenant 01\"}]");
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userIdClaim, tenantClaim }));
 
             _facade = new OperationConfigurationsFacade(_mockContext.Object, _blobManager.Object, _queueManager.Object, _documentDbRepository.Object);
         }

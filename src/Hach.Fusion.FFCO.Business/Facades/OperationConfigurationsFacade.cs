@@ -127,7 +127,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <returns>A task that returns the result of the request.</returns>
         public async Task<CommandResultNoDto> Get(Guid tenantId, Guid? operationId, string authenticationHeader)
         {
-            const string transactionType = "OperationConfigExport";
             var errors = new List<FFErrorCode>();
 
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
@@ -139,21 +138,25 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             var userIdGuid = Guid.Parse(userId);
 
+            // Check that the user has access to the requested tenant.
+            var odataHelper = new Core.Api.OData.ODataHelper();
+            var tenants = odataHelper.GetTenantIds(Thread.CurrentPrincipal) as List<Guid>;
+            if (tenants == null || tenants.All(x => x != tenantId))
+                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+
             if (operationId != null)
             {
                 var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
                 if (operation == null)
-                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("operationId"));
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("OperationId"));
                 else if (operation.ProductOfferingTenantLocations.All(x => x.TenantId != tenantId))
-                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
-            }
-            else if (_context.Tenants.All(x => x.Id != tenantId))
-            { 
-                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
             }
 
             if (errors.Count > 0)
                 return NoDtoHelpers.CreateCommandResult(errors);
+
+            var transactionType = operationId == null ? "ExportOperationTemplate" : "ExportOperationConfig";
 
             var queueMessage = new BlobQueueMessage
             {
