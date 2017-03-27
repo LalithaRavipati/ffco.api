@@ -107,6 +107,8 @@ namespace Hach.Fusion.FFCO.Api.AutofacModules
             builder.RegisterType<NotificationsFacade>().As<INotificationsFacade>();
             builder.RegisterType<NotificationValidator>().As<IFFValidator<NotificationDto>>();
 
+            builder.RegisterType<FileFacade>().As<IFileFacade>();
+
             base.Load(builder);
         }
     }
