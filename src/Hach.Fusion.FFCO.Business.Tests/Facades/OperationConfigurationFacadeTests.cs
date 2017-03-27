@@ -139,69 +139,73 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
         [Test]
-        public async Task When_Delete_Succeeds()
+        public async Task When_Import_Succeeds()
         {
-            var operationId = _mockContext.Object.Locations.Single(x => x.Name == "Operation_01").Id;
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
 
-            var result = await _facade.Delete(operationId);
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
-            var deleted = _mockContext.Object.Locations.SingleOrDefault(x => x.Id == operationId);
-            Assert.That(deleted, Is.Null);
+            Assert.That(result.ErrorCodes.Count, Is.EqualTo(0));
+
+            _blobManager.Verify(x=> x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(),It.IsAny<string>()));
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()));
+            _queueManager.Verify(x=> x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
         }
 
         [Test]
-        public async Task When_Delete_EmptyGuid_Fails()
+        public async Task When_Import__UserClaimNull_Fails()
         {
-            var operationId = Guid.Empty;
+            Thread.CurrentPrincipal = null;
 
-            var result = await _facade.Delete(operationId);
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-            var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-201"); // Property Required
-            Assert.That(errorCode, Is.Not.Null);
+            Assert.That(result.ErrorCodes.FirstOrDefault(x=> x.Code == "FFERR-304"), Is.Not.Null);
+
+            // Make sure no external storage is written to or called
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),Times.Never);
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()),Times.Never);
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
-        public async Task When_Delete_InvalidGuid_Fails()
+        public async Task When_Import__UserNotInRequestedTenant_Fails()
         {
-            var result = await _facade.Delete(Guid.Empty);
+            var tenantId = new Guid("D4820370-E6E1-4FC4-B3B1-F978E21C0D67");
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-            var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-201"); // Property Required
-            Assert.That(errorCode, Is.Not.Null);
+            Assert.That(result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209"), Is.Not.Null);
+
+            // Make sure no external storage is written to or called
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()), Times.Never);
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
-
-        [Test]
-        public async Task When_Delete_NullGuid_Fails()
-        {
-            var result = await _facade.Delete(null);
-            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-            var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-201"); // Property Required
-            Assert.That(errorCode, Is.Not.Null);
-        }
-
-        [Test]
-        public async Task When_Delete_UserIsNotAllowed_Fails()
-        {
-            var operationId = Guid.Empty;
-
-            var result = await _facade.Delete(operationId);
-            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-            var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-106"); // Property Required
-            Assert.That(errorCode, Is.Not.Null);
-            Assert.IsTrue(false);
-        }
-
-        [Test]
-        public async Task When_Delete_OperationWithMeasurements_Fails()
-        {
-            var operationId = Guid.Empty;
-
-            var result = await _facade.Delete(operationId);
-            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
-            //var errorCode = result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-106"); // Property Required
-            //Assert.That(errorCode, Is.Not.Null);
-            Assert.IsTrue(false);
-        }
-
-
     }
 }
