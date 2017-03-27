@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using Swashbuckle.Swagger.Annotations;
 using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Microsoft.OData.Core;
@@ -13,7 +12,6 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
     /// <summary>
     /// Web API controller for retrieving blob storage files whose metadata is stored in DocumentDb.
     /// </summary>
-    [EnableCors("*", "*", "*")]
     [Authorize]
     public class FilesController : ApiController
     {
