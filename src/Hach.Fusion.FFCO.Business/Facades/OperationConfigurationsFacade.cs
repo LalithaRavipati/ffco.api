@@ -178,8 +178,26 @@ namespace Hach.Fusion.FFCO.Business.Facades
         {
             var errors = new List<FFErrorCode>();
 
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            if (userId == null)
+                errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            if (operationId == null || operationId == Guid.Empty)
+                errors.Add(ValidationErrorCode.PropertyRequired("OperationId"));
+
             // Check if user is in the proper tenant.
 
+            // Check that the Location exists and if it's an operation
+
+            // Check that the operation has no measurements or notes and can be deleted
+
+
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
+            
+
+            
 
             return NoDtoHelpers.CreateCommandResult(errors);
         }
