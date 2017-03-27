@@ -41,7 +41,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="blobManager">Manager for Azure Blob Storage.</param>
         /// <param name="queueManager">Manager for Azure Queue Storage.</param>
         /// <param name="documentDb">Azure DocumentDB repository</param>
-        public OperationConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, 
+        public OperationConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager,
             IDocumentDbRepository<UploadTransaction> documentDb)
         {
             if (context == null)
@@ -179,25 +179,39 @@ namespace Hach.Fusion.FFCO.Business.Facades
             var errors = new List<FFErrorCode>();
 
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
-            if (userId == null)
+            if (string.IsNullOrEmpty(userId))
                 errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
 
-            if (operationId == null || operationId == Guid.Empty)
+
+            if (!operationId.HasValue || operationId == Guid.Empty)
                 errors.Add(ValidationErrorCode.PropertyRequired("OperationId"));
-
-            // Check if user is in the proper tenant.
-
-            // Check that the Location exists and if it's an operation
-
-            // Check that the operation has no measurements or notes and can be deleted
-
 
             if (errors.Count > 0)
                 return NoDtoHelpers.CreateCommandResult(errors);
 
-            
+            var userIdGuid = Guid.Parse(userId);
 
-            
+            // Check that the Location exists and if it's an operation
+            if (!_context.Locations.Any(x => x.Id == operationId.Value && x.LocationType.LocationTypeGroup.I18NKeyName == "Operation"))
+                errors.Add(EntityErrorCode.EntityNotFound);
+            else
+            {
+                // Check if user is in the proper tenant.
+                if (!_context.Locations.Single(x => x.Id == operationId.Value)
+                        .ProductOfferingTenantLocations.Any(x => x.Tenant.Users.Any(u => u.Id == userIdGuid)))
+                {
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+                }
+                // Check that the operation has no measurements or notes and can be deleted
+
+            }
+
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
+
+
+
 
             return NoDtoHelpers.CreateCommandResult(errors);
         }

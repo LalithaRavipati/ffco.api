@@ -59,6 +59,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             _mockContext.Setup(x => x.Locations).Returns(new InMemoryDbSet<Location>(LocationSeedData.GetData()));
             _mockContext.Setup(x => x.LocationTypes)
                 .Returns(new InMemoryDbSet<LocationType>(LocationTypeSeedData.GetData()));
+            _mockContext.Setup(x => x.LocationTypeGroups)
+                .Returns(new InMemoryDbSet<LocationTypeGroup>(LocationTypeGroupSeedData.GetData()));
             _mockContext.Setup(x => x.Tenants).Returns(new InMemoryDbSet<Tenant>(TenantSeedData.GetData()));
             _mockContext.Setup(x => x.Users).Returns(new InMemoryDbSet<User>(UserSeedData.GetData()));
             _mockContext.Setup(x => x.ProductOfferingTenantLocations).Returns(new InMemoryDbSet<ProductOfferingTenantLocation>());
@@ -68,7 +70,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 .Returns(new InMemoryDbSet<Measurement>(MeasurementSeedData.GetData()));
             _mockContext.Setup(x => x.MeasurementTransactions)
                 .Returns(new InMemoryDbSet<MeasurementTransaction>(MeasurementTransactionSeedData.GetData()));
-
             _mockContext.Setup(x => x.ProductOfferings)
                 .Returns(new InMemoryDbSet<ProductOffering>(ProductOfferingSeedData.GetData()));
 
@@ -91,12 +92,13 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             user.Tenants.Add(tenant);
             tenant.Users.Add(user);
 
+            // Add LocationType 'Operation' To LocationTypeGroup 'Operation'
+            ctx.LocationTypes.Single(x => x.Id == LocationTypeSeedData.Operation.Id).LocationTypeGroup
+                = ctx.LocationTypeGroups.Single(x => x.Id == LocationTypeGroupSeedData.Operation.Id);
 
-            foreach (var potl in ctx.ProductOfferingTenantLocations)
-            {
-                ctx.Locations.Single(x => x.Id == potl.LocationId).ProductOfferingTenantLocations.Add(potl);
-                potl.Tenant = ctx.Tenants.Single(x => x.Id == potl.TenantId);
-            }
+            // Give Location 'Operation_01' LocationType 'Operation'
+            ctx.Locations.Single(x => x.Id == LocationSeedData.Operation01.Id).LocationType
+                = ctx.LocationTypes.Single(x => x.Id == LocationTypeSeedData.Operation.Id);
 
             foreach (var loc in ctx.LocationTypes)
             {
@@ -229,7 +231,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Delete_UserNotInTenant_Fails()
         {
-            var result = await _facade.Delete(null);
+            var result = await _facade.Delete(LocationSeedData.Operation01.Id);
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209"), Is.Not.Null); // Foreign Key Does not exist
         }
@@ -257,7 +259,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 new ProductOfferingTenantLocation
                 {
                     ProductOfferingId = ProductOfferingSeedData.Collect.Id,
-                    TenantId = TenantSeedData.DevTenant01.Id, 
+                    TenantId = TenantSeedData.DevTenant01.Id,
                     LocationId = LocationSeedData.Operation01.Id
                 },
 
@@ -291,11 +293,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
                 new ProductOfferingTenantLocation
                 {
-                    ProductOfferingId =ProductOfferingSeedData.Collect.Id,
+                    ProductOfferingId = ProductOfferingSeedData.Collect.Id,
                     TenantId = TenantSeedData.AnotherTenant.Id,
                     LocationId = LocationSeedData.ProcessInfluent.Id
                 }
-                
+
             };
         }
     }
@@ -652,6 +654,25 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             Name = "Collect"
         };
     }
+
+
+    internal static class LocationTypeGroupSeedData
+    {
+        public static IEnumerable<LocationTypeGroup> GetData()
+        {
+            return new List<LocationTypeGroup>()
+            {
+                Operation
+            };
+        }
+
+        public static LocationTypeGroup Operation => new LocationTypeGroup()
+        {
+            Id = new Guid("5D8B01D1-C956-4871-B030-154CBF66BF4A"),
+            I18NKeyName = "Operation"
+        };
+    }
+
     #endregion
 
 }
