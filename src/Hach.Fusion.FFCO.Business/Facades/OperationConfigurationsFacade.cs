@@ -17,6 +17,7 @@ using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.Queue;
 using Hach.Fusion.Data.Database.Interfaces;
+using Hach.Fusion.Data.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -182,7 +183,6 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (string.IsNullOrEmpty(userId))
                 errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
 
-
             if (!operationId.HasValue || operationId == Guid.Empty)
                 errors.Add(ValidationErrorCode.PropertyRequired("OperationId"));
 
@@ -190,6 +190,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 return NoDtoHelpers.CreateCommandResult(errors);
 
             var userIdGuid = Guid.Parse(userId);
+
+            List<Location> locations = new List<Location>();
+            List<LocationParameterLimit> locationParameterLimits = new List<LocationParameterLimit>();
+            List<LocationParameter> locationParameters = new List<LocationParameter>();
 
             // Check that the Location exists and if it's an operation
             if (!_context.Locations.Any(x => x.Id == operationId.Value && x.LocationType.LocationTypeGroup.I18NKeyName == "Operation"))
@@ -204,14 +208,38 @@ namespace Hach.Fusion.FFCO.Business.Facades
                 }
                 // Check that the operation has no measurements or notes and can be deleted
 
+                // NOTE : This method will not scale beyond more than 4 or 5 levels max
+                var operation = _context.Locations.Include("Locations").Single(x => x.Id == operationId.Value);
+                locations.Add(operation);
+                var systems = operation.Locations;
+                locations.AddRange(systems);
+                foreach (var system in systems)
+                {
+                    locations.AddRange(_context.Locations.Where(x => x.ParentId == system.Id).ToList());
+                }
+
+                locationParameters =
+                    _context.LocationParameters.Where(x => locations.Select(l => l.Id).Contains(x.LocationId)).ToList();
+
+                locationParameterLimits =
+                    _context.LocationParameterLimits.Where(
+                        x => locationParameters.Select(lp => lp.Id).Contains(x.LocationParameterId)).ToList();
+
+                var hasMeasurements = _context.Measurements.Any(x => locationParameters.Select(lp => lp.Id).Contains(x.LocationParameterId));
+                var hasNotes =
+                    _context.LocationParameterNotes.Any(
+                        x => locationParameters.Select(lp => lp.Id).Contains(x.LocationParameterId));
+
+                if (hasNotes || hasMeasurements)
+                    errors.Add(EntityErrorCode.EntityCouldNotBeDeleted);
             }
 
             if (errors.Count > 0)
                 return NoDtoHelpers.CreateCommandResult(errors);
 
-
-
-
+            _context.LocationParameterLimits.RemoveRange(locationParameterLimits);
+            _context.LocationParameters.RemoveRange(locationParameters);
+            _context.Locations.RemoveRange(locations);
 
             return NoDtoHelpers.CreateCommandResult(errors);
         }

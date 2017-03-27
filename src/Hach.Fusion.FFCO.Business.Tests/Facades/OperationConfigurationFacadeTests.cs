@@ -13,12 +13,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Hach.Fusion.Core.Business.Validation;
-using Hach.Fusion.Core.Dtos;
 using Hach.Fusion.Core.Test.EntityFramework;
 using Hach.Fusion.Data.Database.Interfaces;
 using Hach.Fusion.Data.Entities;
-using Hach.Fusion.Data.Extensions;
 
 namespace Hach.Fusion.FFCO.Business.Tests.Facades
 {
@@ -61,9 +58,17 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 .Returns(new InMemoryDbSet<LocationType>(LocationTypeSeedData.GetData()));
             _mockContext.Setup(x => x.LocationTypeGroups)
                 .Returns(new InMemoryDbSet<LocationTypeGroup>(LocationTypeGroupSeedData.GetData()));
+            _mockContext.Setup(x => x.Measurements)
+                .Returns(new InMemoryDbSet<Measurement>(MeasurementSeedData.GetData()));
+            _mockContext.Setup(x => x.LocationParameterLimits)
+                .Returns(new InMemoryDbSet<LocationParameterLimit>(LocationParameterLimitSeedData.GetData()));
+            _mockContext.Setup(x => x.LocationParameterNotes)
+                .Returns(new InMemoryDbSet<LocationParameterNote>(LocationParameterNoteSeedData.GetData()));
+
             _mockContext.Setup(x => x.Tenants).Returns(new InMemoryDbSet<Tenant>(TenantSeedData.GetData()));
             _mockContext.Setup(x => x.Users).Returns(new InMemoryDbSet<User>(UserSeedData.GetData()));
-            _mockContext.Setup(x => x.ProductOfferingTenantLocations).Returns(new InMemoryDbSet<ProductOfferingTenantLocation>());
+            _mockContext.Setup(x => x.ProductOfferingTenantLocations)
+                .Returns(new InMemoryDbSet<ProductOfferingTenantLocation>(ProductOffingTenantLocationSeedData.GetData()));
             _mockContext.Setup(x => x.LocationParameters)
                 .Returns(new InMemoryDbSet<LocationParameter>(LocationParameterSeedData.GetData()));
             _mockContext.Setup(x => x.Measurements)
@@ -92,6 +97,12 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             user.Tenants.Add(tenant);
             tenant.Users.Add(user);
 
+            user = ctx.Users.SingleOrDefault(x => x.Id == UserSeedData.AnotherUser.Id);
+            tenant = ctx.Tenants.SingleOrDefault(x => x.Id == TenantSeedData.AnotherTenant.Id);
+
+            user.Tenants.Add(tenant);
+            tenant.Users.Add(user);
+
             // Add LocationType 'Operation' To LocationTypeGroup 'Operation'
             ctx.LocationTypes.Single(x => x.Id == LocationTypeSeedData.Operation.Id).LocationTypeGroup
                 = ctx.LocationTypeGroups.Single(x => x.Id == LocationTypeGroupSeedData.Operation.Id);
@@ -100,6 +111,43 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             ctx.Locations.Single(x => x.Id == LocationSeedData.Operation01.Id).LocationType
                 = ctx.LocationTypes.Single(x => x.Id == LocationTypeSeedData.Operation.Id);
 
+
+            foreach (var locParam in ctx.LocationParameters)
+            {
+                var loc = ctx.Locations.Single(x => x.Id == locParam.LocationId);
+                locParam.Location = loc;
+            }
+
+            foreach (var note in ctx.LocationParameterNotes)
+            {
+                var locParam = ctx.LocationParameters.Single(x => x.Id == note.LocationParameterId);
+                note.LocationParameter = locParam;
+            }
+            foreach (var measurment in ctx.Measurements)
+            {
+                var locParam = ctx.LocationParameters.Single(x => x.Id == measurment.LocationParameterId);
+                measurment.LocationParameter = locParam;
+            }
+
+            foreach (var potl in ctx.ProductOfferingTenantLocations)
+            {
+                potl.Tenant = ctx.Tenants.Single(x => x.Id == potl.TenantId);
+                ctx.Tenants.Single(x => x.Id == potl.TenantId).ProductOfferingTenantLocations.Add(potl);
+                potl.Location = ctx.Locations.Single(x => x.Id == potl.LocationId);
+                ctx.Locations.Single(x => x.Id == potl.LocationId).ProductOfferingTenantLocations.Add(potl);
+                potl.ProductOffering = ctx.ProductOfferings.Single(x => x.Id == potl.ProductOfferingId);
+                ctx.ProductOfferings.Single(x => x.Id == potl.ProductOfferingId).ProductOfferingTenantLocations.Add(potl);
+            }
+            foreach (var loc in ctx.Locations)
+            {
+                if (loc.ParentId.HasValue)
+                {
+                    loc.Parent = ctx.Locations.Single(x => x.Id == loc.ParentId.Value);
+                    loc.Parent.Locations.Add(loc);
+                }
+
+                loc.LocationType = ctx.LocationTypes.Single(x => x.Id == loc.LocationTypeId);
+            }
             foreach (var loc in ctx.LocationTypes)
             {
                 var children = ctx.LocationTypes.Where(x => x.ParentId == loc.Id).ToList();
@@ -231,6 +279,11 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         [Test]
         public async Task When_Delete_UserNotInTenant_Fails()
         {
+            var userIdClaim = new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", UserSeedData.AnotherUser.Id.ToString());
+            var tenantClaim = new Claim("Tenants", "[{\"id\" : \"" + TenantSeedData.DevTenant01.Id + "\", \"name\": \" " + TenantSeedData.AnotherTenant.Name + "\"}]");
+            Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { userIdClaim, tenantClaim }));
+
+
             var result = await _facade.Delete(LocationSeedData.Operation01.Id);
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
             Assert.That(result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209"), Is.Not.Null); // Foreign Key Does not exist
@@ -250,6 +303,41 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
     }
 
     #region Seed Data
+
+    internal static class LocationParameterNoteSeedData
+    {
+        public static IEnumerable<LocationParameterNote> GetData()
+        {
+            return new List<LocationParameterNote>()
+            {
+                Note1
+            };
+        }
+
+        public static LocationParameterNote Note1 => new LocationParameterNote()
+        {
+            Id = new Guid("4D13B5FB-D883-4BC7-9A4F-07ABDDE658B2"),
+            Note = "A test note",
+            LocationParameterId = LocationParameterSeedData.LocationParameter.Id
+        };
+    }
+
+    internal static class LocationParameterLimitSeedData
+    {
+        public static IEnumerable<LocationParameterLimit> GetData()
+        {
+            return new List<LocationParameterLimit>()
+            {
+                Limit1
+            };
+        }
+        public static LocationParameterLimit Limit1 => new LocationParameterLimit()
+        {
+            Id = new Guid("8DCFFB4D-8B11-4D25-BD6A-0E11DA8BA5A6"),
+            LocationParameterId = LocationParameterSeedData.LocationParameter.Id,
+            Value = 1
+        };
+    }
     internal static class ProductOffingTenantLocationSeedData
     {
         public static IEnumerable<ProductOfferingTenantLocation> GetData()
@@ -297,7 +385,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                     TenantId = TenantSeedData.AnotherTenant.Id,
                     LocationId = LocationSeedData.ProcessInfluent.Id
                 }
-
             };
         }
     }
@@ -383,12 +470,18 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         {
             return new List<User>()
             {
-                DevTenant01User
+                DevTenant01User,
+                AnotherUser
             };
         }
         public static User DevTenant01User => new User()
         {
             Id = new Guid("A567CB04-6EA9-4DBC-9487-54846A72B2E7")
+        };
+
+        public static User AnotherUser => new User()
+        {
+            Id = new Guid("BCF18955-918C-4042-991B-3BDC7A7D6ADB")
         };
     }
 
@@ -513,15 +606,25 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 SamplingSiteInfluentInfluentCombined,
                 SamplingSiteInfluentHauledWasted,
                 SamplingSiteInfluentRecycled,
-                CannotDeleteProcess
+                CannotDeleteProcess,
+                CannotDeleteCollector
             };
         }
+
+        public static Location CannotDeleteCollector => new Location()
+        {
+            Id = new Guid("0B26D24D-72B6-4B1D-A1ED-5D6FE0E328F0"),
+            Name = "Cannot Delete Collector",
+            ParentId = CannotDeleteProcess.Id,
+            LocationTypeId = LocationTypeSeedData.Distibution.Id
+
+        };
 
         public static Location CannotDeleteOperation => new Location()
         {
             Id = new Guid("89B39DDC-5F87-4FF0-A1FB-3EB6A611B606"),
             Name = "Cannot Be Deleted",
-            LocationType = LocationTypeSeedData.Operation
+            LocationTypeId = LocationTypeSeedData.Operation.Id
         };
 
         public static Location CannotDeleteProcess => new Location()
