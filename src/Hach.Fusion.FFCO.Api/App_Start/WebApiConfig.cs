@@ -37,7 +37,7 @@ namespace Hach.Fusion.FFCO.Api
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             // Enable Cross-origin Resource Sharing (CORS)
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+            config.EnableCors();
 
             RegisterApiControllers(config);
 
