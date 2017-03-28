@@ -131,12 +131,12 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         }
 
         /// <summary>
-        /// Deletes the requested operation if the operation has no measurements associated to it's locations.
+        /// Deletes the requested operation if the operation has no measurements or notes associated to it's locations.
         /// </summary>
         /// <param name="operationId">Identifies the operation to delete</param>
         /// <returns>Task that returns the request result.</returns>
         /// /// <example>
-        /// DELETE: ~/api/v16.1/OperationConfigurationsController(1C3C61A1-EBB5-4A4F-8E25-6B5140E67179)
+        /// DELETE: ~/api/v16.1/OperationConfigurationsController?operationId=1C3C61A1-EBB5-4A4F-8E25-6B5140E67179
         /// </example>
         /// <include file='XmlDocumentation/OperationConfigurationsController.doc' path='OperationConfigurationsController/Methods[@name="Delete"]/*'/>
         [HttpDelete]

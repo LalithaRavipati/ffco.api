@@ -12,6 +12,7 @@ using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Helpers;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Web.Http;
 using Hach.Fusion.Core.Api.Security;
 using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Blob;
@@ -173,7 +174,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <summary>
         /// Deletes the requested operation if the operation has no measurements associated to it's locations.
         /// </summary>
-        /// <param name="operationId">Identifies the operation to delete</param>
+        /// <param name="operationId">Guid identitifer of the operation to delete</param>
         /// <returns>Task that returns the request result.</returns>
         public async Task<CommandResultNoDto> Delete(Guid? operationId)
         {
@@ -218,17 +219,19 @@ namespace Hach.Fusion.FFCO.Business.Facades
                     locations.AddRange(_context.Locations.Where(x => x.ParentId == system.Id).ToList());
                 }
 
+                var locationIds = locations.Select(l => l.Id);
                 locationParameters =
-                    _context.LocationParameters.Where(x => locations.Select(l => l.Id).Contains(x.LocationId)).ToList();
+                    _context.LocationParameters.Where(x => locationIds.Contains(x.LocationId)).ToList();
 
+                var locationParamIds = locationParameters.Select(lp => lp.Id);
                 locationParameterLimits =
                     _context.LocationParameterLimits.Where(
-                        x => locationParameters.Select(lp => lp.Id).Contains(x.LocationParameterId)).ToList();
+                        x => locationParamIds.Contains(x.LocationParameterId)).ToList();
 
-                var hasMeasurements = _context.Measurements.Any(x => locationParameters.Select(lp => lp.Id).Contains(x.LocationParameterId));
+                var hasMeasurements = _context.Measurements.Any(x => locationParamIds.Contains(x.LocationParameterId));
                 var hasNotes =
                     _context.LocationParameterNotes.Any(
-                        x => locationParameters.Select(lp => lp.Id).Contains(x.LocationParameterId));
+                        x => locationParamIds.Contains(x.LocationParameterId));
 
                 if (hasNotes || hasMeasurements)
                     errors.Add(EntityErrorCode.EntityCouldNotBeDeleted);

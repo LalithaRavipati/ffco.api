@@ -73,4 +73,52 @@
     </remarks>
   </Methods>
 
+  <Methods name="Delete">
+    <remarks>
+      <p>
+        <h4>Errors</h4>
+        <p>The following error codes are returned:</p>
+        <br/>
+        <table class="gridtable" >
+          <tr>
+            <th>
+              <b>Code</b>
+            </th>
+            <th>
+              <b>Name</b>
+            </th>
+            <th>
+              <b>Description</b>
+            </th>
+          </tr>
+          <tr>
+            <td>FFERR-100</td >
+            <td>EntityCouldNotBeFound</td >
+            <td>The 'operationId' does not exist or references a location that is not an Operation</td>
+          </tr>
+          <tr>
+            <td>FFERR-106</td >
+            <td>EntityCouldNotBeDeleted</td >
+            <td>The entity cannot be deleted because it has measurements or notes associated to it's related Locations</td>
+          </tr>
+          <tr>
+            <td>FFERR-201</td >
+            <td>PropertyRequired</td >
+            <td>The Property 'operationId' is required and cannot be null or an empty Guid</td>
+          </tr>
+          <tr>
+            <td>FFERR-209</td >
+            <td>ForeignKeyDoesNotExist</td >
+            <td>The referenced Operation does not belong to the user's Tenant</td>
+          </tr>
+          <tr>
+            <td>FFERR-304</td >
+            <td>UserIsNotAuthenticated</td >
+            <td>The User is not authenticated</td>
+          </tr>
+        </table>
+      </p>
+    </remarks>
+  </Methods>
+
 </OperationConfigurationsController>
