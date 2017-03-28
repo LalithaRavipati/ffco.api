@@ -771,8 +771,8 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
 
         public static LocationTypeGroup Operation => new LocationTypeGroup()
         {
-            Id = new Guid("5D8B01D1-C956-4871-B030-154CBF66BF4A"),
-            I18NKeyName = "Operation"
+            Id = Data.Constants.LocationTypeGroups.Operation.Id,
+            I18NKeyName = Data.Constants.LocationTypeGroups.Operation.I18NKeyName
         };
     }
 

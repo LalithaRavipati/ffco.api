@@ -197,7 +197,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             List<LocationParameter> locationParameters = new List<LocationParameter>();
 
             // Check that the Location exists and if it's an operation
-            if (!_context.Locations.Any(x => x.Id == operationId.Value && x.LocationType.LocationTypeGroup.I18NKeyName == "Operation"))
+            if (!_context.Locations.Any(x => x.Id == operationId.Value && x.LocationType.LocationTypeGroup.Id == Data.Constants.LocationTypeGroups.Operation.Id))
                 errors.Add(EntityErrorCode.EntityNotFound);
             else
             {
