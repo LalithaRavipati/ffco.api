@@ -32,6 +32,11 @@
                 (even if the file and its metadata exists).</td>
           </tr>
           <tr>
+            <td>FFERR-211</td>
+            <td>PropertyIsInvalid</td>
+            <td>A property is invalid (the ID argument is not a valid GUID).</td>
+          </tr>          
+          <tr>
             <td>FFERR-304</td >
             <td>TokenInvalid</td >
             <td>Information expected in a token is either invalid or missing (applies to the User ID field).
