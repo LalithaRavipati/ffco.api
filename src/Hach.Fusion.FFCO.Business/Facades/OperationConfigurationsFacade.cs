@@ -244,6 +244,8 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.LocationParameters.RemoveRange(locationParameters);
             _context.Locations.RemoveRange(locations);
 
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+
             return NoDtoHelpers.CreateCommandResult(errors);
         }
     }
