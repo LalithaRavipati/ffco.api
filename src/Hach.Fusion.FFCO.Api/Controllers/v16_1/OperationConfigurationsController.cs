@@ -54,7 +54,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
-        public async Task<IHttpActionResult> Upload()
+        public async Task<IHttpActionResult> Post()
         {
             var errors = new List<FFErrorCode>();
 
@@ -62,8 +62,17 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
             var parts = await Request.Content.ReadAsMultipartAsync(provider).ConfigureAwait(false);
 
+            // Validate the request body
             if (string.IsNullOrEmpty(parts.FormData["uploadTransactionType"]))
                 errors.Add(GeneralErrorCodes.FormDataFieldMissing("uploadTransactionType"));
+
+            var tenantIdString = parts.FormData["tenantId"];
+            if (string.IsNullOrEmpty(tenantIdString))
+                errors.Add(GeneralErrorCodes.FormDataFieldMissing("tenantId"));
+
+            var tenantIdGuid = Guid.Empty;
+            if (!Guid.TryParse(tenantIdString, out tenantIdGuid) || tenantIdGuid == Guid.Empty)
+                errors.Add(GeneralErrorCodes.FormDataFieldInvalid("tenantId"));
 
             // Get files
             var files = parts.FileData.Select(x => x.LocalFileName);
@@ -71,7 +80,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
 
             if (!enumeratedFiles.Any())
                 errors.Add(GeneralErrorCodes.FormDataFilesMissing());
-
+            
             if (errors.Any())
                 return Request.CreateApiResponse(NoDtoHelpers.CreateCommandResult(errors));
 
@@ -86,7 +95,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
             };
 
             var authHeader = Request.Headers.Authorization.ToString();
-            var result = await _facade.Upload(fileUploadMetadata, authHeader);
+            var result = await _facade.Upload(fileUploadMetadata, authHeader, tenantIdGuid);
 
             foreach (var file in enumeratedFiles)
                 File.Delete(file);
@@ -97,7 +106,7 @@ namespace Hach.Fusion.FFCO.Api.Controllers.v16_1
         /// <summary>
         /// Creates a configuration file that contains operation configuration data and save it to blob storage. When
         /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
-        /// requst.
+        /// request.
         /// </summary>
         /// <param name="tenantId">Identifies the tenant that the operation belongs to.</param>
         /// <param name="operationId">Identifies the operation to create the configuration for or null to

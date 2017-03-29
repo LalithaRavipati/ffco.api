@@ -41,6 +41,8 @@ namespace Hach.Fusion.FFCO.Api
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            app.UseCors(CorsOptions.AllowAll);
+
             var sbConnectionString = ConfigurationManager.AppSettings["ServiceBusConnectionString"];
             GlobalHost.DependencyResolver.UseServiceBus(sbConnectionString, "ffcoapisignalr");
 

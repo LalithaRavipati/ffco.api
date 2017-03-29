@@ -10,7 +10,6 @@ using Swashbuckle.OData;
 using System;
 using System.Configuration;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Dispatcher;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
@@ -37,7 +36,7 @@ namespace Hach.Fusion.FFCO.Api
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             // Enable Cross-origin Resource Sharing (CORS)
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+            config.EnableCors();
 
             RegisterApiControllers(config);
 

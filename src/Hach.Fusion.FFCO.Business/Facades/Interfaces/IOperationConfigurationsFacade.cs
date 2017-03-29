@@ -15,8 +15,9 @@ namespace Hach.Fusion.FFCO.Business.Facades.Interfaces
         /// </summary>
         /// <param name="fileName">The full name of the file to upload.</param>
         /// <param name="authenticationHeader">Authentication header for the request.</param>
+        /// <param name="requestTenantId">The selected Tenant Id from the request import the Operation Config to</param>
         /// <returns>A task that returns the result of the upload option.</returns>
-        Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileName, string authenticationHeader);
+        Task<CommandResultNoDto> Upload(FileUploadMetadataDto fileName, string authenticationHeader, Guid requestTenantId);
 
         /// <summary>
         /// Creates an operation configuration file and saves it to blob storage. When

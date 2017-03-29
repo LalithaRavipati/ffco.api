@@ -5,7 +5,7 @@
       <p>
         The following uploadTransactionTypes are valid:
         <ul>
-          <li>ConfigureOperation</li>
+          <li>OperationConfig</li>
         </ul>
 
       </p>
@@ -33,7 +33,7 @@
           <tr>
             <td>FFERR-301</td >
             <td>FormDataFieldMissing</td >
-            <td>The request contains missing form data fields. The key 'uploadTransactionType' is expected in this request.</td>
+            <td>The request contains missing form data fields. The keys 'uploadTransactionType' and 'tenantId' are expected in this request.</td>
           </tr>
         </table>
       </p>
