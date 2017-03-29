@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Test.EntityFramework;
+using Hach.Fusion.Core.Dtos;
 using Hach.Fusion.Data.Database.Interfaces;
 using Hach.Fusion.Data.Entities;
 
@@ -77,7 +78,6 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 .Returns(new InMemoryDbSet<MeasurementTransaction>(MeasurementTransactionSeedData.GetData()));
             _mockContext.Setup(x => x.ProductOfferings)
                 .Returns(new InMemoryDbSet<ProductOffering>(ProductOfferingSeedData.GetData()));
-
 
             SetupDataRelationships(_mockContext.Object);
 
@@ -159,7 +159,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         public async Task When_Download_Succeeds()
         {
             var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
-            var operationId = LocationSeedData.Operation01.Id;
+            var operationId = _mockContext.Object.Locations.Single(l => l.Name == "Operation_01").Id;
 
             var result = await _facade.Download(tenantId, operationId, "");
             Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
@@ -300,6 +300,76 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
         }
 
 
+
+        [Test]
+        public async Task When_Import_Succeeds()
+        {
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(result.ErrorCodes.Count, Is.EqualTo(0));
+
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()));
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+        }
+
+        [Test]
+        public async Task When_Import__UserClaimNull_Fails()
+        {
+            Thread.CurrentPrincipal = null;
+
+            var tenantId = _mockContext.Object.Tenants.Single(x => x.Name == "Dev Tenant 01").Id;
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-304"), Is.Not.Null);
+
+            // Make sure no external storage is written to or called
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()), Times.Never);
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public async Task When_Import__UserNotInRequestedTenant_Fails()
+        {
+            var tenantId = new Guid("D4820370-E6E1-4FC4-B3B1-F978E21C0D67");
+            string authHeader = "StubbedAuthHeader";
+            var fileMetaData = new FileUploadMetadataDto()
+            {
+                OriginalFileName = "MyFile.xlsx",
+                SavedFileName = "/SomeFile/Somewhere",
+                TransactionType = "OperationConfig"
+            };
+
+            var result = await _facade.Upload(fileMetaData, authHeader, tenantId);
+
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.BadRequest));
+            Assert.That(result.ErrorCodes.FirstOrDefault(x => x.Code == "FFERR-209"), Is.Not.Null);
+
+            // Make sure no external storage is written to or called
+            _blobManager.Verify(x => x.StoreAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _documentDbRepository.Verify(x => x.CreateItemAsync(It.IsAny<UploadTransaction>()), Times.Never);
+            _queueManager.Verify(x => x.AddAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
     }
 
     #region Seed Data

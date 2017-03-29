@@ -9,6 +9,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Hach.Fusion.Core.Api.Logger;
 using Hach.Fusion.Core.Api.Security;using Hach.Fusion.Core.Business.Validation;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.DocumentDB;
@@ -60,7 +61,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// metadata stored in DocumentDb.
         /// </param>
         /// <returns>The file indicated by the specified ID.</returns>
-        public async Task<HttpResponseMessage> Get(Guid id)
+        public async Task<HttpResponseMessage> Get(Guid? id)
         {
             // Check that token contains a user ID
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
@@ -77,6 +78,10 @@ namespace Hach.Fusion.FFCO.Business.Facades
             if (user.Tenants.Count < 1)
                 return HandleErrors(GeneralErrorCodes.TokenInvalid("UserId"), HttpStatusCode.Unauthorized);
 
+            // Validate the argument (invalid Guid's are received as nulls)
+            if (id == null)
+                return HandleErrors(ValidationErrorCode.PropertyIsInvalid(nameof(id)), HttpStatusCode.BadRequest);
+
             // Retrieve the metadata associated with the specified ID
             var metadata = await _documentDb.GetItemAsync(id.ToString());
             if (metadata == null || string.IsNullOrWhiteSpace(metadata.BlobStorageContainerName) ||
@@ -90,9 +95,18 @@ namespace Hach.Fusion.FFCO.Business.Facades
 
             // Retrieve the blob
             var stream = new MemoryStream();
-            var result =
-                await _blobManager.DownloadBlobAsync(stream, _blobStorageConnectionString,
-                      metadata.BlobStorageContainerName, metadata.BlobStorageBlobName);
+            BlobDownloadResult result;
+            try
+            {
+                result = await _blobManager.DownloadBlobAsync(stream, _blobStorageConnectionString,
+                          metadata.BlobStorageContainerName, metadata.BlobStorageBlobName);
+            }
+            catch (Exception ex)
+            {
+                FFLogManager.LogException(ex);
+                return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
+            }
+
             if (stream.Length == 0)
                 return HandleErrors(EntityErrorCode.EntityNotFound, HttpStatusCode.NotFound);
 
