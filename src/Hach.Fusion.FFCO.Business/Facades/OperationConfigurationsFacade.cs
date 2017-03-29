@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Dtos;
@@ -12,11 +13,14 @@ using Hach.Fusion.FFCO.Business.Facades.Interfaces;
 using Hach.Fusion.FFCO.Business.Helpers;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Web.Http;
 using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.Queue;
 using Hach.Fusion.Data.Database.Interfaces;
+using Hach.Fusion.Data.Entities;
 
 namespace Hach.Fusion.FFCO.Business.Facades
 {
@@ -41,7 +45,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
         /// <param name="blobManager">Manager for Azure Blob Storage.</param>
         /// <param name="queueManager">Manager for Azure Queue Storage.</param>
         /// <param name="documentDb">Azure DocumentDB repository</param>
-        public OperationConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager, 
+        public OperationConfigurationsFacade(DataContext context, IBlobManager blobManager, IQueueManager queueManager,
             IDocumentDbRepository<UploadTransaction> documentDb)
         {
             if (context == null)
@@ -182,6 +186,97 @@ namespace Hach.Fusion.FFCO.Business.Facades
             await _queueManager.AddAsync(_blobStorageConnectionString, _queueStorageContainerName, JsonConvert.SerializeObject(queueMessage));
 
             return NoDtoHelpers.CreateCommandResult(errors);
+        }
+
+
+        /// <summary>
+        /// Deletes the requested operation if the operation has no measurements associated to it's locations.
+        /// </summary>
+        /// <param name="operationId">Guid identitifer of the operation to delete</param>
+        /// <returns>Task that returns the request result.</returns>
+        public async Task<CommandResultNoDto> Delete(Guid? operationId)
+        {
+            var errors = new List<FFErrorCode>();
+
+            var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
+            if (string.IsNullOrEmpty(userId))
+                errors.Add(GeneralErrorCodes.TokenInvalid("UserId"));
+
+            if (!operationId.HasValue || operationId == Guid.Empty)
+                errors.Add(ValidationErrorCode.PropertyRequired("OperationId"));
+
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
+            var userIdGuid = Guid.Parse(userId);
+
+            List<Location> locations = new List<Location>();
+            List<LocationParameterLimit> locationParameterLimits = new List<LocationParameterLimit>();
+            List<LocationParameter> locationParameters = new List<LocationParameter>();
+            List<LocationLogEntry> locationLocationLogEntries= new List<LocationLogEntry>();
+
+            // Check that the Location exists and if it's an operation
+            if (!_context.Locations.Any(x => x.Id == operationId.Value && x.LocationType.LocationTypeGroup.Id == Data.Constants.LocationTypeGroups.Operation.Id))
+                errors.Add(EntityErrorCode.EntityNotFound);
+            else
+            {
+                // Check if user is in the proper tenant.
+                if (!_context.Locations.Single(x => x.Id == operationId.Value)
+                        .ProductOfferingTenantLocations.Any(x => x.Tenant.Users.Any(u => u.Id == userIdGuid)))
+                {
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+                }
+                // Check that the operation has no measurements or notes and can be deleted
+
+                // NOTE : This method will not scale beyond more than 4 or 5 levels max
+                var operation = _context.Locations.Include("Locations").Single(x => x.Id == operationId.Value);
+                locations.Add(operation);
+                var systems = operation.Locations;
+                locations.AddRange(systems);
+                foreach (var system in systems)
+                {
+                    locations.AddRange(_context.Locations.Where(x => x.ParentId == system.Id).ToList());
+                }
+
+                var locationIds = locations.Select(l => l.Id);
+                locationParameters =
+                    _context.LocationParameters.Where(x => locationIds.Contains(x.LocationId)).ToList();
+
+                var locationParamIds = locationParameters.Select(lp => lp.Id);
+                locationParameterLimits =
+                    _context.LocationParameterLimits.Where(
+                        x => locationParamIds.Contains(x.LocationParameterId)).ToList();
+
+                var hasLocationLocationLogEntries =
+                    _context.LocationLogEntries.Any(x => locationIds.Contains(x.LocationId));
+
+                var hasMeasurements = _context.Measurements.Any(x => locationParamIds.Contains(x.LocationParameterId));
+                var hasParameterNotes =
+                    _context.LocationParameterNotes.Any(
+                        x => locationParamIds.Contains(x.LocationParameterId));
+
+                var hasMeasurementTransactions =
+                    _context.MeasurementTransactions.Any(x => locationIds.Contains(x.LocationId));
+
+                if (hasParameterNotes || hasMeasurements || hasLocationLocationLogEntries || hasMeasurementTransactions)
+                    errors.Add(EntityErrorCode.EntityCouldNotBeDeleted);
+            }
+
+            if (errors.Count > 0)
+                return NoDtoHelpers.CreateCommandResult(errors);
+
+            _context.LocationParameterLimits.RemoveRange(locationParameterLimits);
+            _context.LocationParameters.RemoveRange(locationParameters);
+            _context.Locations.RemoveRange(locations);
+            _context.LocationLogEntries.RemoveRange(locationLocationLogEntries);
+
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            var commandResult = NoDtoHelpers.CreateCommandResult(errors);
+            // CreateCommandResult will either return BadRequest(400) or Ok(200)
+            // Overriding the Status code to return a 204 on a successful delete
+            commandResult.StatusCode = FacadeStatusCode.NoContent;
+            return commandResult;
         }
     }
 }
