@@ -65,7 +65,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
                 .Returns(new InMemoryDbSet<LocationParameterLimit>(LocationParameterLimitSeedData.GetData()));
             _mockContext.Setup(x => x.LocationParameterNotes)
                 .Returns(new InMemoryDbSet<LocationParameterNote>(LocationParameterNoteSeedData.GetData()));
-
+            _mockContext.Setup(x => x.LocationLogEntries).Returns(new InMemoryDbSet<LocationLogEntry>());
             _mockContext.Setup(x => x.Tenants).Returns(new InMemoryDbSet<Tenant>(TenantSeedData.GetData()));
             _mockContext.Setup(x => x.Users).Returns(new InMemoryDbSet<User>(UserSeedData.GetData()));
             _mockContext.Setup(x => x.ProductOfferingTenantLocations)
@@ -238,7 +238,7 @@ namespace Hach.Fusion.FFCO.Business.Tests.Facades
             var operationId = LocationSeedData.Operation01.Id;
 
             var result = await _facade.Delete(operationId);
-            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.Ok));
+            Assert.That(result.StatusCode, Is.EqualTo(FacadeStatusCode.NoContent));
 
             var deleted = _mockContext.Object.Locations.SingleOrDefault(x => x.Id == operationId);
             Assert.That(deleted, Is.Null);

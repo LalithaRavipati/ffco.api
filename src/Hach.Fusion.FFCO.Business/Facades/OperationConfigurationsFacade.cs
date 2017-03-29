@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Hach.Fusion.Core.Business.Results;
 using Hach.Fusion.Core.Dtos;
@@ -14,6 +15,7 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Web.Http;
 using Hach.Fusion.Core.Api.Security;
+using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.Queue;
@@ -211,6 +213,7 @@ namespace Hach.Fusion.FFCO.Business.Facades
             List<Location> locations = new List<Location>();
             List<LocationParameterLimit> locationParameterLimits = new List<LocationParameterLimit>();
             List<LocationParameter> locationParameters = new List<LocationParameter>();
+            List<LocationLogEntry> locationLocationLogEntries= new List<LocationLogEntry>();
 
             // Check that the Location exists and if it's an operation
             if (!_context.Locations.Any(x => x.Id == operationId.Value && x.LocationType.LocationTypeGroup.Id == Data.Constants.LocationTypeGroups.Operation.Id))
@@ -244,12 +247,18 @@ namespace Hach.Fusion.FFCO.Business.Facades
                     _context.LocationParameterLimits.Where(
                         x => locationParamIds.Contains(x.LocationParameterId)).ToList();
 
+                var hasLocationLocationLogEntries =
+                    _context.LocationLogEntries.Any(x => locationIds.Contains(x.LocationId));
+
                 var hasMeasurements = _context.Measurements.Any(x => locationParamIds.Contains(x.LocationParameterId));
-                var hasNotes =
+                var hasParameterNotes =
                     _context.LocationParameterNotes.Any(
                         x => locationParamIds.Contains(x.LocationParameterId));
 
-                if (hasNotes || hasMeasurements)
+                var hasMeasurementTransactions =
+                    _context.MeasurementTransactions.Any(x => locationIds.Contains(x.LocationId));
+
+                if (hasParameterNotes || hasMeasurements || hasLocationLocationLogEntries || hasMeasurementTransactions)
                     errors.Add(EntityErrorCode.EntityCouldNotBeDeleted);
             }
 
@@ -259,10 +268,15 @@ namespace Hach.Fusion.FFCO.Business.Facades
             _context.LocationParameterLimits.RemoveRange(locationParameterLimits);
             _context.LocationParameters.RemoveRange(locationParameters);
             _context.Locations.RemoveRange(locations);
+            _context.LocationLogEntries.RemoveRange(locationLocationLogEntries);
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return NoDtoHelpers.CreateCommandResult(errors);
+            var commandResult = NoDtoHelpers.CreateCommandResult(errors);
+            // CreateCommandResult will either return BadRequest(400) or Ok(200)
+            // Overriding the Status code to return a 204 on a successful delete
+            commandResult.StatusCode = FacadeStatusCode.NoContent;
+            return commandResult;
         }
     }
 }
