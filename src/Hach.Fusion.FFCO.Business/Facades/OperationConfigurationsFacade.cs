@@ -19,6 +19,7 @@ using Hach.Fusion.Core.Enums;
 using Hach.Fusion.Data.Azure.DocumentDB;
 using Hach.Fusion.Data.Azure.Blob;
 using Hach.Fusion.Data.Azure.Queue;
+using Hach.Fusion.Data.Constants;
 using Hach.Fusion.Data.Database.Interfaces;
 using Hach.Fusion.Data.Entities;
 
@@ -135,17 +136,17 @@ namespace Hach.Fusion.FFCO.Business.Facades
         }
 
         /// <summary>
-        /// Creates an xlxs file that contains operation configuration data and save it to blob storage. When
+        /// Creates an operation configuration file and saves it to blob storage. When
         /// the file is ready to be downloaded, a signalr notification is sent to the user who made the
         /// requst.
         /// </summary>
         /// <param name="tenantId">Identifies the tenant that the operation belongs to.</param>
-        /// <param name="operationId">Identifies the operation to download the configuration for.</param>
+        /// <param name="operationId">Identifies the operation to create the configuration for or
+        /// null to create a configuration file template with no operation related data.</param>
         /// <param name="authenticationHeader">Authentication header for the request.</param>
         /// <returns>A task that returns the result of the request.</returns>
-        public async Task<CommandResultNoDto> Download(Guid tenantId, Guid operationId, string authenticationHeader)
+        public async Task<CommandResultNoDto> Get(Guid tenantId, Guid? operationId, string authenticationHeader)
         {
-            const string transactionType = "OperationConfigExport";
             var errors = new List<FFErrorCode>();
 
             var userId = Thread.CurrentPrincipal == null ? null : Thread.CurrentPrincipal.GetUserIdFromPrincipal();
@@ -158,20 +159,26 @@ namespace Hach.Fusion.FFCO.Business.Facades
             // ReSharper disable once AssignNullToNotNullAttribute
             var userIdGuid = Guid.Parse(userId);
 
-            var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
-            if (operation == null)
+            // Check that the user has access to the requested tenant.
+            var odataHelper = new Core.Api.OData.ODataHelper();
+            var tenants = odataHelper.GetTenantIds(Thread.CurrentPrincipal) as List<Guid>;
+            if (tenants == null || tenants.All(x => x != tenantId))
+                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
+
+            if (operationId != null)
             {
-                errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("operationId"));
-            }
-            else
-            {
-                var validTenant = operation.ProductOfferingTenantLocations.Any(x => x.TenantId == tenantId);
-                if (!validTenant)
-                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("tenantId"));
+                var operation = await _context.Locations.FirstOrDefaultAsync(x => x.Id == operationId).ConfigureAwait(false);
+                if (operation == null)
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("OperationId"));
+                else if (operation.ProductOfferingTenantLocations.All(x => x.TenantId != tenantId))
+                    errors.Add(ValidationErrorCode.ForeignKeyValueDoesNotExist("TenantId"));
             }
 
             if (errors.Count > 0)
                 return NoDtoHelpers.CreateCommandResult(errors);
+
+            var transactionType = operationId == null 
+                ? UploadTransactionTypes.ExportOperationTemplate : UploadTransactionTypes.ExportOperationConfig;
 
             var queueMessage = new BlobQueueMessage
             {
